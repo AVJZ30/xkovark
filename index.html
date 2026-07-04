@@ -84,6 +84,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.33A10 10 0 1 0 12 2Z"/></svg>
     </a>
     <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></button>
+    <button class="icon-btn" id="cartToggle" title="Ver carrito">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M6 6h15l-1.6 9.2a2 2 0 0 1-2 1.8H9.4a2 2 0 0 1-2-1.7L5.6 4.4A1 1 0 0 0 4.6 3.5H2"/><circle cx="9.5" cy="20.5" r="1.4"/><circle cx="17.5" cy="20.5" r="1.4"/></svg>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
   </div>
   <button class="menu-toggle" id="menuToggle">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -132,6 +136,21 @@
     <h5>Contacto</h5>
     <a href="https://wa.me/593967071228" target="_blank">WhatsApp: +593 96 707 1228</a>
     <a href="https://www.instagram.com/xkovark/" target="_blank">Instagram</a>
+  </div>
+</div>
+
+<!-- CARRITO -->
+<div class="scrim" id="cartScrim"></div>
+<div class="drawer cart-drawer" id="cartDrawer">
+  <div class="drawer-head">
+    <span class="logo">Carrito<span class="dot">.</span></span>
+    <button class="drawer-close" id="cartClose">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-summary">
+    <div class="cart-total-row"><span>Total</span><span id="cartTotal">$0</span></div>
+    <button class="btn btn-gold cart-checkout" id="checkoutBtn">Finalizar por WhatsApp</button>
+    <p class="cart-note">Al finalizar se abre WhatsApp con el detalle de tu pedido, para confirmar disponibilidad, pago y envío.</p>
   </div>
 </div>
 
