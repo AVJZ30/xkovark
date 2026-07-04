@@ -156,7 +156,6 @@ function showError(message) {
 const CATEGORY_LABELS = {
   joyeria: "Joyería", 
   pulseras: "Pulseras",
-  lentes: "Lentes",
   gafas: "Gafas", 
   vestimenta: "Vestimenta", 
   bolsos: "Bolsos", 
@@ -661,6 +660,43 @@ function initCart() {
   });
 }
 
+/* ============================================================
+   🔍 LIGHTBOX: ampliar imagen de producto al hacer click
+   ============================================================ */
+
+function openLightbox(src, alt) {
+  const img = document.getElementById("lightboxImg");
+  const scrim = document.getElementById("lightboxScrim");
+  if (!img || !scrim) return;
+  img.src = src;
+  img.alt = alt || "";
+  scrim.classList.add("open");
+}
+
+function closeLightbox() {
+  document.getElementById("lightboxScrim")?.classList.remove("open");
+}
+
+function initLightbox() {
+  document.getElementById("lightboxClose")?.addEventListener("click", closeLightbox);
+
+  document.getElementById("lightboxScrim")?.addEventListener("click", (e) => {
+    // Cierra si se hace click en el fondo oscuro, no en la imagen
+    if (e.target.id === "lightboxScrim") closeLightbox();
+  });
+
+  // Delegación: funciona con cualquier imagen de producto, incluso
+  // las que se vuelven a dibujar al buscar o filtrar.
+  document.addEventListener("click", (e) => {
+    const img = e.target.closest(".gallery-main");
+    if (img) openLightbox(img.src, img.alt);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLightbox();
+  });
+}
+
 // ============================================================
 //  INICIALIZACIÓN
 // ============================================================
@@ -690,6 +726,7 @@ async function init() {
   initHeaderScroll();
   initDrawer();
   initCart();
+  initLightbox();
   attachRevealObservers();
 
   // Eventos de navegación por categoría
