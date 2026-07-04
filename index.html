@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XKOVARK — Lujo Urbano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Work+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="siteHeader">
+  <div class="nav-left">
+    <div class="logo">XKOVARK<span class="dot">.</span></div>
+    <nav class="nav-links">
+      <div class="nav-item">
+        <button>Colección</button>
+        <div class="megamenu">
+          <div class="mega-col">
+            <h5>Joyería</h5>
+            <button class="cat-link" data-goto-cat="joyeria">Cadena Cubana</button>
+            <button class="cat-link" data-goto-cat="joyeria">Pulsera Cubana</button>
+            <button class="cat-link" data-goto-cat="joyeria">Pulsera de Moisanita</button>
+            <button class="cat-link" data-goto-cat="joyeria">Aretes de Moisanita</button>
+            <button class="cat-link" data-goto-cat="joyeria">Pulsera Trébol</button>
+            <button class="cat-link" data-goto-cat="joyeria">Grillz</button>
+            <button class="cat-link" data-goto-cat="joyeria">Reloj</button>
+          </div>
+          <div class="mega-col">
+            <h5>Gafas</h5>
+            <button class="cat-link" data-goto-cat="gafas">Gafas Deportivas</button>
+            <button class="cat-link" data-goto-cat="gafas">Gafas Piloto Metálicas</button>
+            <button class="cat-link" data-goto-cat="gafas">Gafas Brasileñas</button>
+          </div>
+          <div class="mega-col">
+            <h5>Vestimenta</h5>
+            <button class="cat-link" data-goto-cat="vestimenta">Camisa</button>
+            <button class="cat-link" data-goto-cat="vestimenta">Buzo</button>
+            <button class="cat-link" data-goto-cat="vestimenta">Joggers</button>
+            <button class="cat-link" data-goto-cat="vestimenta">Bermuda</button>
+            <button class="cat-link" data-goto-cat="vestimenta">Conjunto</button>
+            <button class="cat-link" data-goto-cat="vestimenta">Gorra</button>
+            <button class="cat-link" data-goto-cat="vestimenta">Pasamontañas</button>
+            <button class="cat-link" data-goto-cat="vestimenta">Durag</button>
+          </div>
+          <div class="mega-col">
+            <h5>Bolsos</h5>
+            <button class="cat-link" data-goto-cat="bolsos">Mochila</button>
+            <button class="cat-link" data-goto-cat="bolsos">Bandolera</button>
+            <button class="cat-link" data-goto-cat="bolsos">Cartera de Mujer</button>
+            <button class="cat-link" data-goto-cat="bolsos">Billetera</button>
+          </div>
+          <div class="mega-col">
+            <h5>Extras</h5>
+            <button class="cat-link" data-goto-cat="extras">Perfume</button>
+            <button class="cat-link" data-goto-cat="extras">Vape</button>
+            <button class="cat-link" data-goto-cat="extras">Tatuajes Temporales</button>
+            <button class="cat-link" data-goto-cat="extras">Valquín</button>
+          </div>
+        </div>
+      </div>
+      <a href="#novedades">Novedades</a>
+      <a href="#ofertas">Ofertas</a>
+      <a href="#materiales">Nosotros</a>
+    </nav>
+  </div>
+  <div class="nav-right">
+    <a href="https://wa.me/593967071228" target="_blank" class="icon-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.33A10 10 0 1 0 12 2Z"/></svg>
+    </a>
+    <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></button>
+  </div>
+  <button class="menu-toggle" id="menuToggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+</header>
+
+<!-- DRAWER MÓVIL -->
+<div class="scrim" id="scrim"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <span class="logo">XKOVARK<span class="dot">.</span></span>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <div class="drawer-search">
+    <input type="text" placeholder="Buscar productos..." id="drawerSearch">
+  </div>
+  <div class="drawer-group">
+    <h5>Joyería</h5>
+    <button data-goto-cat="joyeria">Ver joyería completa</button>
+  </div>
+  <div class="drawer-group">
+    <h5>Gafas</h5>
+    <button data-goto-cat="gafas">Ver gafas completas</button>
+  </div>
+  <div class="drawer-group">
+    <h5>Vestimenta</h5>
+    <button data-goto-cat="vestimenta">Ver vestimenta completa</button>
+  </div>
+  <div class="drawer-group">
+    <h5>Bolsos</h5>
+    <button data-goto-cat="bolsos">Ver bolsos completos</button>
+  </div>
+  <div class="drawer-group">
+    <h5>Extras</h5>
+    <button data-goto-cat="extras">Ver extras completos</button>
+  </div>
+  <div class="drawer-group">
+    <h5>Contacto</h5>
+    <a href="https://wa.me/593967071228" target="_blank">WhatsApp: +593 96 707 1228</a>
+    <a href="https://www.instagram.com/xkovark/" target="_blank">Instagram</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div></div>
+    <div class="hero-img-slot">
+      <div class="placeholder"><div class="placeholder-label">SUSTITUIR<br>FOTO HERO<br>(producto icónico, fondo oscuro)</div></div>
+    </div>
+  </div>
+  <h1 class="hero-wordmark display">XKO<span class="accent">VARK</span></h1>
+  <div class="hero-tagline">
+    <span class="eyebrow">Lujo urbano · Piezas numeradas · Tiradas limitadas</span>
+  </div>
+  <div class="hero-foot">
+    <p class="hero-sub">Joyería, vestimenta y accesorios diseñados para durar. Cada pieza se produce en tiradas limitadas.</p>
+    <div class="hero-ctas">
+      <a href="#catalogo" class="btn btn-gold">Ver colección</a>
+      <a href="https://wa.me/593967071228" target="_blank" class="btn btn-ghost">Escríbenos por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="gold">TIRADAS LIMITADAS</span><span>—</span><span>NUMERADO A MANO</span><span>—</span><span class="gold">ENVÍO ASEGURADO</span><span>—</span><span>MATERIALES REALES</span><span>—</span>
+    <span class="gold">TIRADAS LIMITADAS</span><span>—</span><span>NUMERADO A MANO</span><span>—</span><span class="gold">ENVÍO ASEGURADO</span><span>—</span><span>MATERIALES REALES</span><span>—</span>
+  </div>
+</div>
+
+<!-- DEPARTAMENTOS -->
+<section class="departments">
+  <div class="section-head reveal">
+    <div><div class="eyebrow" style="margin-bottom:10px;">Explorar</div><h2 class="section-title display">Categorías</h2></div>
+    <p class="section-note">Toda la colección organizada para que encuentres lo tuyo en segundos.</p>
+  </div>
+  <div class="dept-grid reveal">
+    <button class="dept-tile" data-goto-cat="joyeria">
+      <div class="dept-img"><div class="placeholder"><div class="placeholder-label">FOTO<br>JOYERÍA</div></div></div>
+      <div class="dept-label"><span class="name">Joyería</span><span class="arrow">→</span></div>
+    </button>
+    <button class="dept-tile" data-goto-cat="gafas">
+      <div class="dept-img"><div class="placeholder"><div class="placeholder-label">FOTO<br>GAFAS</div></div></div>
+      <div class="dept-label"><span class="name">Gafas</span><span class="arrow">→</span></div>
+    </button>
+    <button class="dept-tile" data-goto-cat="vestimenta">
+      <div class="dept-img"><div class="placeholder"><div class="placeholder-label">FOTO<br>VESTIMENTA</div></div></div>
+      <div class="dept-label"><span class="name">Vestimenta</span><span class="arrow">→</span></div>
+    </button>
+    <button class="dept-tile" data-goto-cat="bolsos">
+      <div class="dept-img"><div class="placeholder"><div class="placeholder-label">FOTO<br>BOLSOS</div></div></div>
+      <div class="dept-label"><span class="name">Bolsos</span><span class="arrow">→</span></div>
+    </button>
+    <button class="dept-tile" data-goto-cat="extras">
+      <div class="dept-img"><div class="placeholder"><div class="placeholder-label">FOTO<br>EXTRAS</div></div></div>
+      <div class="dept-label"><span class="name">Extras</span><span class="arrow">→</span></div>
+    </button>
+  </div>
+</section>
+
+<!-- DESTACADOS -->
+<section class="section" id="destacados">
+  <div class="section-head reveal">
+    <div><div class="eyebrow" style="margin-bottom:10px;">Selección</div><h2 class="section-title display">Destacados</h2></div>
+    <p class="section-note">Las piezas que definen la temporada.</p>
+  </div>
+  <div class="grid feature-grid" id="destacados-grid"></div>
+</section>
+
+<!-- NOVEDADES -->
+<section class="section alt" id="novedades">
+  <div class="section-head reveal">
+    <div><div class="eyebrow" style="margin-bottom:10px;">Recién llegado</div><h2 class="section-title display">Novedades</h2></div>
+    <p class="section-note">Lo último en sumarse al catálogo.</p>
+  </div>
+  <div class="grid" id="novedades-grid"></div>
+</section>
+
+<!-- OFERTAS -->
+<section class="section" id="ofertas">
+  <div class="section-head reveal">
+    <div><div class="eyebrow" style="margin-bottom:10px;">Tiempo limitado</div><h2 class="section-title display">Ofertas</h2></div>
+    <p class="section-note">Precio especial mientras dure el stock.</p>
+  </div>
+  <div class="grid" id="ofertas-grid"></div>
+</section>
+
+<!-- CATÁLOGO COMPLETO -->
+<section id="catalogo">
+  <div class="filterbar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+      <input type="text" id="searchInput" placeholder="Buscar en el catálogo...">
+    </div>
+    <select class="filter-select" id="categoryFilter">
+      <option value="todas">Todas las categorías</option>
+      <option value="joyeria">Joyería</option>
+      <option value="gafas">Gafas</option>
+      <option value="vestimenta">Vestimenta</option>
+      <option value="bolsos">Bolsos</option>
+      <option value="extras">Extras</option>
+    </select>
+    <select class="filter-select" id="sortSelect">
+      <option value="relevancia">Relevancia</option>
+      <option value="precio-asc">Precio: menor a mayor</option>
+      <option value="precio-desc">Precio: mayor a menor</option>
+    </select>
+    <label class="filter-check">
+      <input type="checkbox" id="onlyStock"> Solo disponibles
+    </label>
+    <span class="result-count" id="resultCount"></span>
+  </div>
+
+  <div class="chipnav">
+    <button class="chip active" data-cat="todas">Todas</button>
+    <button class="chip" data-cat="joyeria">Joyería</button>
+    <button class="chip" data-cat="gafas">Gafas</button>
+    <button class="chip" data-cat="vestimenta">Vestimenta</button>
+    <button class="chip" data-cat="bolsos">Bolsos</button>
+    <button class="chip" data-cat="extras">Extras</button>
+  </div>
+
+  <div class="section" style="padding-top:50px;">
+    <div class="section-head reveal">
+      <div><div class="eyebrow" style="margin-bottom:10px;">Catálogo completo</div><h2 class="section-title display">Toda la colección</h2></div>
+      <p class="section-note">Usa el buscador o los filtros para encontrar exactamente lo que quieres.</p>
+    </div>
+    <div class="grid" id="catalogo-grid"></div>
+  </div>
+</section>
+
+<!-- MATERIALES -->
+<section class="section alt" id="materiales">
+  <div class="section-head reveal">
+    <div><div class="eyebrow" style="margin-bottom:10px;">Proceso</div><h2 class="section-title display">Materiales</h2></div>
+    <p class="section-note">No usamos sintéticos. Cada material se elige por cómo envejece, no solo por cómo luce nuevo.</p>
+  </div>
+  <div class="craft-body">
+    <div class="craft-img reveal"><div class="placeholder"><div class="placeholder-label">SUSTITUIR<br>FOTO DE DETALLE<br>(costura, herraje, textura)</div></div></div>
+    <div class="craft-text reveal">
+      <p>Trabajamos con curtidurías que aún curten al vegetal, y con talleres que ensamblan a mano, pieza por pieza. El resultado no es perfecto — es honesto.</p>
+      <p>Por eso cada artículo trae su propio registro de origen y número de serie.</p>
+      <div class="craft-list">
+        <div class="craft-list-item"><span>Curtido</span><span>Vegetal, sin cromo</span></div>
+        <div class="craft-list-item"><span>Herraje</span><span>Latón y acero macizo</span></div>
+        <div class="craft-list-item"><span>Ensamblaje</span><span>Manual, taller único</span></div>
+        <div class="craft-list-item"><span>Garantía</span><span>5 años, reparación incluida</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-section reveal">
+  <p class="quote display" style="text-transform:none;">"No hacemos productos para todos.<br>Hacemos productos para quienes <span class="accent">los merecen</span>."</p>
+  <p class="quote-attr">— Fundadores, XKOVARK</p>
+</section>
+
+<!-- FOOTER -->
+<footer id="contacto">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo">XKOVARK<span class="dot">.</span></span>
+      <p>Lujo urbano, piezas numeradas y tiradas limitadas. Escríbenos por WhatsApp para asesoría personalizada.</p>
+      <div class="social-row">
+        <a class="social-icon" href="https://www.instagram.com/xkovark/" target="_blank" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        </a>
+        <a class="social-icon" href="#" target="_blank" title="Facebook (agrega tu enlace)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/></svg>
+        </a>
+        <a class="social-icon" href="https://wa.me/593967071228" target="_blank" title="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.33A10 10 0 1 0 12 2Z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Joyería</h4><button data-goto-cat="joyeria">Ver todo</button></div>
+    <div class="footer-col"><h4>Vestimenta</h4><button data-goto-cat="vestimenta">Ver todo</button></div>
+    <div class="footer-col"><h4>Bolsos</h4><button data-goto-cat="bolsos">Ver todo</button></div>
+    <div class="footer-col"><h4>Contacto</h4>
+      <a href="https://wa.me/593967071228" target="_blank">+593 96 707 1228</a>
+      <a href="https://www.instagram.com/xkovark/" target="_blank">@xkovark</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 XKOVARK. Todos los derechos reservados.</span>
+    <span>Diseñado con precisión.</span>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOTANTE -->
+<a href="https://wa.me/593967071228?text=Hola%20XKOVARK,%20quiero%20más%20información" target="_blank" class="wa-float" title="Escríbenos por WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.4 0-.5C11.6 9 11.1 7.9 11 7.5c-.1-.3-.3-.3-.5-.3h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.1 1.7 2.6 4.1 3.6.6.2 1 .4 1.4.5.6.2 1.1.2 1.5.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.33A10 10 0 1 0 12 2Z"/></svg>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
