@@ -152,6 +152,8 @@ function showError(message) {
 
 const CATEGORY_LABELS = {
   joyeria: "Joyería", 
+  pulseras: "Pulseras",
+  lentes: "Lentes",
   gafas: "Gafas", 
   vestimenta: "Vestimenta", 
   bolsos: "Bolsos", 
