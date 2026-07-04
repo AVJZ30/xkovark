@@ -7,6 +7,9 @@
 // ✅ REEMPLAZA con la URL de tu Apps Script (la que copiaste al implementar)
 const SPREADSHEET_URL = "https://script.google.com/macros/s/AKfycbx0gPeRzKW24nS82HQUs9qNLyJ3Vn27uQ7V1H7WGrlFpEbuCXUYH8pKEUwmTEVyIKxH7Q/exec";
 
+// Número de WhatsApp para recibir pedidos del carrito (mismo que el resto del sitio)
+const WHATSAPP_NUMBER = "593967071228";
+
 // ============================================================
 //  VARIABLES GLOBALES
 // ============================================================
@@ -205,8 +208,10 @@ function cardHTML(p) {
     ? `<span class="price-old">$${p.precioAntes}</span><span class="price">$${p.precio}</span>`
     : `<span class="price">$${p.precio}</span>`;
 
+  const agotado = p.disponibilidad === "agotado";
+
   return `
-    <div class="card reveal ${p.disponibilidad==='agotado'?'is-agotado':''}" 
+    <div class="card reveal ${agotado ? 'is-agotado' : ''}" 
          data-id="${p.id}" data-categoria="${p.categoria}" id="${p.id}">
       <div class="card-img">
         ${imagesHTML}
@@ -221,6 +226,16 @@ function cardHTML(p) {
             <span class="dot-status ${p.disponibilidad}"></span>
             ${AVAIL_LABELS[p.disponibilidad] || p.disponibilidad}
           </span>
+        </div>
+        <div class="qty-row">
+          <div class="qty-stepper" data-id="${p.id}">
+            <button class="qty-btn qty-minus" type="button" aria-label="Restar cantidad">−</button>
+            <span class="qty-value">1</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Sumar cantidad">+</button>
+          </div>
+          <button class="btn-add-cart" type="button" data-id="${p.id}" ${agotado ? "disabled" : ""}>
+            ${agotado ? "Agotado" : "Agregar"}
+          </button>
         </div>
       </div>
     </div>
@@ -428,6 +443,224 @@ function initDrawer() {
   }
 }
 
+/* ============================================================
+   🛒 CARRITO DE COMPRAS
+   ============================================================
+   - Cada producto tiene un selector de cantidad y un botón
+     "Agregar" que suma esa cantidad al carrito.
+   - El carrito se guarda en localStorage, así que sobrevive
+     si el visitante recarga la página o vuelve más tarde.
+   - El botón "Finalizar por WhatsApp" arma un mensaje con el
+     detalle del pedido y abre WhatsApp con ese número.
+   ============================================================ */
+
+let cart = [];
+
+function loadCart() {
+  try {
+    const saved = localStorage.getItem("xkovark_cart");
+    return saved ? JSON.parse(saved) : [];
+  } catch (e) {
+    console.warn("No se pudo leer el carrito guardado:", e);
+    return [];
+  }
+}
+
+function saveCart() {
+  try {
+    localStorage.setItem("xkovark_cart", JSON.stringify(cart));
+  } catch (e) {
+    console.warn("No se pudo guardar el carrito:", e);
+  }
+}
+
+function findProduct(id) {
+  return PRODUCTS.find(p => p.id === id);
+}
+
+function addToCart(id, cantidad) {
+  const existing = cart.find(i => i.id === id);
+  if (existing) {
+    existing.cantidad += cantidad;
+  } else {
+    cart.push({ id, cantidad });
+  }
+  saveCart();
+  renderCart();
+  bumpCartBadge();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  saveCart();
+  renderCart();
+}
+
+function changeCartQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.cantidad += delta;
+  if (item.cantidad <= 0) {
+    removeFromCart(id);
+  } else {
+    saveCart();
+    renderCart();
+  }
+}
+
+function cartTotal() {
+  return cart.reduce((sum, item) => {
+    const product = findProduct(item.id);
+    return sum + (product ? product.precio * item.cantidad : 0);
+  }, 0);
+}
+
+function cartItemCount() {
+  return cart.reduce((sum, item) => sum + item.cantidad, 0);
+}
+
+function renderCart() {
+  const container = document.getElementById("cartItems");
+  const totalEl = document.getElementById("cartTotal");
+  const badge = document.getElementById("cartBadge");
+  const checkoutBtn = document.getElementById("checkoutBtn");
+
+  if (container) {
+    if (cart.length === 0) {
+      container.innerHTML = `<div class="cart-empty">Tu carrito está vacío.<br>Agrega productos desde el catálogo.</div>`;
+    } else {
+      container.innerHTML = cart.map(item => {
+        const product = findProduct(item.id);
+        if (!product) return "";
+        const subtotal = product.precio * item.cantidad;
+        return `
+          <div class="cart-item" data-id="${item.id}">
+            <div class="cart-item-info">
+              <span class="cart-item-name">${product.nombre}</span>
+              <span class="cart-item-price">$${product.precio} c/u · Subtotal $${subtotal}</span>
+            </div>
+            <div class="cart-item-actions">
+              <button class="cart-qty-btn cart-qty-minus" type="button" data-id="${item.id}">−</button>
+              <span class="cart-qty-value">${item.cantidad}</span>
+              <button class="cart-qty-btn cart-qty-plus" type="button" data-id="${item.id}">+</button>
+              <button class="cart-remove" type="button" data-id="${item.id}" title="Quitar del carrito">✕</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+  }
+
+  const total = cartTotal();
+  if (totalEl) totalEl.textContent = `$${total}`;
+
+  const count = cartItemCount();
+  if (badge) {
+    badge.textContent = count;
+    badge.classList.toggle("hidden", count === 0);
+  }
+
+  if (checkoutBtn) checkoutBtn.disabled = cart.length === 0;
+}
+
+function bumpCartBadge() {
+  const badge = document.getElementById("cartBadge");
+  if (!badge) return;
+  badge.classList.add("bump");
+  setTimeout(() => badge.classList.remove("bump"), 250);
+}
+
+function openCartDrawer() {
+  document.getElementById("cartDrawer")?.classList.add("open");
+  document.getElementById("cartScrim")?.classList.add("open");
+}
+
+function closeCartDrawer() {
+  document.getElementById("cartDrawer")?.classList.remove("open");
+  document.getElementById("cartScrim")?.classList.remove("open");
+}
+
+function buildWhatsAppOrderMessage() {
+  const lines = ["Hola XKOVARK, quiero hacer este pedido:", ""];
+  cart.forEach(item => {
+    const product = findProduct(item.id);
+    if (!product) return;
+    const subtotal = product.precio * item.cantidad;
+    lines.push(`• ${product.nombre} x${item.cantidad} — $${subtotal}`);
+  });
+  lines.push("", `Total: $${cartTotal()}`);
+  return lines.join("\n");
+}
+
+function checkoutViaWhatsApp() {
+  if (cart.length === 0) return;
+  const message = encodeURIComponent(buildWhatsAppOrderMessage());
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+}
+
+function initCart() {
+  cart = loadCart();
+  renderCart();
+
+  document.getElementById("cartToggle")?.addEventListener("click", () => {
+    renderCart();
+    openCartDrawer();
+  });
+  document.getElementById("cartClose")?.addEventListener("click", closeCartDrawer);
+  document.getElementById("cartScrim")?.addEventListener("click", closeCartDrawer);
+  document.getElementById("checkoutBtn")?.addEventListener("click", checkoutViaWhatsApp);
+
+  // Delegación de eventos: funciona aunque las tarjetas se
+  // vuelvan a dibujar al buscar, filtrar u ordenar.
+  document.addEventListener("click", (e) => {
+    const plusBtn = e.target.closest(".qty-plus");
+    const minusBtn = e.target.closest(".qty-minus");
+    const addBtn = e.target.closest(".btn-add-cart");
+    const cartQtyPlus = e.target.closest(".cart-qty-plus");
+    const cartQtyMinus = e.target.closest(".cart-qty-minus");
+    const cartRemoveBtn = e.target.closest(".cart-remove");
+
+    if (plusBtn || minusBtn) {
+      const stepper = (plusBtn || minusBtn).closest(".qty-stepper");
+      const valueEl = stepper?.querySelector(".qty-value");
+      if (!valueEl) return;
+      let val = parseInt(valueEl.textContent) || 1;
+      val = plusBtn ? val + 1 : Math.max(1, val - 1);
+      valueEl.textContent = val;
+      return;
+    }
+
+    if (addBtn) {
+      if (addBtn.disabled) return;
+      const card = addBtn.closest(".card");
+      if (!card) return;
+      const id = card.dataset.id;
+      const qty = parseInt(card.querySelector(".qty-value")?.textContent) || 1;
+      addToCart(id, qty);
+
+      const originalText = addBtn.textContent;
+      addBtn.textContent = "Agregado ✓";
+      addBtn.classList.add("added");
+      setTimeout(() => {
+        addBtn.textContent = originalText;
+        addBtn.classList.remove("added");
+      }, 1200);
+      return;
+    }
+
+    if (cartQtyPlus || cartQtyMinus) {
+      const id = (cartQtyPlus || cartQtyMinus).dataset.id;
+      changeCartQty(id, cartQtyPlus ? 1 : -1);
+      return;
+    }
+
+    if (cartRemoveBtn) {
+      removeFromCart(cartRemoveBtn.dataset.id);
+      return;
+    }
+  });
+}
+
 // ============================================================
 //  INICIALIZACIÓN
 // ============================================================
@@ -456,6 +689,7 @@ async function init() {
   initFilterBar();
   initHeaderScroll();
   initDrawer();
+  initCart();
   attachRevealObservers();
 
   // Eventos de navegación por categoría
