@@ -1,180 +1,182 @@
 /* ============================================================
-   CONFIGURACIÓN - CAMBIA ESTA URL POR LA TUYA
+   🚀 XKOVARK - Script principal para la tienda online
+   ============================================================
+   CONFIGURACIÓN - Cambia esta URL por la de tu Apps Script
    ============================================================ */
-// 📌 PASO 1: Publica tu hoja de Google Sheets como CSV
-// Ve a Archivo > Compartir > Publicar en la web > Hoja completa > CSV
-// Copia la URL y pégala abajo:
 
-const SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/https://script.google.com/macros/s/AKfycbx0gPeRzKW24nS82HQUs9qNLyJ3Vn27uQ7V1H7WGrlFpEbuCXUYH8pKEUwmTEVyIKxH7Q/exec/export?format=csv&gid=0";
-//                                ↑ Reemplaza ### con tu ID de hoja
+// ✅ REEMPLAZA con la URL de tu Apps Script (la que copiaste al implementar)
+const SPREADSHEET_URL = "https://script.google.com/macros/s/AKfycbx0gPeRzKW24nS82HQUs9qNLyJ3Vn27uQ7V1H7WGrlFpEbuCXUYH8pKEUwmTEVyIKxH7Q/exec";
 
 // ============================================================
-//  CARGA DE DATOS DESDE GOOGLE SHEETS
+//  VARIABLES GLOBALES
 // ============================================================
 
 let PRODUCTS = [];
 let allProductsLoaded = false;
+let state = { 
+  search: "", 
+  categoria: "todas", 
+  soloStock: false, 
+  orden: "relevancia" 
+};
+
+// ============================================================
+//  CARGA DE PRODUCTOS DESDE APPS SCRIPT
+// ============================================================
 
 async function loadProductsFromSheet() {
   try {
-    const response = await fetch(SPREADSHEET_URL);
-    if (!response.ok) throw new Error("Error al cargar la hoja de cálculo");
-    const csvData = await response.text();
-    const rows = csvToArray(csvData);
-    const headers = rows[0].map(h => h.trim().toLowerCase());
+    console.log("🔄 Cargando productos desde Apps Script...");
+    console.log("📡 URL:", SPREADSHEET_URL);
     
-    // Mapeo de columnas esperadas
-    const colMap = {};
-    headers.forEach((h, i) => {
-      if (h === "nombre_producto") colMap.nombre = i;
-      else if (h === "categoria") colMap.categoria = i;
-      else if (h === "descripcion") colMap.descripcion = i;
-      else if (h === "precio") colMap.precio = i;
-      else if (h === "en_oferta") colMap.en_oferta = i;
-      else if (h === "imagen_frente") colMap.imagen_frente = i;
-      else if (h === "imagen_espalda") colMap.imagen_espalda = i;
-      else if (h === "disponibilidad") colMap.disponibilidad = i;
-    });
-
-    // Verificar columnas requeridas
-    const required = ["nombre", "categoria", "descripcion", "precio", "disponibilidad"];
-    const missing = required.filter(r => !(r in colMap));
-    if (missing.length) {
-      console.warn("Faltan columnas en la hoja:", missing);
+    const response = await fetch(SPREADSHEET_URL);
+    
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status} - ${response.statusText}`);
     }
-
-    // Procesar datos
-    const products = [];
-    for (let i = 1; i < rows.length; i++) {
-      const row = rows[i];
-      if (!row || row.length === 0 || row.every(cell => cell.trim() === "")) continue;
-      
-      const nombre = row[colMap.nombre]?.trim() || "";
-      if (!nombre) continue; // Saltar filas sin nombre
-      
-      const categoria = row[colMap.categoria]?.trim().toLowerCase() || "extras";
-      const descripcion = row[colMap.descripcion]?.trim() || "";
-      const precio = parseFloat(row[colMap.precio]?.trim()) || 0;
-      const en_oferta = row[colMap.en_oferta]?.trim().toLowerCase() === "true" || 
-                        row[colMap.en_oferta]?.trim() === "TRUE" || 
-                        row[colMap.en_oferta]?.trim() === "1";
-      const imagen_frente = row[colMap.imagen_frente]?.trim() || "";
-      const imagen_espalda = row[colMap.imagen_espalda]?.trim() || "";
-      const disponibilidad = row[colMap.disponibilidad]?.trim().toLowerCase() || "stock";
-      
-      // Crear ID único basado en el nombre
-      const id = nombre.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-      
+    
+    const data = await response.json();
+    console.log("✅ Datos recibidos:", data);
+    
+    // Verificar si es un array
+    if (!Array.isArray(data)) {
+      throw new Error("Los datos recibidos no son un array válido");
+    }
+    
+    if (data.length === 0) {
+      throw new Error("La hoja está vacía, no hay productos para mostrar");
+    }
+    
+    // Mapear los datos al formato que espera la tienda
+    PRODUCTS = data.map((item, index) => {
       // Determinar tags
       const tags = [];
-      if (en_oferta) tags.push("oferta");
-      // Las primeras 3 filas con imágenes se marcan como destacadas
-      if (i <= 3 && imagen_frente) tags.push("destacado");
-      // Novedades: marcar como nuevo si tiene imagen_espalda y no es oferta
-      if (imagen_espalda && !en_oferta && i <= 5) tags.push("nuevo");
+      if (item.en_oferta === true || item.en_oferta === "true") {
+        tags.push("oferta");
+      }
       
-      // Construir objeto producto
-      const imagenes = [];
-      if (imagen_frente) imagenes.push(imagen_frente);
-      if (imagen_espalda) imagenes.push(imagen_espalda);
+      // Crear array de imágenes
+      const images = [];
+      if (item.imagen_frente && item.imagen_frente.trim() !== "") {
+        images.push(item.imagen_frente);
+      }
+      if (item.imagen_espalda && item.imagen_espalda.trim() !== "") {
+        images.push(item.imagen_espalda);
+      }
       
-      products.push({
-        id: id,
-        categoria: categoria,
-        nombre: nombre,
-        desc: descripcion,
-        precio: precio,
-        precioAntes: en_oferta ? Math.round(precio * 1.2) : null, // Simular precio anterior
+      // Determinar precio anterior (para ofertas)
+      let precioAntes = null;
+      if (item.en_oferta === true || item.en_oferta === "true") {
+        const precioActual = parseFloat(item.precio) || 0;
+        precioAntes = Math.round(precioActual * 1.2);
+      }
+      
+      // Validar que los campos requeridos existan
+      if (!item.nombre_producto && !item.nombre) {
+        console.warn(`⚠️ Producto en fila ${index + 2} sin nombre, saltando...`);
+        return null;
+      }
+      
+      return {
+        id: item.id || item.nombre_producto?.toLowerCase().replace(/[^a-z0-9]+/g, "-") || `producto-${index}`,
+        categoria: item.categoria?.toLowerCase() || "extras",
+        nombre: item.nombre_producto || item.nombre || "Producto sin nombre",
+        desc: item.descripcion || "",
+        precio: parseFloat(item.precio) || 0,
+        precioAntes: precioAntes,
         tags: tags,
-        disponibilidad: disponibilidad,
-        images: imagenes.length > 0 ? imagenes : [] // Array de URLs
-      });
-    }
+        disponibilidad: item.disponibilidad?.toLowerCase() || "stock",
+        images: images
+      };
+    }).filter(p => p !== null); // Eliminar productos nulos
     
-    PRODUCTS = products;
+    // Agregar tags automáticos (destacados, novedades)
+    PRODUCTS.forEach((p, i) => {
+      // Los primeros 3 con imágenes son destacados
+      if (i < 3 && p.images.length > 0 && !p.tags.includes("destacado")) {
+        p.tags.push("destacado");
+      }
+      // Los siguientes 3 sin oferta son novedades
+      if (i >= 3 && i < 6 && p.images.length > 0 && !p.tags.includes("oferta") && !p.tags.includes("destacado")) {
+        p.tags.push("nuevo");
+      }
+    });
+    
     allProductsLoaded = true;
-    return products;
-  } catch (error) {
-    console.error("Error cargando productos desde Google Sheets:", error);
-    // Usar datos de respaldo
-    PRODUCTS = getFallbackProducts();
-    allProductsLoaded = true;
+    console.log(`✅ ${PRODUCTS.length} productos cargados desde Apps Script`);
+    console.log("📦 Tags disponibles:", [...new Set(PRODUCTS.flatMap(p => p.tags))]);
     return PRODUCTS;
-  }
-}
-
-// ============================================================
-//  UTILIDAD: Convertir CSV a Array
-// ============================================================
-function csvToArray(csv) {
-  const rows = [];
-  let currentRow = [];
-  let currentCell = "";
-  let insideQuotes = false;
-  
-  for (let i = 0; i < csv.length; i++) {
-    const char = csv[i];
     
-    if (char === '"') {
-      if (insideQuotes && csv[i+1] === '"') {
-        currentCell += '"';
-        i++;
-      } else {
-        insideQuotes = !insideQuotes;
-      }
-    } else if (char === ',' && !insideQuotes) {
-      currentRow.push(currentCell.trim());
-      currentCell = "";
-    } else if ((char === '\n' || char === '\r') && !insideQuotes) {
-      if (char === '\r' && i+1 < csv.length && csv[i+1] === '\n') i++;
-      currentRow.push(currentCell.trim());
-      if (currentRow.some(cell => cell !== "")) {
-        rows.push(currentRow);
-      }
-      currentRow = [];
-      currentCell = "";
-    } else {
-      currentCell += char;
-    }
+  } catch (error) {
+    console.error("❌ Error cargando productos:", error);
+    allProductsLoaded = false;
+    
+    // Mostrar mensaje de error en la página
+    showError("No se pudieron cargar los productos. Por favor, intenta de nuevo más tarde.");
+    
+    return [];
   }
-  
-  // Última fila
-  if (currentCell || currentRow.length > 0) {
-    currentRow.push(currentCell.trim());
-    if (currentRow.some(cell => cell !== "")) {
-      rows.push(currentRow);
-    }
-  }
-  
-  return rows;
 }
 
 // ============================================================
-//  DATOS DE RESPALDO (si falla la carga de Google Sheets)
+//  MOSTRAR ERROR EN LA PÁGINA
 // ============================================================
-function getFallbackProducts() {
-  return [
-    { id:"cadena-cubana", categoria:"joyeria", nombre:"Cadena Cubana", desc:"Eslabones macizos, baño de oro 18k.", precio:260, precioAntes:null, tags:["destacado"], disponibilidad:"stock", images:[] },
-    { id:"pulsera-cubana", categoria:"joyeria", nombre:"Pulsera Cubana", desc:"El mismo eslabón de la cadena, en pulso.", precio:150, precioAntes:null, tags:[], disponibilidad:"stock", images:[] },
-    { id:"pulsera-moisanita", categoria:"joyeria", nombre:"Pulsera de Moisanita", desc:"El brillo de un diamante, engaste cerrado.", precio:210, precioAntes:null, tags:["nuevo"], disponibilidad:"stock", images:[] },
-    { id:"aretes-moisanita", categoria:"joyeria", nombre:"Aretes de Moisanita", desc:"Talla brillante, para toda ocasión.", precio:175, precioAntes:210, tags:["oferta"], disponibilidad:"pocas", images:[] },
+
+function showError(message) {
+  const containers = [
+    "destacados-grid",
+    "novedades-grid", 
+    "ofertas-grid",
+    "catalogo-grid"
   ];
+  
+  containers.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.innerHTML = `
+        <div class="error-state" style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--grey);">
+          <p style="font-size: 18px; margin-bottom: 12px;">⚠️ ${message}</p>
+          <p style="font-size: 13px; color: var(--grey-dim);">Verifica que tu hoja de Google Sheets esté publicada correctamente.</p>
+          <p style="font-size: 12px; margin-top: 16px; color: var(--grey-dim);">
+            <a href="#" onclick="location.reload()" style="color: var(--gold); text-decoration: underline;">Recargar página</a>
+          </p>
+        </div>
+      `;
+    }
+  });
 }
 
 // ============================================================
-//  CONSTANTES Y RENDER
+//  CONSTANTES DE ETIQUETAS
 // ============================================================
+
 const CATEGORY_LABELS = {
-  joyeria:"Joyería", gafas:"Gafas", vestimenta:"Vestimenta", bolsos:"Bolsos", extras:"Extras"
+  joyeria: "Joyería", 
+  gafas: "Gafas", 
+  vestimenta: "Vestimenta", 
+  bolsos: "Bolsos", 
+  extras: "Extras"
 };
-const AVAIL_LABELS = { stock:"En stock", pocas:"Pocas unidades", agotado:"Agotado" };
+
+const AVAIL_LABELS = { 
+  stock: "En stock", 
+  pocas: "Pocas unidades", 
+  agotado: "Agotado" 
+};
+
+// ============================================================
+//  RENDER DE TARJETAS DE PRODUCTO
+// ============================================================
 
 function cardHTML(p) {
-  const badge = p.disponibilidad === "agotado" ? `<span class="badge agotado">Agotado</span>`
-    : p.tags.includes("oferta") ? `<span class="badge oferta">Oferta</span>`
-    : p.tags.includes("nuevo") ? `<span class="badge nuevo">Nuevo</span>` : "";
+  const badge = p.disponibilidad === "agotado" 
+    ? `<span class="badge agotado">Agotado</span>`
+    : p.tags.includes("oferta") 
+      ? `<span class="badge oferta">Oferta</span>`
+      : p.tags.includes("nuevo") 
+        ? `<span class="badge nuevo">Nuevo</span>` 
+        : "";
 
-  // Generar imágenes de galería
   let imagesHTML = "";
   if (p.images && p.images.length > 0) {
     const imgs = p.images;
@@ -184,12 +186,12 @@ function cardHTML(p) {
     
     imagesHTML = `
       <div class="product-gallery">
-        <img src="${imgs[0]}" alt="${p.nombre}" class="gallery-main" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%231a1a17%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%2396958c%22 font-family=%22monospace%22 font-size=%2212%22%3EFOTO%3C/text%3E%3C/svg%3E'">
+        <img src="${imgs[0]}" alt="${p.nombre}" class="gallery-main" loading="lazy" 
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%231a1a17%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%2396958c%22 font-family=%22monospace%22 font-size=%2212%22%3ESin%20imagen%3C/text%3E%3C/svg%3E'">
         ${imgs.length > 1 ? `<div class="gallery-dots">${dots}</div>` : ""}
       </div>
     `;
   } else {
-    // Placeholder si no hay imágenes
     imagesHTML = `
       <div class="placeholder">
         <div class="placeholder-label">${p.nombre}<br><span style="font-size:9px;">Sin imagen</span></div>
@@ -202,45 +204,65 @@ function cardHTML(p) {
     : `<span class="price">$${p.precio}</span>`;
 
   return `
-  <div class="card reveal ${p.disponibilidad==='agotado'?'is-agotado':''}" data-id="${p.id}" data-categoria="${p.categoria}" id="${p.id}">
-    <div class="card-img">
-      ${imagesHTML}
-      ${badge}
-    </div>
-    <div class="card-body">
-      <span class="name">${p.nombre}</span>
-      <span class="desc">${p.desc}</span>
-      <div class="card-foot">
-        <div class="price-wrap">${priceHTML}</div>
-        <span class="availability"><span class="dot-status ${p.disponibilidad}"></span>${AVAIL_LABELS[p.disponibilidad] || p.disponibilidad}</span>
+    <div class="card reveal ${p.disponibilidad==='agotado'?'is-agotado':''}" 
+         data-id="${p.id}" data-categoria="${p.categoria}" id="${p.id}">
+      <div class="card-img">
+        ${imagesHTML}
+        ${badge}
+      </div>
+      <div class="card-body">
+        <span class="name">${p.nombre}</span>
+        <span class="desc">${p.desc}</span>
+        <div class="card-foot">
+          <div class="price-wrap">${priceHTML}</div>
+          <span class="availability">
+            <span class="dot-status ${p.disponibilidad}"></span>
+            ${AVAIL_LABELS[p.disponibilidad] || p.disponibilidad}
+          </span>
+        </div>
       </div>
     </div>
-  </div>`;
+  `;
 }
+
+// ============================================================
+//  FUNCIONES DE RENDERIZADO
+// ============================================================
 
 function renderGrid(containerId, list) {
   const el = document.getElementById(containerId);
   if (!el) return;
-  el.innerHTML = list.length
-    ? list.map(cardHTML).join("")
-    : `<div class="empty-state">No encontramos productos con esos filtros. Prueba con otra búsqueda o categoría.</div>`;
+  
+  if (!allProductsLoaded || list.length === 0) {
+    if (allProductsLoaded) {
+      el.innerHTML = `<div class="empty-state">No encontramos productos con esos filtros. Prueba con otra búsqueda o categoría.</div>`;
+    }
+    return;
+  }
+  
+  el.innerHTML = list.map(cardHTML).join("");
+  attachGalleryDots();
 }
 
-// ============================================================
-//  SECCIONES CURADAS
-// ============================================================
 function renderCurated() {
-  renderGrid("destacados-grid", PRODUCTS.filter(p => p.tags.includes("destacado")).slice(0,5));
-  renderGrid("novedades-grid", PRODUCTS.filter(p => p.tags.includes("nuevo")));
-  renderGrid("ofertas-grid", PRODUCTS.filter(p => p.tags.includes("oferta")));
+  if (!allProductsLoaded || PRODUCTS.length === 0) return;
+  
+  const destacados = PRODUCTS.filter(p => p.tags.includes("destacado"));
+  const novedades = PRODUCTS.filter(p => p.tags.includes("nuevo"));
+  const ofertas = PRODUCTS.filter(p => p.tags.includes("oferta"));
+  
+  renderGrid("destacados-grid", destacados.slice(0, 5));
+  renderGrid("novedades-grid", novedades);
+  renderGrid("ofertas-grid", ofertas);
 }
 
 // ============================================================
-//  CATÁLOGO FILTRABLE
+//  FILTROS Y BÚSQUEDA
 // ============================================================
-let state = { search:"", categoria:"todas", soloStock:false, orden:"relevancia" };
 
 function applyFilters() {
+  if (!allProductsLoaded || PRODUCTS.length === 0) return;
+  
   let list = PRODUCTS.filter(p => {
     const matchSearch = (p.nombre + " " + p.desc).toLowerCase().includes(state.search.toLowerCase());
     const matchCat = state.categoria === "todas" || p.categoria === state.categoria;
@@ -252,43 +274,69 @@ function applyFilters() {
   if (state.orden === "precio-desc") list.sort((a, b) => b.precio - a.precio);
 
   renderGrid("catalogo-grid", list);
+  
   const countEl = document.getElementById("resultCount");
   if (countEl) {
     countEl.textContent = list.length + (list.length === 1 ? " pieza" : " piezas");
   }
+  
   attachRevealObservers();
-  attachGalleryDots();
 }
 
 function goToCatalog(categoria) {
   state.categoria = categoria;
   const catFilter = document.getElementById("categoryFilter");
   if (catFilter) catFilter.value = categoria;
-  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c.dataset.cat === categoria));
+  
+  document.querySelectorAll(".chip").forEach(c => {
+    c.classList.toggle("active", c.dataset.cat === categoria);
+  });
+  
   applyFilters();
-  document.getElementById("catalogo")?.scrollIntoView({behavior:"smooth"});
+  document.getElementById("catalogo")?.scrollIntoView({ behavior: "smooth" });
   closeDrawer();
 }
 
 // ============================================================
-//  INTERACCIONES
+//  INTERACCIONES Y EVENTOS
 // ============================================================
+
 function initFilterBar() {
   const searchInput = document.getElementById("searchInput");
   const categorySelect = document.getElementById("categoryFilter");
   const stockCheck = document.getElementById("onlyStock");
   const sortSelect = document.getElementById("sortSelect");
 
-  if (searchInput) searchInput.addEventListener("input", e => { state.search = e.target.value; applyFilters(); });
+  if (searchInput) {
+    searchInput.addEventListener("input", e => { 
+      state.search = e.target.value; 
+      applyFilters(); 
+    });
+  }
+  
   if (categorySelect) {
     categorySelect.addEventListener("change", e => {
       state.categoria = e.target.value;
-      document.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c.dataset.cat === e.target.value));
+      document.querySelectorAll(".chip").forEach(c => {
+        c.classList.toggle("active", c.dataset.cat === e.target.value);
+      });
       applyFilters();
     });
   }
-  if (stockCheck) stockCheck.addEventListener("change", e => { state.soloStock = e.target.checked; applyFilters(); });
-  if (sortSelect) sortSelect.addEventListener("change", e => { state.orden = e.target.value; applyFilters(); });
+  
+  if (stockCheck) {
+    stockCheck.addEventListener("change", e => { 
+      state.soloStock = e.target.checked; 
+      applyFilters(); 
+    });
+  }
+  
+  if (sortSelect) {
+    sortSelect.addEventListener("change", e => { 
+      state.orden = e.target.value; 
+      applyFilters(); 
+    });
+  }
 
   document.querySelectorAll(".chip").forEach(chip => {
     chip.addEventListener("click", () => {
@@ -308,13 +356,16 @@ function attachGalleryDots() {
         e.stopPropagation();
         wrap.querySelectorAll(".gdot").forEach(d => d.classList.remove("active"));
         dot.classList.add("active");
+        
         const card = wrap.closest(".card");
         const img = card?.querySelector(".gallery-main");
-        const imgs = card?.querySelectorAll(".gallery-main");
-        if (img && imgs) {
+        if (img) {
           const idx = parseInt(dot.dataset.idx);
-          // Si hay más imágenes en un array, aquí se podría cambiar la src
-          // Para simplificar, solo cambiamos el dot activo
+          const productId = card.dataset.id;
+          const product = PRODUCTS.find(p => p.id === productId);
+          if (product && product.images && product.images[idx]) {
+            img.src = product.images[idx];
+          }
         }
       });
     });
@@ -330,16 +381,20 @@ function attachRevealObservers() {
       }
     });
   }, { threshold: 0.12 });
+  
   document.querySelectorAll(".reveal:not(.in)").forEach(el => observer.observe(el));
 }
 
 // ============================================================
-//  HEADER / DRAWER
+//  HEADER Y DRAWER (MENÚ MÓVIL)
 // ============================================================
+
 function initHeaderScroll() {
   const header = document.getElementById("siteHeader");
+  if (!header) return;
+  
   window.addEventListener("scroll", () => {
-    header?.classList.toggle("scrolled", window.scrollY > 40);
+    header.classList.toggle("scrolled", window.scrollY > 40);
   });
 }
 
@@ -358,7 +413,6 @@ function initDrawer() {
   document.getElementById("drawerClose")?.addEventListener("click", closeDrawer);
   document.getElementById("scrim")?.addEventListener("click", closeDrawer);
   
-  // Buscar en drawer
   const drawerSearch = document.getElementById("drawerSearch");
   if (drawerSearch) {
     drawerSearch.addEventListener("input", (e) => {
@@ -373,10 +427,25 @@ function initDrawer() {
 }
 
 // ============================================================
-//  INIT
+//  INICIALIZACIÓN
 // ============================================================
+
 async function init() {
-  // Cargar productos desde Google Sheets
+  console.log("🚀 Iniciando XKOVARK...");
+  
+  // Mostrar loader
+  const loaderHTML = `
+    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--grey);">
+      <p style="font-size: 16px;">🔄 Cargando productos...</p>
+    </div>
+  `;
+  
+  document.getElementById("destacados-grid").innerHTML = loaderHTML;
+  document.getElementById("novedades-grid").innerHTML = loaderHTML;
+  document.getElementById("ofertas-grid").innerHTML = loaderHTML;
+  document.getElementById("catalogo-grid").innerHTML = loaderHTML;
+  
+  // Cargar productos
   await loadProductsFromSheet();
   
   // Renderizar todo
@@ -387,10 +456,24 @@ async function init() {
   initDrawer();
   attachRevealObservers();
 
-  // Eventos para navegación por categoría
+  // Eventos de navegación por categoría
   document.querySelectorAll("[data-goto-cat]").forEach(btn => {
     btn.addEventListener("click", () => goToCatalog(btn.dataset.gotoCat));
   });
+  
+  if (allProductsLoaded && PRODUCTS.length > 0) {
+    console.log(`✅ XKOVARK listo! ${PRODUCTS.length} productos cargados`);
+  } else {
+    console.warn("⚠️ XKOVARK iniciado sin productos");
+  }
 }
 
-document.addEventListener("DOMContentLoaded", init);
+// ============================================================
+//  EJECUTAR CUANDO EL DOM ESTÉ LISTO
+// ============================================================
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
