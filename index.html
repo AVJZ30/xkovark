@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XKOVARK — Accesorios de edición limitada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Work+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="nav-left">
+    <div class="logo">XKOVARK</div>
+    <nav class="nav-links">
+      <div class="nav-item">
+        <button>Colección</button>
+        <div class="megamenu">
+          <div class="mega-col">
+            <h5>Joyería</h5>
+            <a href="#grillz">Grillz</a>
+            <a href="#pulsera-moisanita">Pulsera de Moisanita</a>
+            <a href="#aretes-moisanita">Aretes de Moisanita</a>
+            <div class="view-all"><a href="#joyeria">Ver toda la joyería →</a></div>
+          </div>
+          <div class="mega-col">
+            <h5>Vestimenta</h5>
+            <a href="#camisa">Camisa</a>
+            <a href="#joggers">Joggers</a>
+            <a href="#gorros">Gorros</a>
+            <div class="view-all"><a href="#vestimenta">Ver toda la vestimenta →</a></div>
+          </div>
+          <div class="mega-col">
+            <h5>Bolsos</h5>
+            <a href="#mochila">Mochila</a>
+            <a href="#bolso-bandolera">Bolso / Bandolera</a>
+            <div class="view-all"><a href="#bolsos">Ver todos los bolsos →</a></div>
+          </div>
+          <div class="mega-col">
+            <h5>Extras</h5>
+            <a href="#perfume">Perfume</a>
+            <a href="#vape">Vape</a>
+            <a href="#tatuajes">Tatuajes Temporales</a>
+            <div class="view-all"><a href="#extras">Ver todos los extras →</a></div>
+          </div>
+        </div>
+      </div>
+      <a href="#materiales">Materiales</a>
+      <a href="#historia">Historia</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </div>
+  <div class="nav-right">
+    <a href="#" class="nav-icon">Buscar</a>
+    <a href="#" class="nav-icon">Carrito (0)</a>
+  </div>
+  <button class="menu-toggle">Menú</button>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div></div>
+    <div class="hero-img-slot">
+      <div class="placeholder"><div class="placeholder-label">SUSTITUIR<br>FOTO DE PRODUCTO<br>(vertical, fondo neutro)</div></div>
+    </div>
+  </div>
+  <h1 class="hero-wordmark display"><span>XKO</span><span>VARK</span></h1>
+  <div class="hero-foot">
+    <p class="hero-sub">Accesorios diseñados para durar. Cada pieza se produce en tiradas limitadas y se numera a mano — sin excepciones.</p>
+    <a href="#joyeria" class="cta">Ver colección</a>
+  </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>PIEL PLENA FLOR</span><span>—</span><span>HERRAJE DE LATÓN SÓLIDO</span><span>—</span><span>NUMERADO A MANO</span><span>—</span><span>TIRADAS LIMITADAS</span><span>—</span><span>ENVÍO ASEGURADO</span><span>—</span>
+    <span>PIEL PLENA FLOR</span><span>—</span><span>HERRAJE DE LATÓN SÓLIDO</span><span>—</span><span>NUMERADO A MANO</span><span>—</span><span>TIRADAS LIMITADAS</span><span>—</span><span>ENVÍO ASEGURADO</span><span>—</span>
+  </div>
+</div>
+
+<!-- DEPARTMENT TILES (entrada visual, estilo Farfetch) -->
+<section class="departments">
+  <div class="departments-head reveal">
+    <div class="eyebrow" style="margin-bottom:10px;">Explorar por categoría</div>
+    <h2 class="section-title display">Encuentra lo tuyo</h2>
+  </div>
+  <div class="dept-grid reveal">
+    <a class="dept-tile" href="#joyeria">
+      <div class="dept-img"><div class="placeholder light"><div class="placeholder-label">FOTO<br>JOYERÍA</div></div></div>
+      <div class="dept-label"><span class="name">Joyería</span><span class="arrow">→</span></div>
+    </a>
+    <a class="dept-tile" href="#vestimenta">
+      <div class="dept-img"><div class="placeholder light"><div class="placeholder-label">FOTO<br>VESTIMENTA</div></div></div>
+      <div class="dept-label"><span class="name">Vestimenta</span><span class="arrow">→</span></div>
+    </a>
+    <a class="dept-tile" href="#bolsos">
+      <div class="dept-img"><div class="placeholder light"><div class="placeholder-label">FOTO<br>BOLSOS</div></div></div>
+      <div class="dept-label"><span class="name">Bolsos</span><span class="arrow">→</span></div>
+    </a>
+    <a class="dept-tile" href="#extras">
+      <div class="dept-img"><div class="placeholder light"><div class="placeholder-label">FOTO<br>EXTRAS</div></div></div>
+      <div class="dept-label"><span class="name">Extras</span><span class="arrow">→</span></div>
+    </a>
+  </div>
+</section>
+
+<!-- CHIP NAV (navegación rápida entre las 11 piezas) -->
+<div class="chipnav-wrap">
+  <div class="chipnav" id="chipnav">
+    <a class="chip" data-target="grillz" href="#grillz">Grillz</a>
+    <a class="chip" data-target="pulsera-moisanita" href="#pulsera-moisanita">Pulsera Moisanita</a>
+    <a class="chip" data-target="aretes-moisanita" href="#aretes-moisanita">Aretes Moisanita</a>
+    <a class="chip" data-target="camisa" href="#camisa">Camisa</a>
+    <a class="chip" data-target="joggers" href="#joggers">Joggers</a>
+    <a class="chip" data-target="gorros" href="#gorros">Gorros</a>
+    <a class="chip" data-target="mochila" href="#mochila">Mochila</a>
+    <a class="chip" data-target="bolso-bandolera" href="#bolso-bandolera">Bolso/Bandolera</a>
+    <a class="chip" data-target="perfume" href="#perfume">Perfume</a>
+    <a class="chip" data-target="vape" href="#vape">Vape</a>
+    <a class="chip" data-target="tatuajes" href="#tatuajes">Tatuajes Temporales</a>
+  </div>
+</div>
+
+<!-- JOYERÍA — spotlight estilo Van Cleef & Arpels -->
+<section class="section" id="joyeria">
+  <div class="section-head reveal">
+    <div>
+      <div class="eyebrow" style="margin-bottom:10px;">01 — Joyería</div>
+      <h2 class="section-title display">Joyería</h2>
+    </div>
+    <p class="section-note">Piedra por piedra, engaste por engaste. Cada pieza se presenta sola — no necesita compañía.</p>
+  </div>
+
+  <div class="spotlight reveal" id="grillz">
+    <div class="spot-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO GRILLZ<br>(macro, fondo neutro)</div></div></div>
+    <div class="spot-text">
+      <div class="eyebrow spot-eyebrow">Grillz</div>
+      <h3 class="spot-name display" style="text-transform:none;">Grillz a la medida</h3>
+      <p class="spot-desc serif-note">Un molde tomado con precisión, un acabado que no se ajusta a nadie más que a ti.</p>
+      <div class="spot-meta"><span class="spot-price">$ 180</span><a href="#" class="spot-link">Descubrir</a></div>
+    </div>
+  </div>
+
+  <div class="spotlight reverse reveal" id="pulsera-moisanita">
+    <div class="spot-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO PULSERA MOISANITA</div></div></div>
+    <div class="spot-text">
+      <div class="eyebrow spot-eyebrow">Pulsera de Moisanita</div>
+      <h3 class="spot-name display" style="text-transform:none;">El brillo que elige quien sabe</h3>
+      <p class="spot-desc serif-note">La dureza de un diamante, la conciencia de una decisión distinta. Engaste cerrado, brillo constante.</p>
+      <div class="spot-meta"><span class="spot-price">$ 210</span><a href="#" class="spot-link">Descubrir</a></div>
+    </div>
+  </div>
+
+  <div class="spotlight reveal" id="aretes-moisanita">
+    <div class="spot-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO ARETES MOISANITA</div></div></div>
+    <div class="spot-text">
+      <div class="eyebrow spot-eyebrow">Aretes de Moisanita</div>
+      <h3 class="spot-name display" style="text-transform:none;">Peso ligero, presencia total</h3>
+      <p class="spot-desc serif-note">Tallados para atrapar la luz desde cualquier ángulo. Se sienten tan bien como se ven.</p>
+      <div class="spot-meta"><span class="spot-price">$ 175</span><a href="#" class="spot-link">Descubrir</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- VESTIMENTA -->
+<section class="section" id="vestimenta" style="background:#f2f1ec;">
+  <div class="section-head reveal">
+    <div>
+      <div class="eyebrow" style="margin-bottom:10px;">02 — Vestimenta</div>
+      <h2 class="section-title display">Vestimenta</h2>
+    </div>
+    <p class="section-note">Cortes limpios, corte sobre medida. Hechas para verse igual de bien puestas que colgadas.</p>
+  </div>
+  <div class="grid reveal">
+    <div class="card" id="camisa">
+      <div class="card-img split">
+        <div class="placeholder light"><div class="placeholder-label">FRENTE</div></div>
+        <div class="placeholder light"><div class="placeholder-label">ESPALDA</div></div>
+        <div class="tag">Camisa</div>
+      </div>
+      <div class="card-meta">
+        <span class="name">Camisa Manifiesto</span>
+        <span class="desc serif-note">Bordado frontal, tipografía en la espalda.</span>
+        <span class="price">$ 95</span>
+      </div>
+    </div>
+    <div class="card" id="joggers">
+      <div class="card-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO JOGGERS</div></div><div class="tag">Joggers</div></div>
+      <div class="card-meta">
+        <span class="name">Jogger Estructurado</span>
+        <span class="desc serif-note">Caída recta, cintura ajustable, silueta limpia.</span>
+        <span class="price">$ 110</span>
+      </div>
+    </div>
+    <div class="card" id="gorros">
+      <div class="card-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO GORROS</div></div><div class="tag">Gorros</div></div>
+      <div class="card-meta">
+        <span class="name">Gorro Sin Costuras</span>
+        <span class="desc serif-note">Punto denso, calce cerrado, sin etiqueta visible.</span>
+        <span class="price">$ 58</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOLSOS -->
+<section class="section" id="bolsos">
+  <div class="section-head reveal">
+    <div>
+      <div class="eyebrow" style="margin-bottom:10px;">03 — Bolsos</div>
+      <h2 class="section-title display">Bolsos</h2>
+    </div>
+    <p class="section-note">Estructura antes que tendencia. Piezas que cargan peso real sin perder la forma.</p>
+  </div>
+  <div class="grid two-col reveal">
+    <div class="card" id="mochila">
+      <div class="card-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO MOCHILA</div></div><div class="tag">Mochila</div>
+        <div class="authcard">
+          <div class="authcard-row"><span>N.° SERIE</span><span>XK-0114</span></div>
+          <div class="authcard-row"><span>MATERIAL</span><span>LONA / PIEL</span></div>
+          <div class="authcard-name">Mochila Módulo</div>
+          <div class="authcard-price">$ 220</div>
+        </div>
+      </div>
+      <div class="card-meta"><span class="name">Mochila Módulo</span><span class="desc serif-note">Compartimentos internos, base reforzada.</span><span class="price">$ 220</span></div>
+    </div>
+    <div class="card" id="bolso-bandolera">
+      <div class="card-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO BOLSO/BANDOLERA</div></div><div class="tag">Bandolera</div>
+        <div class="authcard">
+          <div class="authcard-row"><span>N.° SERIE</span><span>XK-0221</span></div>
+          <div class="authcard-row"><span>MATERIAL</span><span>PIEL FLOR</span></div>
+          <div class="authcard-name">Bandolera Cruzada</div>
+          <div class="authcard-price">$ 190</div>
+        </div>
+      </div>
+      <div class="card-meta"><span class="name">Bandolera Cruzada</span><span class="desc serif-note">Correa ajustable, cierre de broche macizo.</span><span class="price">$ 190</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXTRAS -->
+<section class="section centered-section" id="extras" style="background:#f2f1ec;">
+  <div class="section-head reveal">
+    <div>
+      <div class="eyebrow" style="margin-bottom:10px;">04 — Extras</div>
+      <h2 class="section-title display">Extras</h2>
+    </div>
+    <p class="section-note">Los detalles que completan el gesto — pensados con la misma exigencia que todo lo demás.</p>
+  </div>
+  <div class="grid centered reveal">
+    <div class="card" id="perfume">
+      <div class="card-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO FRASCO PERFUME<br>(centrado, fondo liso)</div></div><div class="tag">Perfume</div></div>
+      <div class="card-meta"><span class="name">Eau de XKOVARK</span><span class="desc serif-note">Madera, cuero y una nota final de ámbar.</span><span class="price">$ 130</span></div>
+    </div>
+    <div class="card" id="vape">
+      <div class="card-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO VAPE</div></div><div class="tag">Vape</div></div>
+      <div class="card-meta"><span class="name">Vape Edición 01</span><span class="desc serif-note">Cuerpo en aluminio cepillado, grabado numerado.</span><span class="price">$ 65</span></div>
+    </div>
+    <div class="card" id="tatuajes">
+      <div class="card-img"><div class="placeholder light"><div class="placeholder-label">SUSTITUIR<br>FOTO TATUAJES TEMPORALES</div></div><div class="tag">Tatuajes</div></div>
+      <div class="card-meta"><span class="name">Set Tatuajes Temporales</span><span class="desc serif-note">6 diseños, tinta de larga duración, aplicación fácil.</span><span class="price">$ 22</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MATERIALES -->
+<section class="section craft" id="materiales">
+  <div class="section-head reveal">
+    <div><div class="eyebrow" style="margin-bottom:10px;">Proceso</div><h2 class="section-title display">Materiales</h2></div>
+    <p class="section-note">No usamos sintéticos. Cada material se elige por cómo envejece, no solo por cómo luce nuevo.</p>
+  </div>
+  <div class="craft-body">
+    <div class="craft-img reveal"><div class="placeholder"><div class="placeholder-label">SUSTITUIR<br>FOTO DE DETALLE<br>(costura, herraje, textura)</div></div></div>
+    <div class="craft-text reveal">
+      <p>Trabajamos con curtidurías que aún curten al vegetal, y con talleres que ensamblan a mano, pieza por pieza. El resultado no es perfecto — es honesto.</p>
+      <p>Por eso cada artículo trae su propia tarjeta de autenticidad: no es un gesto decorativo, es un registro real de origen y número de serie.</p>
+      <div class="craft-list">
+        <div class="craft-list-item"><span>Curtido</span><span>Vegetal, sin cromo</span></div>
+        <div class="craft-list-item"><span>Herraje</span><span>Latón sólido macizo</span></div>
+        <div class="craft-list-item"><span>Ensamblaje</span><span>Manual, taller único</span></div>
+        <div class="craft-list-item"><span>Garantía</span><span>5 años, reparación incluida</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-section reveal" id="historia">
+  <p class="quote display" style="text-transform:none;">"No hacemos productos para todos.<br>Hacemos productos para quienes los merecen."</p>
+  <p class="quote-attr">— Fundadores, XKOVARK</p>
+</section>
+
+<!-- FOOTER -->
+<footer id="contacto">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo">XKOVARK</span>
+      <p>Accesorios de edición limitada, hechos para durar más que la tendencia que los inspiró.</p>
+      <div class="newsletter"><input type="email" placeholder="tu@email.com"><button>Unirme</button></div>
+    </div>
+    <div class="footer-col"><h4>Joyería</h4><a href="#grillz">Grillz</a><a href="#pulsera-moisanita">Pulsera Moisanita</a><a href="#aretes-moisanita">Aretes Moisanita</a></div>
+    <div class="footer-col"><h4>Vestimenta y bolsos</h4><a href="#camisa">Camisa</a><a href="#joggers">Joggers</a><a href="#gorros">Gorros</a><a href="#mochila">Mochila</a><a href="#bolso-bandolera">Bandolera</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="#">Términos</a><a href="#">Privacidad</a><a href="#">Envíos</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 XKOVARK. Todos los derechos reservados.</span><span>Diseñado con precisión.</span></div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
