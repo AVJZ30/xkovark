@@ -5,7 +5,7 @@
 // Ve a Archivo > Compartir > Publicar en la web > Hoja completa > CSV
 // Copia la URL y pégala abajo:
 
-const SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/###/export?format=csv&gid=0";
+const SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/https://script.google.com/macros/s/AKfycbx0gPeRzKW24nS82HQUs9qNLyJ3Vn27uQ7V1H7WGrlFpEbuCXUYH8pKEUwmTEVyIKxH7Q/exec/export?format=csv&gid=0";
 //                                ↑ Reemplaza ### con tu ID de hoja
 
 // ============================================================
