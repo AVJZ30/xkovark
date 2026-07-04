@@ -74,7 +74,7 @@ header.scrolled{padding:14px 5vw;background:rgba(11,11,11,.94);backdrop-filter:b
   position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);
   width:min(1080px,90vw);
   background:var(--bg-alt);color:var(--white);
-  display:grid;grid-template-columns:repeat(7,1fr);
+  display:grid;grid-template-columns:repeat(6,1fr);
   box-shadow:0 40px 80px rgba(0,0,0,.55);
   border:1px solid var(--hair);
   opacity:0;visibility:hidden;pointer-events:none;
@@ -161,9 +161,11 @@ header.scrolled{padding:14px 5vw;background:rgba(11,11,11,.94);backdrop-filter:b
 .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;border-bottom:1px solid var(--hair);padding-bottom:26px;flex-wrap:wrap;gap:16px;}
 .section-title{font-size:clamp(28px,3.6vw,48px);}
 .section-note{max-width:280px;font-size:13px;color:var(--grey);line-height:1.6;}
-.dept-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--hair);}
+.dept-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--hair);}
 .dept-tile{background:var(--bg);position:relative;display:block;}
 .dept-img{aspect-ratio:3/4;position:relative;overflow:hidden;}
+.dept-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease);}
+.dept-tile:hover .dept-img img{transform:scale(1.05);}
 .dept-label{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-top:1px solid var(--hair);}
 .dept-label .name{font-size:14px;}
 .dept-label .arrow{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gold);transition:transform .3s var(--ease);}
@@ -270,7 +272,7 @@ select.filter-select{
 
 /* ===== FOOTER ===== */
 footer{padding:90px 5vw 36px;}
-.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr 1fr;gap:36px;padding-bottom:70px;border-bottom:1px solid var(--hair);}
+.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:36px;padding-bottom:70px;border-bottom:1px solid var(--hair);}
 .footer-brand .logo{font-size:24px;margin-bottom:18px;display:block;}
 .footer-brand p{font-size:13px;color:var(--grey);max-width:280px;line-height:1.7;margin-bottom:22px;}
 .social-row{display:flex;gap:12px;}
@@ -295,6 +297,36 @@ footer{padding:90px 5vw 36px;}
 .wa-float:hover{transform:scale(1.08);}
 .wa-float svg{width:26px;height:26px;fill:var(--gold);}
 
+/* ===== LIGHTBOX (imagen ampliada) ===== */
+.card-img img, .card-img .placeholder{cursor:zoom-in;}
+.lightbox-scrim{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(6,6,6,.92);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;
+  transition:opacity .3s var(--ease);
+  padding:5vw;
+}
+.lightbox-scrim.open{opacity:1;visibility:visible;}
+.lightbox-img{
+  max-width:90vw;max-height:85vh;
+  width:auto;height:auto;
+  object-fit:contain;
+  border:1px solid var(--hair);
+  transform:scale(.94);
+  transition:transform .3s var(--ease);
+  background:var(--bg-alt);
+}
+.lightbox-scrim.open .lightbox-img{transform:scale(1);}
+.lightbox-close{
+  position:absolute;top:26px;right:5vw;
+  width:42px;height:42px;
+  background:none;border:1px solid rgba(255,255,255,.3);color:var(--white);
+  font-size:18px;cursor:pointer;
+  transition:border-color .25s var(--ease), color .25s var(--ease);
+}
+.lightbox-close:hover{border-color:var(--gold);color:var(--gold);}
+
 /* ===== REVEAL ===== */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
 .reveal.in{opacity:1;transform:translateY(0);}
@@ -309,7 +341,7 @@ footer{padding:90px 5vw 36px;}
   .dept-grid{grid-template-columns:repeat(2,1fr);}
   .footer-top{grid-template-columns:1fr 1fr;gap:30px;}
   .megamenu{grid-template-columns:repeat(3,1fr);width:90vw;left:50%;transform:translateX(-50%) translateY(8px);}
-  .megamenu .mega-col:nth-child(4),.megamenu .mega-col:nth-child(5),.megamenu .mega-col:nth-child(6),.megamenu .mega-col:nth-child(7){display:none;}
+  .megamenu .mega-col:nth-child(4),.megamenu .mega-col:nth-child(5),.megamenu .mega-col:nth-child(6){display:none;}
 }
 @media (max-width: 640px){
   .hero-grid{grid-template-columns:1fr;}
