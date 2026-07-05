@@ -707,7 +707,7 @@ async function init() {
   // Mostrar loader
   const loaderHTML = `
     <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--grey);">
-      <p style="font-size: 16px;">🔄 Cargando productos...</p>
+      <p style="font-size: 16px;">Cargando productos...</p>
     </div>
   `;
   
