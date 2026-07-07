@@ -20,8 +20,8 @@
         - anon / public key → pégalo en SUPABASE_ANON_KEY
    ============================================================ */
 
-const SUPABASE_URL = "PON-AQUI-TU-SUPABASE-URL";       // ej: https://abcdefgh.supabase.co
-const SUPABASE_ANON_KEY = "PON-AQUI-TU-SUPABASE-ANON-KEY";
+const SUPABASE_URL = "https://xdwjlhquqphbelnzctkv.supabase.co";       // ej: https://abcdefgh.supabase.co
+const SUPABASE_ANON_KEY = "sb_publishable_qHl4TDOq58HUAWZtNC3nYQ_y-Dohm_G";
 const TABLE_NAME = "opiniones";
 
 let supabaseClient = null;
@@ -138,9 +138,15 @@ function reviewCardHTML(r) {
   const nombre = (r.nombre || "Cliente XKOVARK").toString();
   const comentario = (r.comentario || "").toString();
   const rating = Number(r.calificacion) || 0;
+  const foto = (r.foto_url || "").toString().trim();
+
+  const fotoHTML = foto
+    ? `<img src="${foto}" alt="Foto de ${escapeHTML(nombre)}" class="review-photo" loading="lazy">`
+    : "";
 
   return `
     <div class="review-card reveal in">
+      ${fotoHTML}
       <div class="rating-stars">${starsRow(rating, true)}</div>
       <span class="review-name">${escapeHTML(nombre)}</span>
       <span class="review-date">${fecha}</span>
@@ -197,6 +203,58 @@ function initStarPicker() {
 }
 
 // ============================================================
+//  PREVISUALIZAR FOTO ELEGIDA
+// ============================================================
+
+function initFilePreview() {
+  const input = document.getElementById("reviewFoto");
+  const preview = document.getElementById("filePreview");
+  if (!input || !preview) return;
+
+  input.addEventListener("change", () => {
+    preview.innerHTML = "";
+    const file = input.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      showFormMessage("La foto pesa más de 5 MB. Elige una más liviana.", "error");
+      input.value = "";
+      return;
+    }
+
+    const url = URL.createObjectURL(file);
+    const img = document.createElement("img");
+    img.src = url;
+    preview.appendChild(img);
+  });
+}
+
+// ============================================================
+//  SUBIR FOTO A SUPABASE STORAGE
+// ============================================================
+
+const FOTOS_BUCKET = "opiniones-fotos";
+
+async function subirFotoOpinion(file) {
+  if (!file) return null;
+
+  const extension = file.name.split(".").pop();
+  const nombreArchivo = `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
+
+  const { error: uploadError } = await supabaseClient.storage
+    .from(FOTOS_BUCKET)
+    .upload(nombreArchivo, file);
+
+  if (uploadError) throw uploadError;
+
+  const { data } = supabaseClient.storage
+    .from(FOTOS_BUCKET)
+    .getPublicUrl(nombreArchivo);
+
+  return data?.publicUrl || null;
+}
+
+// ============================================================
 //  ENVIAR NUEVA OPINIÓN
 // ============================================================
 
@@ -216,6 +274,7 @@ function initReviewForm() {
 
     const nombre = document.getElementById("reviewNombre").value.trim();
     const comentario = document.getElementById("reviewComentario").value.trim();
+    const fotoInput = document.getElementById("reviewFoto");
     const submitBtn = document.getElementById("reviewSubmit");
 
     if (!nombre || !comentario || selectedRating === 0) {
@@ -232,8 +291,17 @@ function initReviewForm() {
     submitBtn.textContent = "Enviando...";
 
     try {
+      let fotoUrl = null;
+      const file = fotoInput.files[0];
+
+      if (file) {
+        submitBtn.textContent = "Subiendo foto...";
+        fotoUrl = await subirFotoOpinion(file);
+        submitBtn.textContent = "Guardando...";
+      }
+
       const { error } = await supabaseClient.from(TABLE_NAME).insert([
-        { nombre, calificacion: selectedRating, comentario }
+        { nombre, calificacion: selectedRating, comentario, foto_url: fotoUrl }
       ]);
 
       if (error) throw error;
@@ -242,6 +310,7 @@ function initReviewForm() {
       form.reset();
       selectedRating = 0;
       document.querySelectorAll("#starPicker .star").forEach(s => s.classList.remove("filled"));
+      document.getElementById("filePreview").innerHTML = "";
       loadOpiniones();
     } catch (err) {
       console.error("Error guardando opinión:", err);
@@ -262,4 +331,5 @@ document.addEventListener("DOMContentLoaded", () => {
   loadOpiniones();
   initStarPicker();
   initReviewForm();
+  initFilePreview();
 });
