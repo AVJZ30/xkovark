@@ -201,6 +201,13 @@
       <textarea id="reviewComentario" placeholder="Cuéntanos qué te pareció el producto, el envío, la atención..." required maxlength="500"></textarea>
     </div>
 
+    <div class="form-group">
+      <label for="reviewFoto">Foto (opcional)</label>
+      <input type="file" id="reviewFoto" accept="image/*">
+      <span class="file-hint">JPG o PNG, máximo 5 MB.</span>
+      <div class="file-preview" id="filePreview"></div>
+    </div>
+
     <button type="submit" class="btn btn-gold form-submit" id="reviewSubmit">Enviar opinión</button>
     <p class="form-message" id="formMessage"></p>
   </form>
