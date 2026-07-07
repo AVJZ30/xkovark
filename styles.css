@@ -382,6 +382,20 @@ footer{padding:90px 5vw 36px;}
 .form-group input[type="text"]:focus,
 .form-group textarea:focus{border-color:var(--gold);}
 .form-group textarea{resize:vertical;min-height:110px;}
+.form-group input[type="file"]{
+  background:var(--bg-alt);border:1px dashed var(--hair);color:var(--grey);
+  font-family:'IBM Plex Mono',monospace;font-size:12px;padding:14px 16px;cursor:pointer;
+}
+.form-group input[type="file"]::file-selector-button{
+  background:var(--gold);color:#0b0b0b;border:none;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  padding:8px 14px;margin-right:12px;cursor:pointer;
+}
+.file-hint{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--grey-dim);}
+.file-preview{display:flex;gap:10px;}
+.file-preview img{width:70px;height:70px;object-fit:cover;border:1px solid var(--hair);}
+.review-photo{width:100%;aspect-ratio:4/3;object-fit:cover;border:1px solid var(--hair);cursor:zoom-in;}
+
 .star-picker{display:flex;gap:8px;}
 .star-picker button{background:none;border:none;cursor:pointer;padding:2px;}
 .star-picker .star{width:26px;height:26px;transition:transform .15s var(--ease);}
