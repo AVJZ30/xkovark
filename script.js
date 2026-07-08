@@ -1,10 +1,10 @@
 /* ============================================================
-   🚀 XKOVARK - Script principal para la tienda online
+   XKOVARK - Script principal para la tienda online
    ============================================================
    CONFIGURACIÓN - Cambia esta URL por la de tu Apps Script
    ============================================================ */
 
-// ✅ REEMPLAZA con la URL de tu Apps Script (la que copiaste al implementar)
+// REEMPLAZA con la URL de tu Apps Script (la que copiaste al implementar)
 const SPREADSHEET_URL = "https://script.google.com/macros/s/AKfycbx0gPeRzKW24nS82HQUs9qNLyJ3Vn27uQ7V1H7WGrlFpEbuCXUYH8pKEUwmTEVyIKxH7Q/exec";
 
 // Número de WhatsApp para recibir pedidos del carrito (mismo que el resto del sitio)
@@ -29,8 +29,8 @@ let state = {
 
 async function loadProductsFromSheet() {
   try {
-    console.log("🔄 Cargando productos desde Apps Script...");
-    console.log("📡 URL:", SPREADSHEET_URL);
+    console.log("Cargando productos desde Apps Script...");
+    console.log("URL:", SPREADSHEET_URL);
     
     const response = await fetch(SPREADSHEET_URL);
     
@@ -39,7 +39,7 @@ async function loadProductsFromSheet() {
     }
     
     const data = await response.json();
-    console.log("✅ Datos recibidos:", data);
+    console.log("Datos recibidos:", data);
     
     // Verificar si es un array
     if (!Array.isArray(data)) {
@@ -76,7 +76,7 @@ async function loadProductsFromSheet() {
       
       // Validar que los campos requeridos existan
       if (!item.nombre_producto && !item.nombre) {
-        console.warn(`⚠️ Producto en fila ${index + 2} sin nombre, saltando...`);
+        console.warn(`Producto en fila ${index + 2} sin nombre, saltando...`);
         return null;
       }
       
@@ -106,12 +106,12 @@ async function loadProductsFromSheet() {
     });
     
     allProductsLoaded = true;
-    console.log(`✅ ${PRODUCTS.length} productos cargados desde Apps Script`);
-    console.log("📦 Tags disponibles:", [...new Set(PRODUCTS.flatMap(p => p.tags))]);
+    console.log(`${PRODUCTS.length} productos cargados desde Apps Script`);
+    console.log("Tags disponibles:", [...new Set(PRODUCTS.flatMap(p => p.tags))]);
     return PRODUCTS;
     
   } catch (error) {
-    console.error("❌ Error cargando productos:", error);
+    console.error("Error cargando productos:", error);
     allProductsLoaded = false;
     
     // Mostrar mensaje de error en la página
@@ -138,7 +138,7 @@ function showError(message) {
     if (el) {
       el.innerHTML = `
         <div class="error-state" style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--grey);">
-          <p style="font-size: 18px; margin-bottom: 12px;">⚠️ ${message}</p>
+          <p style="font-size: 18px; margin-bottom: 12px;">${message}</p>
           <p style="font-size: 13px; color: var(--grey-dim);">Verifica que tu hoja de Google Sheets esté publicada correctamente.</p>
           <p style="font-size: 12px; margin-top: 16px; color: var(--grey-dim);">
             <a href="#" onclick="location.reload()" style="color: var(--gold); text-decoration: underline;">Recargar página</a>
@@ -453,7 +453,7 @@ function initDrawer() {
 }
 
 /* ============================================================
-   🛒 CARRITO DE COMPRAS
+   CARRITO DE COMPRAS
    ============================================================
    - Cada producto tiene un selector de cantidad y un botón
      "Agregar" que suma esa cantidad al carrito.
@@ -671,7 +671,7 @@ function initCart() {
 }
 
 /* ============================================================
-   🔍 LIGHTBOX: ampliar imagen de producto al hacer click
+   LIGHTBOX: ampliar imagen de producto al hacer click
    ============================================================ */
 
 function openLightbox(src, alt) {
@@ -712,12 +712,12 @@ function initLightbox() {
 // ============================================================
 
 async function init() {
-  console.log("🚀 Iniciando XKOVARK...");
+  console.log("Iniciando XKOVARK...");
   
   // Mostrar loader
   const loaderHTML = `
     <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--grey);">
-      <p style="font-size: 16px;"> Cargando productos...</p>
+      <p style="font-size: 16px;">Cargando productos...</p>
     </div>
   `;
   
@@ -745,9 +745,9 @@ async function init() {
   });
   
   if (allProductsLoaded && PRODUCTS.length > 0) {
-    console.log(`✅ XKOVARK listo! ${PRODUCTS.length} productos cargados`);
+    console.log(`XKOVARK listo. ${PRODUCTS.length} productos cargados`);
   } else {
-    console.warn("⚠️ XKOVARK iniciado sin productos");
+    console.warn("XKOVARK iniciado sin productos");
   }
 
   // Si llegamos redirigidos desde otra página (ej. opiniones.html)
