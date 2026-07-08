@@ -36,7 +36,7 @@ function initSupabaseClient() {
     console.error("❌ No se cargó la librería de Supabase (revisa el <script> del CDN en el HTML).");
     return null;
   }
-  if (SUPABASE_URL.includes("https://xdwjlhquqphbelnzctkv.supabase.co") || SUPABASE_ANON_KEY.includes("sb_publishable_qHl4TDOq58HUAWZtNC3nYQ_y-Dohm_G")) {
+  if (SUPABASE_URL.includes("PON-AQUI") || SUPABASE_ANON_KEY.includes("PON-AQUI")) {
     console.warn("⚠️ Falta configurar SUPABASE_URL y SUPABASE_ANON_KEY en opiniones.js");
     return null;
   }
