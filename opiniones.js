@@ -20,8 +20,8 @@
         - anon / public key → pégalo en SUPABASE_ANON_KEY
    ============================================================ */
 
-const SUPABASE_URL = "PON-AQUI-TU-SUPABASE-URL";       // ej: https://abcdefgh.supabase.co
-const SUPABASE_ANON_KEY = "PON-AQUI-TU-SUPABASE-ANON-KEY";
+const SUPABASE_URL = "https://xdwjlhquqphbelnzctkv.supabase.co";       // ej: https://abcdefgh.supabase.co
+const SUPABASE_ANON_KEY = "sb_publishable_qHl4TDOq58HUAWZtNC3nYQ_y-Dohm_G";
 const TABLE_NAME = "opiniones";
 
 let supabaseClient = null;
@@ -36,7 +36,7 @@ function initSupabaseClient() {
     console.error("❌ No se cargó la librería de Supabase (revisa el <script> del CDN en el HTML).");
     return null;
   }
-  if (SUPABASE_URL.includes("PON-AQUI") || SUPABASE_ANON_KEY.includes("PON-AQUI")) {
+  if (SUPABASE_URL.includes("https://xdwjlhquqphbelnzctkv.supabase.co") || SUPABASE_ANON_KEY.includes("sb_publishable_qHl4TDOq58HUAWZtNC3nYQ_y-Dohm_G")) {
     console.warn("⚠️ Falta configurar SUPABASE_URL y SUPABASE_ANON_KEY en opiniones.js");
     return null;
   }
