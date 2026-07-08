@@ -86,7 +86,7 @@ header.scrolled{padding:14px 5vw;background:rgba(11,11,11,.94);backdrop-filter:b
 
 /* mega menu */
 .megamenu{
-  position:absolute;top:100%;left:0;transform:translateY(8px);
+  position:absolute;top:100%;left:50;transform:translateY(8px);
   width:min(1080px,90vw);
   background:var(--bg-alt);color:var(--white);
   display:grid;grid-template-columns:repeat(6,1fr);
