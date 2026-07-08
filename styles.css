@@ -428,7 +428,7 @@ footer{padding:90px 5vw 36px;}
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 980px){
-  .header-left-group .nav-links{display:none;}
+  .nav-links{display:none;}
   .menu-toggle{display:block;}
   .grid{grid-template-columns:repeat(2,1fr);}
   .grid.feature-grid .card:first-child{grid-column:span 2;grid-row:span 1;}
