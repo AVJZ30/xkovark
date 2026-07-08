@@ -20,8 +20,8 @@
         - anon / public key → pégalo en SUPABASE_ANON_KEY
    ============================================================ */
 
-const SUPABASE_URL = "https://xdwjlhquqphbelnzctkv.supabase.co";       // ej: https://abcdefgh.supabase.co
-const SUPABASE_ANON_KEY = "sb_publishable_qHl4TDOq58HUAWZtNC3nYQ_y-Dohm_G";
+const SUPABASE_URL = "PON-AQUI-TU-SUPABASE-URL";       // ej: https://abcdefgh.supabase.co
+const SUPABASE_ANON_KEY = "PON-AQUI-TU-SUPABASE-ANON-KEY";
 const TABLE_NAME = "opiniones";
 
 let supabaseClient = null;
