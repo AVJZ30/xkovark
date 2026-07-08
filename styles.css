@@ -44,7 +44,7 @@ header.scrolled{padding:14px 5vw;background:rgba(11,11,11,.94);backdrop-filter:b
 .header-left-group{
   display:flex;
   align-items:center;
-  gap:20px;
+  gap:28px;
 }
 
 .logo{font-family:'Archivo',sans-serif;font-weight:900;font-size:19px;letter-spacing:.26em;flex:none;}
