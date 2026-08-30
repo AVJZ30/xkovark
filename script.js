@@ -187,12 +187,23 @@ function cardHTML(p) {
     const dots = imgs.map((_, i) => 
       `<span class="gdot ${i===0?'active':''}" data-idx="${i}"></span>`
     ).join("");
-    
     imagesHTML = `
-      <div class="product-gallery">
-        <img src="${imgs[0]}" alt="${p.nombre}" class="gallery-main" loading="lazy" 
-             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%231a1a17%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%2396958c%22 font-family=%22monospace%22 font-size=%2212%22%3ESin%20imagen%3C/text%3E%3C/svg%3E'">
-        ${imgs.length > 1 ? `<div class="gallery-dots">${dots}</div>` : ""}
+      <div class="product-gallery" data-total="${imgs.length}" data-index="0">
+        <div class="gallery-track" style="width:${imgs.length * 100}%;">
+          ${imgs.map(src => `
+        <div class="gallery-slide" style="width:${100 / imgs.length}%">
+          <img src="${src}" alt="${p.nombre}" class="gallery-main" loading="lazy"
+               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%231a1a17%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%2396958c%22 font-family=%22monospace%22 font-size=%2212%22%3ESin%20imagen%3C/text%3E%3C/svg%3E'">
+        </div>`).join("")}
+        </div>
+        ${imgs.length > 1 ? `
+        <button class="gallery-arrow prev" type="button" aria-label="Imagen anterior">
+          <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <button class="gallery-arrow next" type="button" aria-label="Imagen siguiente">
+          <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <div class="gallery-dots">${dots}</div>` : ""}
       </div>
     `;
   } else {
@@ -375,25 +386,40 @@ function initFilterBar() {
   });
 }
 
+function goToGallerySlide(gallery, index) {
+  const track = gallery.querySelector(".gallery-track");
+  const total = parseInt(gallery.dataset.total, 10);
+  if (!track || !total) return;
+
+  const clamped = ((index % total) + total) % total; // permite ciclar y "regresar"
+  gallery.dataset.index = clamped;
+  track.style.transform = `translateX(-${clamped * (100 / total)}%)`;
+
+  gallery.querySelectorAll(".gdot").forEach((d, i) => {
+    d.classList.toggle("active", i === clamped);
+  });
+}
+
 function attachGalleryDots() {
-  document.querySelectorAll(".gallery-dots").forEach(wrap => {
-    wrap.querySelectorAll(".gdot").forEach(dot => {
+  document.querySelectorAll(".product-gallery").forEach(gallery => {
+    const current = parseInt(gallery.dataset.index || "0", 10);
+    goToGallerySlide(gallery, current);
+
+    gallery.querySelectorAll(".gdot").forEach(dot => {
       dot.addEventListener("click", (e) => {
         e.stopPropagation();
-        wrap.querySelectorAll(".gdot").forEach(d => d.classList.remove("active"));
-        dot.classList.add("active");
-        
-        const card = wrap.closest(".card");
-        const img = card?.querySelector(".gallery-main");
-        if (img) {
-          const idx = parseInt(dot.dataset.idx);
-          const productId = card.dataset.id;
-          const product = PRODUCTS.find(p => p.id === productId);
-          if (product && product.images && product.images[idx]) {
-            img.src = product.images[idx];
-          }
-        }
+        goToGallerySlide(gallery, parseInt(dot.dataset.idx, 10));
       });
+    });
+
+    gallery.querySelector(".gallery-arrow.prev")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      goToGallerySlide(gallery, parseInt(gallery.dataset.index, 10) - 1);
+    });
+
+    gallery.querySelector(".gallery-arrow.next")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      goToGallerySlide(gallery, parseInt(gallery.dataset.index, 10) + 1);
     });
   });
 }
