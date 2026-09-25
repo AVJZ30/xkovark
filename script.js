@@ -82,7 +82,7 @@ async function loadProductsFromSheet() {
       
       return {
         id: item.id || item.nombre_producto?.toLowerCase().replace(/[^a-z0-9]+/g, "-") || `producto-${index}`,
-        categoria: item.categoria?.toLowerCase() || "extras",
+        categoria: item.categoria?.toLowerCase() || "otros",
         nombre: item.nombre_producto || item.nombre || "Producto sin nombre",
         desc: item.descripcion || "",
         precio: parseFloat(item.precio) || 0,
@@ -157,9 +157,15 @@ const CATEGORY_LABELS = {
   joyeria: "Joyería", 
   pulseras: "Pulseras",
   gafas: "Gafas", 
-  vestimenta: "Vestimenta", 
   bolsos: "Bolsos", 
-  extras: "Extras"
+  gorras: "Gorras",
+  joggers: "Joggers",
+  camisas: "Camisas",
+  busos: "Busos",
+  pasamontanas: "Pasamontañas",
+  vapes: "Vapes",
+  cinturon: "Cinturones",
+  perfumes: "Perfumes"
 };
 
 const AVAIL_LABELS = { 
