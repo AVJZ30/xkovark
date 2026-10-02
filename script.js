@@ -154,10 +154,15 @@ function showError(message) {
 // ============================================================
 
 const CATEGORY_LABELS = {
-  joyeria: "Joyería", 
+  cadenas: "Cadenas",
+  aretes: "Aretes",
+  anillos: "Anillos",
+  relojes: "Relojes",
   pulseras: "Pulseras",
-  gafas: "Gafas", 
-  bolsos: "Bolsos", 
+  gafas: "Gafas",
+  mochilas: "Mochilas",
+  bandoleras: "Bandoleras",
+  bolsos: "Bolsos",
   gorras: "Gorras",
   joggers: "Joggers",
   camisas: "Camisas",
