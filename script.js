@@ -1,13 +1,11 @@
 /* ============================================================
    XKOVARK - Script principal para la tienda online
-   ============================================================
-   CONFIGURACIÓN - Cambia esta URL por la de tu Apps Script
    ============================================================ */
 
-// REEMPLAZA con la URL de tu Apps Script (la que copiaste al implementar)
+// URL de tu Apps Script (la que copiaste al implementar)
 const SPREADSHEET_URL = "https://script.google.com/macros/s/AKfycbx0gPeRzKW24nS82HQUs9qNLyJ3Vn27uQ7V1H7WGrlFpEbuCXUYH8pKEUwmTEVyIKxH7Q/exec";
 
-// Número de WhatsApp para recibir pedidos del carrito (mismo que el resto del sitio)
+// Número de WhatsApp para recibir pedidos del carrito
 const WHATSAPP_NUMBER = "593967071228";
 
 // ============================================================
@@ -16,109 +14,101 @@ const WHATSAPP_NUMBER = "593967071228";
 
 let PRODUCTS = [];
 let allProductsLoaded = false;
-let state = { 
-  search: "", 
-  categoria: "todas", 
-  soloStock: false, 
-  orden: "relevancia" 
+let state = {
+  search: "",
+  categoria: "todas",
+  soloStock: false,
+  orden: "relevancia"
 };
 
 // ============================================================
-//  CARGA DE PRODUCTOS DESDE APPS SCRIPT
+//  CARGA DE PRODUCTOS (con caché local y petición temprana)
 // ============================================================
 
-async function loadProductsFromSheet() {
+const CACHE_KEY = "xkovark_productos_v1"; // si cambias la estructura de datos, cambia v1 por v2
+
+function leerCache() {
   try {
-    console.log("Cargando productos desde Apps Script...");
-    console.log("URL:", SPREADSHEET_URL);
-    
-    const response = await fetch(SPREADSHEET_URL);
-    
-    if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status} - ${response.statusText}`);
+    const txt = localStorage.getItem(CACHE_KEY);
+    return txt ? JSON.parse(txt) : null;
+  } catch (e) { return null; }
+}
+
+function guardarCache(data) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (e) { /* ignorar */ }
+}
+
+// La petición arranca YA, en cuanto se carga este archivo
+const peticionTemprana = fetch(SPREADSHEET_URL).then(res => {
+  if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+  return res.json();
+});
+peticionTemprana.catch(() => {}); // evita aviso de error sin capturar; se maneja en init()
+
+// Convierte los datos crudos de la hoja al formato de la tienda
+function mapearProductos(data) {
+  // Si la hoja trae la columna "seccion" (DESTACADO / NOVEDADES), se usa.
+  // Si no, se asignan automáticamente por posición.
+  const usaSeccion = data.some(item => item.seccion && String(item.seccion).trim() !== "");
+
+  const lista = data.map((item, index) => {
+    const enOferta = item.en_oferta === true || String(item.en_oferta).toLowerCase() === "true";
+    const tags = [];
+    if (enOferta) tags.push("oferta");
+
+    const images = [];
+    if (item.imagen_frente && String(item.imagen_frente).trim() !== "") images.push(String(item.imagen_frente).trim());
+    if (item.imagen_espalda && String(item.imagen_espalda).trim() !== "") images.push(String(item.imagen_espalda).trim());
+
+    let precioAntes = null;
+    if (enOferta) {
+      const precioActual = parseFloat(item.precio) || 0;
+      precioAntes = Math.round(precioActual * 1.2);
     }
-    
-    const data = await response.json();
-    console.log("Datos recibidos:", data);
-    
-    // Verificar si es un array
-    if (!Array.isArray(data)) {
-      throw new Error("Los datos recibidos no son un array válido");
+
+    if (!item.nombre_producto && !item.nombre) {
+      console.warn(`Producto en fila ${index + 2} sin nombre, saltando...`);
+      return null;
     }
-    
-    if (data.length === 0) {
-      throw new Error("La hoja está vacía, no hay productos para mostrar");
+
+    if (usaSeccion) {
+      const sec = String(item.seccion || "").toLowerCase().trim();
+      if (sec === "destacado" || sec === "destacados") tags.push("destacado");
+      if (sec === "novedades" || sec === "novedad" || sec === "nuevo") tags.push("nuevo");
     }
-    
-    // Mapear los datos al formato que espera la tienda
-    PRODUCTS = data.map((item, index) => {
-      // Determinar tags
-      const tags = [];
-      if (item.en_oferta === true || item.en_oferta === "true") {
-        tags.push("oferta");
-      }
-      
-      // Crear array de imágenes
-      const images = [];
-      if (item.imagen_frente && item.imagen_frente.trim() !== "") {
-        images.push(item.imagen_frente);
-      }
-      if (item.imagen_espalda && item.imagen_espalda.trim() !== "") {
-        images.push(item.imagen_espalda);
-      }
-      
-      // Determinar precio anterior (para ofertas)
-      let precioAntes = null;
-      if (item.en_oferta === true || item.en_oferta === "true") {
-        const precioActual = parseFloat(item.precio) || 0;
-        precioAntes = Math.round(precioActual * 1.2);
-      }
-      
-      // Validar que los campos requeridos existan
-      if (!item.nombre_producto && !item.nombre) {
-        console.warn(`Producto en fila ${index + 2} sin nombre, saltando...`);
-        return null;
-      }
-      
-      return {
-        id: item.id || item.nombre_producto?.toLowerCase().replace(/[^a-z0-9]+/g, "-") || `producto-${index}`,
-        categoria: item.categoria?.toLowerCase() || "otros",
-        nombre: item.nombre_producto || item.nombre || "Producto sin nombre",
-        desc: item.descripcion || "",
-        precio: parseFloat(item.precio) || 0,
-        precioAntes: precioAntes,
-        tags: tags,
-        disponibilidad: item.disponibilidad?.toLowerCase() || "stock",
-        images: images
-      };
-    }).filter(p => p !== null); // Eliminar productos nulos
-    
-    // Agregar tags automáticos (destacados, novedades)
-    PRODUCTS.forEach((p, i) => {
-      // Los primeros 3 con imágenes son destacados
-      if (i < 3 && p.images.length > 0 && !p.tags.includes("destacado")) {
-        p.tags.push("destacado");
-      }
-      // Los siguientes 3 sin oferta son novedades
-      if (i >= 3 && i < 6 && p.images.length > 0 && !p.tags.includes("oferta") && !p.tags.includes("destacado")) {
-        p.tags.push("nuevo");
-      }
+
+    return {
+      id: item.id || String(item.nombre_producto || "").toLowerCase().replace(/[^a-z0-9]+/g, "-") || `producto-${index}`,
+      categoria: item.categoria ? String(item.categoria).toLowerCase().trim() : "otros",
+      nombre: item.nombre_producto || item.nombre || "Producto sin nombre",
+      desc: item.descripcion || "",
+      precio: parseFloat(item.precio) || 0,
+      precioAntes: precioAntes,
+      tags: tags,
+      disponibilidad: item.disponibilidad ? String(item.disponibilidad).toLowerCase().trim() : "stock",
+      images: images
+    };
+  }).filter(p => p !== null);
+
+  // Tags automáticos solo si la hoja no define la columna "seccion"
+  if (!usaSeccion) {
+    lista.forEach((p, i) => {
+      if (i < 3 && p.images.length > 0 && !p.tags.includes("destacado")) p.tags.push("destacado");
+      if (i >= 3 && i < 6 && p.images.length > 0 && !p.tags.includes("oferta") && !p.tags.includes("destacado")) p.tags.push("nuevo");
     });
-    
-    allProductsLoaded = true;
-    console.log(`${PRODUCTS.length} productos cargados desde Apps Script`);
-    console.log("Tags disponibles:", [...new Set(PRODUCTS.flatMap(p => p.tags))]);
-    return PRODUCTS;
-    
-  } catch (error) {
-    console.error("Error cargando productos:", error);
-    allProductsLoaded = false;
-    
-    // Mostrar mensaje de error en la página
-    showError("No se pudieron cargar los productos. Por favor, intenta de nuevo más tarde.");
-    
-    return [];
   }
+
+  return lista;
+}
+
+// Guarda los productos en memoria y repinta todo
+function aplicarDatos(data) {
+  PRODUCTS = mapearProductos(data);
+  allProductsLoaded = PRODUCTS.length > 0;
+  renderCurated();
+  applyFilters();
+  renderCart(); // el total del carrito depende de los precios
+  attachRevealObservers();
 }
 
 // ============================================================
@@ -128,18 +118,18 @@ async function loadProductsFromSheet() {
 function showError(message) {
   const containers = [
     "destacados-grid",
-    "novedades-grid", 
+    "novedades-grid",
     "ofertas-grid",
     "catalogo-grid"
   ];
-  
+
   containers.forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.innerHTML = `
         <div class="error-state" style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--grey);">
           <p style="font-size: 18px; margin-bottom: 12px;">${message}</p>
-          <p style="font-size: 13px; color: var(--grey-dim);">Verifica que tu hoja de Google Sheets esté publicada correctamente.</p>
+          <p style="font-size: 13px; color: var(--grey-dim);">Verifica tu conexión e inténtalo otra vez.</p>
           <p style="font-size: 12px; margin-top: 16px; color: var(--grey-dim);">
             <a href="#" onclick="location.reload()" style="color: var(--gold); text-decoration: underline;">Recargar página</a>
           </p>
@@ -170,13 +160,14 @@ const CATEGORY_LABELS = {
   pasamontanas: "Pasamontañas",
   vapes: "Vapes",
   cinturon: "Cinturones",
-  perfumes: "Perfumes"
+  perfumes: "Perfumes",
+  tatuajes: "Tatuajes"
 };
 
-const AVAIL_LABELS = { 
-  stock: "En stock", 
-  pocas: "Pocas unidades", 
-  agotado: "Agotado" 
+const AVAIL_LABELS = {
+  stock: "En stock",
+  pocas: "Pocas unidades",
+  agotado: "Agotado"
 };
 
 // ============================================================
@@ -184,18 +175,18 @@ const AVAIL_LABELS = {
 // ============================================================
 
 function cardHTML(p) {
-  const badge = p.disponibilidad === "agotado" 
+  const badge = p.disponibilidad === "agotado"
     ? `<span class="badge agotado">Agotado</span>`
-    : p.tags.includes("oferta") 
+    : p.tags.includes("oferta")
       ? `<span class="badge oferta">Oferta</span>`
-      : p.tags.includes("nuevo") 
-        ? `<span class="badge nuevo">Nuevo</span>` 
+      : p.tags.includes("nuevo")
+        ? `<span class="badge nuevo">Nuevo</span>`
         : "";
 
   let imagesHTML = "";
   if (p.images && p.images.length > 0) {
     const imgs = p.images;
-    const dots = imgs.map((_, i) => 
+    const dots = imgs.map((_, i) =>
       `<span class="gdot ${i===0?'active':''}" data-idx="${i}"></span>`
     ).join("");
     imagesHTML = `
@@ -232,7 +223,7 @@ function cardHTML(p) {
   const agotado = p.disponibilidad === "agotado";
 
   return `
-    <div class="card reveal ${agotado ? 'is-agotado' : ''}" 
+    <div class="card reveal ${agotado ? 'is-agotado' : ''}"
          data-id="${p.id}" data-categoria="${p.categoria}" id="${p.id}">
       <div class="card-img">
         ${imagesHTML}
@@ -270,25 +261,25 @@ function cardHTML(p) {
 function renderGrid(containerId, list) {
   const el = document.getElementById(containerId);
   if (!el) return;
-  
+
   if (!allProductsLoaded || list.length === 0) {
     if (allProductsLoaded) {
       el.innerHTML = `<div class="empty-state">No encontramos productos con esos filtros. Prueba con otra búsqueda o categoría.</div>`;
     }
     return;
   }
-  
+
   el.innerHTML = list.map(cardHTML).join("");
   attachGalleryDots();
 }
 
 function renderCurated() {
   if (!allProductsLoaded || PRODUCTS.length === 0) return;
-  
+
   const destacados = PRODUCTS.filter(p => p.tags.includes("destacado"));
   const novedades = PRODUCTS.filter(p => p.tags.includes("nuevo"));
   const ofertas = PRODUCTS.filter(p => p.tags.includes("oferta"));
-  
+
   renderGrid("destacados-grid", destacados.slice(0, 5));
   renderGrid("novedades-grid", novedades);
   renderGrid("ofertas-grid", ofertas);
@@ -300,7 +291,7 @@ function renderCurated() {
 
 function applyFilters() {
   if (!allProductsLoaded || PRODUCTS.length === 0) return;
-  
+
   let list = PRODUCTS.filter(p => {
     const matchSearch = (p.nombre + " " + p.desc).toLowerCase().includes(state.search.toLowerCase());
     const matchCat = state.categoria === "todas" || p.categoria === state.categoria;
@@ -312,12 +303,12 @@ function applyFilters() {
   if (state.orden === "precio-desc") list.sort((a, b) => b.precio - a.precio);
 
   renderGrid("catalogo-grid", list);
-  
+
   const countEl = document.getElementById("resultCount");
   if (countEl) {
     countEl.textContent = list.length + (list.length === 1 ? " pieza" : " piezas");
   }
-  
+
   attachRevealObservers();
 }
 
@@ -335,11 +326,11 @@ function goToCatalog(categoria) {
   state.categoria = categoria;
   const catFilter = document.getElementById("categoryFilter");
   if (catFilter) catFilter.value = categoria;
-  
+
   document.querySelectorAll(".chip").forEach(c => {
     c.classList.toggle("active", c.dataset.cat === categoria);
   });
-  
+
   applyFilters();
   catalogSection.scrollIntoView({ behavior: "smooth" });
   closeDrawer();
@@ -356,12 +347,12 @@ function initFilterBar() {
   const sortSelect = document.getElementById("sortSelect");
 
   if (searchInput) {
-    searchInput.addEventListener("input", e => { 
-      state.search = e.target.value; 
-      applyFilters(); 
+    searchInput.addEventListener("input", e => {
+      state.search = e.target.value;
+      applyFilters();
     });
   }
-  
+
   if (categorySelect) {
     categorySelect.addEventListener("change", e => {
       state.categoria = e.target.value;
@@ -371,18 +362,18 @@ function initFilterBar() {
       applyFilters();
     });
   }
-  
+
   if (stockCheck) {
-    stockCheck.addEventListener("change", e => { 
-      state.soloStock = e.target.checked; 
-      applyFilters(); 
+    stockCheck.addEventListener("change", e => {
+      state.soloStock = e.target.checked;
+      applyFilters();
     });
   }
-  
+
   if (sortSelect) {
-    sortSelect.addEventListener("change", e => { 
-      state.orden = e.target.value; 
-      applyFilters(); 
+    sortSelect.addEventListener("change", e => {
+      state.orden = e.target.value;
+      applyFilters();
     });
   }
 
@@ -444,7 +435,7 @@ function attachRevealObservers() {
       }
     });
   }, { threshold: 0.12 });
-  
+
   document.querySelectorAll(".reveal:not(.in)").forEach(el => observer.observe(el));
 }
 
@@ -455,7 +446,7 @@ function attachRevealObservers() {
 function initHeaderScroll() {
   const header = document.getElementById("siteHeader");
   if (!header) return;
-  
+
   window.addEventListener("scroll", () => {
     header.classList.toggle("scrolled", window.scrollY > 40);
   });
@@ -475,7 +466,7 @@ function initDrawer() {
   document.getElementById("menuToggle")?.addEventListener("click", openDrawer);
   document.getElementById("drawerClose")?.addEventListener("click", closeDrawer);
   document.getElementById("scrim")?.addEventListener("click", closeDrawer);
-  
+
   const drawerSearch = document.getElementById("drawerSearch");
   if (drawerSearch) {
     drawerSearch.addEventListener("input", (e) => {
@@ -750,25 +741,26 @@ function initLightbox() {
 
 async function init() {
   console.log("Iniciando XKOVARK...");
-  
-  // Mostrar loader
-  const loaderHTML = `
-    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--grey);">
-      <p style="font-size: 16px;">Cargando productos...</p>
-    </div>
-  `;
-  
-  ["destacados-grid", "novedades-grid", "ofertas-grid", "catalogo-grid"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = loaderHTML;
-  });
-  
-  // Cargar productos
-  await loadProductsFromSheet();
-  
-  // Renderizar todo
-  renderCurated();
-  applyFilters();
+
+  const cacheado = leerCache();
+
+  if (cacheado && cacheado.length) {
+    // Visita repetida: se pinta al instante con lo guardado
+    aplicarDatos(cacheado);
+  } else {
+    // Primera visita: mensaje mientras llega la respuesta
+    const loaderHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--grey);">
+        <p style="font-size: 16px;">Cargando productos...</p>
+      </div>
+    `;
+    ["destacados-grid", "novedades-grid", "ofertas-grid", "catalogo-grid"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = loaderHTML;
+    });
+  }
+
+  // Todo lo demás se inicializa sin esperar a la red
   initFilterBar();
   initHeaderScroll();
   initDrawer();
@@ -780,12 +772,6 @@ async function init() {
   document.querySelectorAll("[data-goto-cat]").forEach(btn => {
     btn.addEventListener("click", () => goToCatalog(btn.dataset.gotoCat));
   });
-  
-  if (allProductsLoaded && PRODUCTS.length > 0) {
-    console.log(`XKOVARK listo. ${PRODUCTS.length} productos cargados`);
-  } else {
-    console.warn("XKOVARK iniciado sin productos");
-  }
 
   // Si llegamos redirigidos desde otra página (ej. opiniones.html)
   // con una categoría pendiente, la aplicamos ahora.
@@ -796,6 +782,24 @@ async function init() {
       goToCatalog(pendingCat);
     }
   } catch (e) { /* ignorar */ }
+
+  // Datos frescos en segundo plano
+  try {
+    const frescos = await peticionTemprana;
+    if (!Array.isArray(frescos) || frescos.length === 0) {
+      throw new Error("La hoja está vacía o la respuesta no es válida");
+    }
+    // Solo repinta si algo cambió en la hoja
+    if (JSON.stringify(frescos) !== JSON.stringify(cacheado)) {
+      guardarCache(frescos);
+      aplicarDatos(frescos);
+      console.log(`${PRODUCTS.length} productos actualizados`);
+    }
+  } catch (error) {
+    console.error("Error cargando productos:", error);
+    if (!cacheado) showError("No se pudieron cargar los productos. Por favor, intenta de nuevo más tarde.");
+    // Si había caché, el visitante sigue viendo los productos guardados
+  }
 }
 
 // ============================================================
