@@ -47,10 +47,6 @@ peticionTemprana.catch(() => {}); // evita aviso de error sin capturar; se manej
 
 // Convierte los datos crudos de la hoja al formato de la tienda
 function mapearProductos(data) {
-  // Si la hoja trae la columna "seccion" (NOVEDADES), se usa.
-  // Si no, se asignan automáticamente por posición.
-  const usaSeccion = data.some(item => item.seccion && String(item.seccion).trim() !== "");
-
   const lista = data.map((item, index) => {
     const enOferta = item.en_oferta === true || String(item.en_oferta).toLowerCase() === "true";
     const tags = [];
@@ -71,11 +67,6 @@ function mapearProductos(data) {
       return null;
     }
 
-    if (usaSeccion) {
-      const sec = String(item.seccion || "").toLowerCase().trim();
-      if (sec === "novedades" || sec === "novedad" || sec === "nuevo") tags.push("nuevo");
-    }
-
     return {
       id: item.id || String(item.nombre_producto || "").toLowerCase().replace(/[^a-z0-9]+/g, "-") || `producto-${index}`,
       categoria: item.categoria ? String(item.categoria).toLowerCase().trim() : "otros",
@@ -88,13 +79,6 @@ function mapearProductos(data) {
       images: images
     };
   }).filter(p => p !== null);
-
-  // Tags automáticos solo si la hoja no define la columna "seccion"
-  if (!usaSeccion) {
-    lista.forEach((p, i) => {
-      if (i < 6 && p.images.length > 0 && !p.tags.includes("oferta")) p.tags.push("nuevo");
-    });
-  }
 
   return lista;
 }
@@ -115,7 +99,6 @@ function aplicarDatos(data) {
 
 function showError(message) {
   const containers = [
-    "novedades-grid",
     "ofertas-grid",
     "catalogo-grid"
   ];
@@ -176,9 +159,7 @@ function cardHTML(p) {
     ? `<span class="badge agotado">Agotado</span>`
     : p.tags.includes("oferta")
       ? `<span class="badge oferta">Oferta</span>`
-      : p.tags.includes("nuevo")
-        ? `<span class="badge nuevo">Nuevo</span>`
-        : "";
+      : "";
 
   let imagesHTML = "";
   if (p.images && p.images.length > 0) {
@@ -273,10 +254,8 @@ function renderGrid(containerId, list) {
 function renderCurated() {
   if (!allProductsLoaded || PRODUCTS.length === 0) return;
 
-  const novedades = PRODUCTS.filter(p => p.tags.includes("nuevo"));
   const ofertas = PRODUCTS.filter(p => p.tags.includes("oferta"));
 
-  renderGrid("novedades-grid", novedades);
   renderGrid("ofertas-grid", ofertas);
 }
 
@@ -749,7 +728,7 @@ async function init() {
         <p style="font-size: 16px;">Cargando productos...</p>
       </div>
     `;
-    ["novedades-grid", "ofertas-grid", "catalogo-grid"].forEach(id => {
+    ["ofertas-grid", "catalogo-grid"].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.innerHTML = loaderHTML;
     });
