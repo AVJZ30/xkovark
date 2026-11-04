@@ -184,14 +184,18 @@ header.scrolled{padding:14px 5vw;background:rgba(11,11,11,.94);backdrop-filter:b
 /* ===== DEPARTMENTS ===== */
 /* Categorías plegadas por defecto; se despliegan al tocar el encabezado. */
 .categories-disclosure{width:100%;}
-.categories-toggle{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:18px;cursor:pointer;border:1px solid var(--hair);padding:22px 25px;font-family:'Archivo',sans-serif;font-size:clamp(13px,1.3vw,17px);font-weight:600;letter-spacing:.01em;transition:border-color .25s,color .25s;}
+.categories-toggle{list-style:none;cursor:pointer;transition:border-color .25s,color .25s;}
+.categories-toggle-right{display:flex;align-items:center;gap:14px;}
+.categories-toggle-right .section-note{display:block;}
+.categories-toggle:hover .section-note,.categories-toggle:focus-visible .section-note{color:var(--gold);}
+.categories-toggle:hover .categories-toggle-icon{transform:translateY(3px);}
 .categories-toggle::-webkit-details-marker{display:none;}
 .categories-toggle:hover,.categories-toggle:focus-visible{border-color:var(--gold);color:var(--gold);}
 .categories-toggle:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 .categories-toggle-icon{font-size:27px;line-height:1;color:var(--gold);transition:transform .25s;flex:none;}
 .categories-disclosure[open] .categories-toggle-icon{transform:rotate(180deg);}
 .categories-disclosure[open] .dept-grid{margin-top:18px;}
-@media(max-width:640px){.categories-toggle{padding:18px 16px;}}
+@media(max-width:640px){.categories-toggle-right{width:100%;justify-content:space-between;}}
 
 .departments{padding:110px 5vw 40px;}
 .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;border-bottom:1px solid var(--hair);padding-bottom:26px;flex-wrap:wrap;gap:16px;}
