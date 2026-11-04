@@ -83,9 +83,21 @@ function mapearProductos(data) {
   return lista;
 }
 
+// Mezcla el catálogo en cada visita o recarga (Fisher-Yates).
+// Se conserva el orden durante la visita, incluso si se actualizan los datos del caché.
+const ordenAleatorioVisita = new Map();
+function mezclarProductos(productos) {
+  const nuevos = productos.filter(p => !ordenAleatorioVisita.has(p.id));
+  // Asignamos una prioridad aleatoria estable a cada producto durante esta visita.
+  nuevos.forEach(p => ordenAleatorioVisita.set(p.id, Math.random()));
+  return productos.sort((a, b) =>
+    ordenAleatorioVisita.get(a.id) - ordenAleatorioVisita.get(b.id)
+  );
+}
+
 // Guarda los productos en memoria y repinta todo
 function aplicarDatos(data) {
-  PRODUCTS = mapearProductos(data);
+  PRODUCTS = mezclarProductos(mapearProductos(data));
   allProductsLoaded = PRODUCTS.length > 0;
   renderCurated();
   applyFilters();
