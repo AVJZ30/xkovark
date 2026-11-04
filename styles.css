@@ -49,6 +49,10 @@ header.scrolled{padding:14px 5vw;background:rgba(11,11,11,.94);backdrop-filter:b
 
 .logo{font-family:'Archivo',sans-serif;font-weight:900;font-size:19px;letter-spacing:.26em;flex:none;}
 .logo .dot{color:var(--gold);}
+.logo-with-tagline{display:inline-flex;flex-direction:column;align-items:flex-start;gap:3px;line-height:1.1;}
+.logo-with-tagline .logo-name{display:block;white-space:nowrap;}
+.logo-with-tagline .logo-tagline{display:block;font-family:'Archivo',sans-serif;font-size:8px;font-weight:600;letter-spacing:.12em;line-height:1.3;color:var(--grey);white-space:nowrap;}
+.footer-brand .logo-with-tagline{display:inline-flex;}
 
 .nav-links{
   display:flex;
