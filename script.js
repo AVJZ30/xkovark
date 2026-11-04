@@ -47,7 +47,7 @@ peticionTemprana.catch(() => {}); // evita aviso de error sin capturar; se manej
 
 // Convierte los datos crudos de la hoja al formato de la tienda
 function mapearProductos(data) {
-  // Si la hoja trae la columna "seccion" (DESTACADO / NOVEDADES), se usa.
+  // Si la hoja trae la columna "seccion" (NOVEDADES), se usa.
   // Si no, se asignan automáticamente por posición.
   const usaSeccion = data.some(item => item.seccion && String(item.seccion).trim() !== "");
 
@@ -73,7 +73,6 @@ function mapearProductos(data) {
 
     if (usaSeccion) {
       const sec = String(item.seccion || "").toLowerCase().trim();
-      if (sec === "destacado" || sec === "destacados") tags.push("destacado");
       if (sec === "novedades" || sec === "novedad" || sec === "nuevo") tags.push("nuevo");
     }
 
@@ -93,8 +92,7 @@ function mapearProductos(data) {
   // Tags automáticos solo si la hoja no define la columna "seccion"
   if (!usaSeccion) {
     lista.forEach((p, i) => {
-      if (i < 3 && p.images.length > 0 && !p.tags.includes("destacado")) p.tags.push("destacado");
-      if (i >= 3 && i < 6 && p.images.length > 0 && !p.tags.includes("oferta") && !p.tags.includes("destacado")) p.tags.push("nuevo");
+      if (i < 6 && p.images.length > 0 && !p.tags.includes("oferta")) p.tags.push("nuevo");
     });
   }
 
@@ -117,7 +115,6 @@ function aplicarDatos(data) {
 
 function showError(message) {
   const containers = [
-    "destacados-grid",
     "novedades-grid",
     "ofertas-grid",
     "catalogo-grid"
@@ -276,11 +273,9 @@ function renderGrid(containerId, list) {
 function renderCurated() {
   if (!allProductsLoaded || PRODUCTS.length === 0) return;
 
-  const destacados = PRODUCTS.filter(p => p.tags.includes("destacado"));
   const novedades = PRODUCTS.filter(p => p.tags.includes("nuevo"));
   const ofertas = PRODUCTS.filter(p => p.tags.includes("oferta"));
 
-  renderGrid("destacados-grid", destacados.slice(0, 5));
   renderGrid("novedades-grid", novedades);
   renderGrid("ofertas-grid", ofertas);
 }
@@ -754,7 +749,7 @@ async function init() {
         <p style="font-size: 16px;">Cargando productos...</p>
       </div>
     `;
-    ["destacados-grid", "novedades-grid", "ofertas-grid", "catalogo-grid"].forEach(id => {
+    ["novedades-grid", "ofertas-grid", "catalogo-grid"].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.innerHTML = loaderHTML;
     });
