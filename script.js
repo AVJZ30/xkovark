@@ -781,6 +781,95 @@ function closeLightbox() {
   document.getElementById("lightboxScrim")?.classList.remove("open");
 }
 
+// Vista de producto inspirada en las fichas de tiendas de streetwear.
+let detailProduct = null;
+let detailImagePosition = 0;
+let detailPreviousFocus = null;
+
+function setProductDetailPhoto(position) {
+  if (!detailProduct) return;
+  const images = detailProduct.images || [];
+  if (!images.length) return;
+  detailImagePosition = (position + images.length) % images.length;
+  const img = document.getElementById("detailProductImage");
+  if (img) {
+    img.src = images[detailImagePosition];
+    img.alt = detailProduct.nombre + " — foto " + (detailImagePosition + 1);
+  }
+  document.getElementById("detailImageIndex").textContent = (detailImagePosition + 1) + " / " + images.length;
+  document.getElementById("detailPrev").hidden = images.length < 2;
+  document.getElementById("detailNext").hidden = images.length < 2;
+}
+
+function openProductDetail(id) {
+  const p = PRODUCTS.find(item => String(item.id) === String(id));
+  if (!p) return;
+  detailProduct = p;
+  detailPreviousFocus = document.activeElement;
+  document.getElementById("detailProductName").textContent = p.nombre;
+  document.getElementById("detailProductCategory").textContent = CATEGORY_LABELS[p.categoria] || p.categoria;
+  document.getElementById("detailProductPrice").textContent = "$" + Number(p.precio).toFixed(2);
+  const oldPrice = document.getElementById("detailProductOldPrice");
+  oldPrice.textContent = p.precioAntes ? "$" + Number(p.precioAntes).toFixed(2) : "";
+  oldPrice.hidden = !p.precioAntes;
+  document.getElementById("detailProductStock").textContent = AVAIL_LABELS[p.disponibilidad] || p.disponibilidad;
+  document.getElementById("detailProductDescription").textContent = p.desc || "Consulta los detalles de esta pieza con nuestro equipo.";
+  document.getElementById("detailQuantity").value = "1";
+  const add = document.getElementById("detailAddCart");
+  add.disabled = p.disponibilidad === "agotado";
+  add.textContent = add.disabled ? "Agotado" : "Agregar al carrito";
+  setProductDetailPhoto(0);
+  const overlay = document.getElementById("productDetailOverlay");
+  overlay.hidden = false;
+  document.body.classList.add("product-detail-open");
+  document.getElementById("productDetailClose").focus();
+}
+function closeProductDetail() {
+  const overlay = document.getElementById("productDetailOverlay");
+  if (!overlay || overlay.hidden) return;
+  overlay.hidden = true;
+  document.body.classList.remove("product-detail-open");
+  detailProduct = null;
+  if (detailPreviousFocus?.isConnected) detailPreviousFocus.focus();
+}
+function initProductDetail() {
+  const overlay = document.getElementById("productDetailOverlay");
+  if (!overlay) return;
+  overlay.querySelectorAll("[data-detail-close]").forEach(el => el.addEventListener("click", closeProductDetail));
+  document.getElementById("productDetailClose").addEventListener("click", closeProductDetail);
+  document.getElementById("detailPrev").addEventListener("click", () => setProductDetailPhoto(detailImagePosition - 1));
+  document.getElementById("detailNext").addEventListener("click", () => setProductDetailPhoto(detailImagePosition + 1));
+  document.getElementById("detailQtyMinus").addEventListener("click", () => {
+    const q = document.getElementById("detailQuantity");
+    q.value = Math.max(1, Math.min(99, Number(q.value || 1) - 1));
+  });
+  document.getElementById("detailQtyPlus").addEventListener("click", () => {
+    const q = document.getElementById("detailQuantity");
+    q.value = Math.max(1, Math.min(99, Number(q.value || 1) + 1));
+  });
+  document.getElementById("detailAddCart").addEventListener("click", () => {
+    if (!detailProduct || detailProduct.disponibilidad === "agotado") return;
+    const q = document.getElementById("detailQuantity");
+    const amount = Math.max(1, Math.min(99, Math.floor(Number(q.value) || 1)));
+    addToCart(detailProduct.id, amount);
+    closeProductDetail();
+    openCartDrawer();
+  });
+  document.addEventListener("keydown", e => {
+    if (overlay.hidden) return;
+    if (e.key === "Escape") closeProductDetail();
+    if (e.key === "ArrowLeft") setProductDetailPhoto(detailImagePosition - 1);
+    if (e.key === "ArrowRight") setProductDetailPhoto(detailImagePosition + 1);
+    if (e.key === "Tab") {
+      const focusable = [...overlay.querySelectorAll('button:not([disabled]):not([hidden]),input:not([disabled])')].filter(x => x.getClientRects().length);
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length-1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+}
+
 function initLightbox() {
   document.getElementById("lightboxClose")?.addEventListener("click", closeLightbox);
 
@@ -792,8 +881,11 @@ function initLightbox() {
   // Delegación: funciona con cualquier imagen de producto, incluso
   // las que se vuelven a dibujar al buscar o filtrar.
   document.addEventListener("click", (e) => {
-    const img = e.target.closest(".gallery-main");
-    if (img) openLightbox(img.src, img.alt);
+    const img = e.target.closest(".card .gallery-main");
+    if (img) {
+      const card = img.closest(".card");
+      if (card) openProductDetail(card.dataset.id);
+    }
   });
 
   document.addEventListener("keydown", (e) => {
@@ -832,6 +924,7 @@ async function init() {
   initDrawer();
   initCart();
   initLightbox();
+  initProductDetail();
   attachRevealObservers();
 
   // Eventos de navegación por categoría
