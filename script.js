@@ -390,6 +390,18 @@ function goToGallerySlide(gallery, index) {
 
 function attachGalleryDots() {
   document.querySelectorAll(".product-gallery").forEach(gallery => {
+    // Usa los colores de la misma foto como fondo difuminado.
+    // Funciona incluso con fotos externas que no permiten leer píxeles desde canvas.
+    gallery.querySelectorAll(".gallery-slide").forEach(slide => {
+      const img = slide.querySelector("img.gallery-main");
+      if (!img) return;
+      const applyBackground = () => {
+        const src = img.currentSrc || img.src;
+        if (src) slide.style.setProperty("--product-photo-bg", 'url("' + src.replace(/["\\\n\r]/g, "") + '")');
+      };
+      applyBackground();
+      img.addEventListener("load", applyBackground, { once: true });
+    });
     const current = parseInt(gallery.dataset.index || "0", 10);
     goToGallerySlide(gallery, current);
 
