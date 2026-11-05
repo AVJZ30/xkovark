@@ -150,7 +150,7 @@
   <div class="hero-foot">
     <p class="hero-sub">Piezas que hablan por ti. Descubre joyería, ropa y accesorios con carácter.</p>
     <div class="hero-ctas">
-      <a href="#catalogo" class="btn btn-gold">Explorar productos ↗</a>
+      <a href="#catalogo" class="btn btn-gold hero-shop-btn">Explorar productos ↗</a>
       <a href="https://wa.me/593967071228" target="_blank" class="btn btn-ghost">Escríbenos por WhatsApp</a>
     </div>
   </div>
@@ -383,6 +383,43 @@
 <a href="https://wa.me/593967071228?text=Hola%20XKOVARK,%20quiero%20más%20información" target="_blank" class="wa-float" title="Escríbenos por WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.4 0-.5C11.6 9 11.1 7.9 11 7.5c-.1-.3-.3-.3-.5-.3h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.1 1.7 2.6 4.1 3.6.6.2 1 .4 1.4.5.6.2 1.1.2 1.5.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.33A10 10 0 1 0 12 2Z"/></svg>
 </a>
+
+<!-- Vista de producto: galería y detalles, sin abrir solamente la imagen -->
+<div class="product-detail-overlay" id="productDetailOverlay" hidden>
+  <div class="product-detail-backdrop" data-detail-close></div>
+  <section class="product-detail-panel" role="dialog" aria-modal="true" aria-labelledby="detailProductName" tabindex="-1">
+    <button class="product-detail-close" id="productDetailClose" aria-label="Cerrar detalles">✕</button>
+    <div class="product-detail-photo">
+      <img id="detailProductImage" alt="" src="" />
+      <button class="product-detail-arrow previous" id="detailPrev" type="button" aria-label="Foto anterior">‹</button>
+      <button class="product-detail-arrow following" id="detailNext" type="button" aria-label="Foto siguiente">›</button>
+      <span class="product-detail-index" id="detailImageIndex"></span>
+    </div>
+    <div class="product-detail-info">
+      <span class="product-detail-kicker">XKOVARK / THE COLLECTION</span>
+      <h2 id="detailProductName"></h2>
+      <p class="product-detail-category" id="detailProductCategory"></p>
+      <div class="product-detail-prices"><span id="detailProductPrice"></span><del id="detailProductOldPrice"></del></div>
+      <p class="product-detail-availability" id="detailProductStock"></p>
+      <div class="product-detail-rule"></div>
+      <h3>Descripción</h3>
+      <p class="product-detail-description" id="detailProductDescription"></p>
+      <div class="product-detail-actions">
+        <label for="detailQuantity">Cantidad</label>
+        <div class="product-detail-action-row">
+          <div class="product-detail-stepper">
+            <button id="detailQtyMinus" type="button" aria-label="Reducir cantidad">−</button>
+            <input id="detailQuantity" type="number" min="1" max="99" value="1" inputmode="numeric" aria-label="Cantidad" />
+            <button id="detailQtyPlus" type="button" aria-label="Aumentar cantidad">+</button>
+          </div>
+          <button type="button" id="detailAddCart" class="product-detail-add">Agregar al carrito</button>
+        </div>
+      </div>
+      <p class="product-detail-footnote">Confirma disponibilidad, pago y envío al finalizar tu pedido por WhatsApp.</p>
+      <button type="button" class="product-detail-return" data-detail-close>← Seguir explorando</button>
+    </div>
+  </section>
+</div>
 
 <!-- LIGHTBOX: imagen de producto ampliada -->
 <div class="lightbox-scrim" id="lightboxScrim">
