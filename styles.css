@@ -763,3 +763,71 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 .reviews-page .reviews-more-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-width:190px;padding:15px 29px;border:1px solid #b79961;border-radius:999px;background:transparent;color:#e7ca95;cursor:pointer;font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;transition:background .2s,color .2s,box-shadow .2s}
 .reviews-page .reviews-more-btn:hover{background:#c6a15b;color:#0b0b0b;box-shadow:0 0 20px rgba(198,161,91,.22)}
 .reviews-page .reviews-more-btn:focus-visible{outline:2px solid #e5c184;outline-offset:4px}
+
+
+/* Botón blanco premium de portada */
+.hero .hero-shop-btn{background:#fff!important;color:#0b0b0b!important;border:1px solid #fff!important;border-radius:999px!important;font-weight:700;box-shadow:0 10px 28px #0005;transition:background .25s,transform .25s,box-shadow .25s}
+.hero .hero-shop-btn:hover{background:#eee!important;color:#080808!important;transform:translateY(-2px);box-shadow:0 12px 35px #0007}
+
+/* Tarjetas redondeadas en catálogo y ofertas */
+.shop-first .card,#ofertas .card{border-radius:14px!important;overflow:hidden}
+.shop-first .card-img,#ofertas .card-img{overflow:hidden}
+.shop-first .gallery-main,#ofertas .gallery-main{cursor:pointer}
+.shop-first .card-img:hover .gallery-main,#ofertas .card-img:hover .gallery-main{cursor:zoom-in}
+
+/* Ficha de producto de pantalla amplia */
+.product-detail-open{overflow:hidden}
+.product-detail-overlay[hidden]{display:none!important}
+.product-detail-overlay{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:22px}
+.product-detail-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.86);backdrop-filter:blur(10px)}
+.product-detail-panel{position:relative;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(340px,.8fr);width:min(1160px,96vw);height:min(760px,92dvh);overflow:hidden;border-radius:18px;border:1px solid #474035;background:#121211;box-shadow:0 30px 100px #000c}
+.product-detail-close{position:absolute;right:20px;top:18px;z-index:4;width:40px;height:40px;border-radius:50%;background:#27231c;color:#fff;border:1px solid #5c513b;font-size:18px}
+.product-detail-close:hover{background:#c6a15b;color:#111}
+.product-detail-photo{position:relative;min-height:0;background:white;display:grid;place-items:center;overflow:hidden}
+.product-detail-photo img{display:block;width:100%;height:100%;object-fit:contain}
+.product-detail-arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border:1px solid #d1c9bb;border-radius:50%;background:#fffe;color:#161616;font-size:32px;display:grid;place-items:center;line-height:1;z-index:2}
+.product-detail-arrow.previous{left:15px}.product-detail-arrow.following{right:15px}
+.product-detail-arrow[hidden]{display:none}
+.product-detail-index{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:#161616;background:#ffffffe6;border-radius:100px;padding:7px 13px;font:11px 'IBM Plex Mono',monospace}
+.product-detail-info{overflow:auto;padding:clamp(30px,5vw,66px) clamp(25px,4vw,56px);display:flex;flex-direction:column;align-items:flex-start}
+.product-detail-kicker{font:10px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#c9ad7a}
+.product-detail-info h2{font-family:'Archivo',sans-serif;font-size:clamp(28px,3.5vw,52px);font-weight:900;letter-spacing:-.045em;line-height:1.06;margin:21px 0 10px}
+.product-detail-category{text-transform:uppercase;font:11px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#a6a29c}
+.product-detail-prices{display:flex;align-items:center;gap:18px;margin:30px 0 12px}
+#detailProductPrice{color:#e1bd7b;font:600 30px 'Archivo',sans-serif}
+#detailProductOldPrice{font:14px 'IBM Plex Mono',monospace;color:#8f8b84}
+.product-detail-availability{font:11px 'IBM Plex Mono',monospace;text-transform:uppercase;color:#bca67b}
+.product-detail-rule{height:1px;width:100%;background:#373229;margin:25px 0}
+.product-detail-info h3{font:700 12px 'Archivo',sans-serif;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.product-detail-description{line-height:1.85;color:#c4c0b8;font-size:14px;white-space:pre-line}
+.product-detail-actions{margin-top:32px;width:100%}
+.product-detail-actions>label{display:block;color:#c5b69d;font:11px 'IBM Plex Mono',monospace;margin-bottom:11px;text-transform:uppercase}
+.product-detail-action-row{display:flex;gap:12px;align-items:stretch}
+.product-detail-stepper{display:flex;align-items:center;border:1px solid #554d40;border-radius:9px;overflow:hidden}
+.product-detail-stepper button{width:35px;height:48px;background:transparent;color:#fff;border:0;font-size:18px}
+.product-detail-stepper input{width:40px;background:transparent;border:0;outline:0;color:#fff;font:14px 'IBM Plex Mono',monospace;text-align:center;appearance:textfield;-moz-appearance:textfield}
+.product-detail-stepper input::-webkit-inner-spin-button,.product-detail-stepper input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.product-detail-add{flex:1;min-height:49px;border:0;border-radius:9px;background:#d5af67;color:#111;font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.05em;text-transform:uppercase;padding:12px}
+.product-detail-add:hover{background:#e7c98e}.product-detail-add:disabled{opacity:.5;cursor:not-allowed}
+.product-detail-footnote{font-size:11px;color:#9c958a;line-height:1.7;margin-top:15px}
+.product-detail-return{margin-top:27px;background:transparent;border:0;color:#d8bd8c;font:11px 'IBM Plex Mono',monospace;padding:8px 0}
+@media(max-width:650px){
+ .shop-first .grid,#ofertas .grid{grid-template-columns:1fr!important;max-width:560px;margin:auto;gap:16px;padding:0 4vw}
+ .shop-first .card,#ofertas .card{border-radius:17px!important}
+ .shop-first .card-img,#ofertas .card-img{aspect-ratio:1/1.06!important}
+ .shop-first .card[data-categoria="gafas"] .card-img,#ofertas .card[data-categoria="gafas"] .card-img{aspect-ratio:1.22/1!important}
+ .shop-first .card-body,#ofertas .card-body{padding:19px 18px 22px}
+ .shop-first .card-body .name,#ofertas .card-body .name{font-size:18px}
+ .shop-first .card-body .desc,#ofertas .card-body .desc{font-size:13px;min-height:auto}
+ .shop-first .price,#ofertas .price{font-size:21px}
+ .shop-first .btn-add-cart,#ofertas .btn-add-cart{font-size:12px;min-height:45px}
+ .product-detail-overlay{padding:0}
+ .product-detail-panel{width:100%;height:100dvh;border:0;border-radius:0;grid-template-columns:1fr;grid-template-rows:minmax(260px,46dvh) minmax(0,1fr);overflow:auto}
+ .product-detail-photo{min-height:260px}
+ .product-detail-info{overflow:visible;padding:24px 23px 45px}
+ .product-detail-close{right:14px;top:12px}
+ .product-detail-info h2{font-size:32px;margin:13px 0 8px}
+ .product-detail-prices{margin:18px 0 8px}
+ .product-detail-rule{margin:18px 0}
+}
+@media(prefers-reduced-motion:reduce){.hero .hero-shop-btn,.shop-first .card{transition:none}}
