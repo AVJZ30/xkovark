@@ -512,10 +512,18 @@ function attachRevealObservers() {
 function initHeaderScroll() {
   const header = document.getElementById("siteHeader");
   if (!header) return;
-
-  window.addEventListener("scroll", () => {
+  let scrollFrame = 0;
+  const updateScrollEffects = () => {
+    scrollFrame = 0;
     header.classList.toggle("scrolled", window.scrollY > 40);
-  });
+    // La iluminación cambia de tono con la distancia recorrida, sin recargar fotos.
+    const hue = (35 + window.scrollY * 0.22) % 360;
+    document.documentElement.style.setProperty("--xk-scroll-hue", hue.toFixed(1));
+  };
+  window.addEventListener("scroll", () => {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScrollEffects);
+  }, { passive: true });
+  updateScrollEffects();
 }
 
 function openDrawer() {
