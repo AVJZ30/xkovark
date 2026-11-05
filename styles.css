@@ -848,3 +848,6 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 /* Portada: XKO blanco y VARK color conchervino / borgoña */
 .hero .hero-wordmark{color:#ffffff!important}
 .hero .hero-wordmark .accent{color:#76253e!important}
+
+/* Título principal XKOVARK completamente blanco */
+.hero .hero-wordmark,.hero .hero-wordmark .accent{color:#ffffff!important}
