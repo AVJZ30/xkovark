@@ -881,10 +881,9 @@ function initLightbox() {
   // Delegación: funciona con cualquier imagen de producto, incluso
   // las que se vuelven a dibujar al buscar o filtrar.
   document.addEventListener("click", (e) => {
-    const img = e.target.closest(".card .gallery-main");
-    if (img) {
-      const card = img.closest(".card");
-      if (card) openProductDetail(card.dataset.id);
+    const card = e.target.closest("#catalogo-grid .card, #ofertas-grid .card");
+    if (card && !e.target.closest(".gallery-arrow, .gdot, .qty-row, .btn-add-cart")) {
+      openProductDetail(card.dataset.id);
     }
   });
 
