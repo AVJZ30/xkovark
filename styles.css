@@ -1047,3 +1047,8 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 }
 /* La bandera es un emoji Unicode real, sin imágenes ni iconos añadidos. */
 .nav-right .ecuador-flag{font-family:system-ui,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+
+/* Permite que el blanco de la foto se fusione con el halo que está detrás. */
+.shop-first .gallery-slide,#ofertas .gallery-slide{isolation:auto!important}
+.shop-first .gallery-track,#ofertas .gallery-track{isolation:auto}
+.shop-first .product-gallery,#ofertas .product-gallery{isolation:auto}
