@@ -968,3 +968,33 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
   }
   .shop-first .gallery-slide img,#ofertas .gallery-slide img{padding:4px!important}
 }
+
+/* Efecto catálogo estilo boutique: entrada suave y luz dorada al recorrerlo */
+.shop-first .card.reveal,#ofertas .card.reveal{
+  opacity:0;
+  transform:translate3d(0,25px,0) scale(.975);
+  transition:
+    opacity .65s cubic-bezier(.2,.8,.2,1),
+    transform .75s cubic-bezier(.2,.8,.2,1),
+    border-color .3s ease,box-shadow .35s ease;
+  transition-delay:var(--card-reveal-delay,0ms),var(--card-reveal-delay,0ms),0ms,0ms;
+}
+.shop-first .card.reveal.in,#ofertas .card.reveal.in{
+  opacity:1;transform:translate3d(0,0,0) scale(1);
+}
+@media(hover:hover) and (pointer:fine){
+  .shop-first .card.reveal.in:hover,#ofertas .card.reveal.in:hover{
+    transform:translate3d(0,-5px,0) scale(1.008);
+    border-color:#bb9656;
+    box-shadow:0 0 0 1px rgba(210,168,91,.28),0 0 26px rgba(176,126,47,.18),0 16px 36px rgba(0,0,0,.4);
+  }
+  .shop-first .card-img img,#ofertas .card-img img{
+    transition:transform .55s cubic-bezier(.2,.8,.2,1);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .shop-first .card.reveal,#ofertas .card.reveal,
+  .shop-first .card.reveal.in,#ofertas .card.reveal.in{
+    opacity:1;transform:none;transition:none;
+  }
+}
