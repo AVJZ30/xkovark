@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Opiniones — XKOVARK</title>
+<title>Opiniones de clientes | XKOVARK</title>
+<meta name="description" content="Conoce las opiniones compartidas por clientes de XKOVARK. Lee sus experiencias y deja tu reseña.">
 <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
@@ -17,7 +18,7 @@
 <!-- Cliente de Supabase (JS) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
-<body>
+<body class="reviews-page">
 
 <!-- HEADER (igual al del resto del sitio) -->
 <header id="siteHeader">
@@ -28,7 +29,7 @@
         <div class="megamenu">
           <div class="mega-col">
             <h5>Joyería</h5>
-            <button class="cat-link" data-goto-cat="joyeria">Cadenas</button>
+            <button class="cat-link" data-goto-cat="cadenas">Cadenas</button>
             <button class="cat-link" data-goto-cat="joyeria">Aretes</button>
             <button class="cat-link" data-goto-cat="joyeria">Relojes</button>
           </div>
@@ -69,7 +70,7 @@
           </div>
         </div>
       </div>
-      <a href="index.html#novedades">Novedades</a>
+      <a href="index.html#catalogo">Catálogo</a>
       <a href="index.html#ofertas">Ofertas</a>
       <a href="opiniones.html">Opiniones</a>
     </nav>
@@ -135,30 +136,36 @@
 </div>
 
 <!-- BANNER DE LA PÁGINA -->
-<section class="page-hero">
+<section class="page-hero reviews-hero">
   <div class="page-hero-inner reveal">
-    <div class="eyebrow">Testimonios reales</div>
-    <h1 class="section-title display">Opiniones</h1>
-    <p class="hero-sub">Esto dicen quienes ya compraron en XKOVARK. Sin filtros, sin actores — clientes reales.</p>
+    <div class="eyebrow">XKOVARK / COMUNIDAD</div>
+    <h1 class="section-title display">TU EXPERIENCIA<br><span class="reviews-gold">IMPORTA.</span></h1>
+    <p class="hero-sub">Conoce las experiencias compartidas por nuestra comunidad. Opiniones, detalles y fotos de quienes eligieron XKOVARK.</p>
+    <div class="reviews-hero-actions">
+      <a class="btn btn-gold" href="#opiniones-clientes">Leer opiniones ↓</a>
+      <a class="btn btn-ghost" href="#dejar-opinion">Escribir mi opinión ↗</a>
+    </div>
   </div>
+  <span class="reviews-hero-number" aria-hidden="true">XK / 01</span>
 </section>
 
 <!-- RESUMEN DE CALIFICACIÓN -->
-<section class="section" style="padding-bottom:50px;">
+<section class="section reviews-overview">
   <div class="rating-summary reveal">
     <div class="rating-score" id="ratingScore">—</div>
     <div class="rating-summary-body">
       <div class="rating-stars" id="ratingStarsSummary"></div>
       <span class="rating-count" id="ratingCount">Cargando opiniones...</span>
+      <a href="#dejar-opinion" class="rating-write-link">Comparte tu experiencia ↗</a>
     </div>
   </div>
 </section>
 
 <!-- LISTA DE OPINIONES -->
-<section class="section alt" style="padding-top:0;">
+<section class="section alt reviews-gallery" id="opiniones-clientes">
   <div class="section-head reveal">
-    <div><div class="eyebrow" style="margin-bottom:10px;">Comunidad XKOVARK</div><h2 class="section-title display">Lo que dicen</h2></div>
-    <p class="section-note">Actualizado en tiempo real desde nuestra base de datos.</p>
+    <div><div class="eyebrow" style="margin-bottom:10px;">LA VOZ DE LA COMUNIDAD</div><h2 class="section-title display">OPINIONES DE CLIENTES</h2></div>
+    <p class="section-note">Comentarios compartidos por clientes, ordenados del más reciente al más antiguo.</p>
   </div>
   <div class="reviews-grid" id="reviewsGrid">
     <div class="reviews-loading">Cargando opiniones...</div>
@@ -166,9 +173,9 @@
 </section>
 
 <!-- FORMULARIO -->
-<section class="section" id="dejar-opinion">
+<section class="section reviews-form-section" id="dejar-opinion">
   <div class="section-head reveal">
-    <div><div class="eyebrow" style="margin-bottom:10px;">Tu turno</div><h2 class="section-title display">Deja tu opinión</h2></div>
+    <div><div class="eyebrow" style="margin-bottom:10px;">TU EXPERIENCIA CUENTA</div><h2 class="section-title display">DEJA TU OPINIÓN</h2></div>
     <p class="section-note">Cuéntanos cómo fue tu experiencia con tu pedido.</p>
   </div>
 
@@ -225,9 +232,6 @@
       </div>
     </div>
     <div class="footer-col"><h4>Joyería</h4><button data-goto-cat="joyeria">Ver todo</button></div>
-    <div class="footer-col"><h4>Pulseras</h4><button data-goto-cat="pulseras">Ver todo</button></div>
-    <div class="footer-col"><h4>Gorras</h4><button data-goto-cat="gorras">Ver todo</button></div>
-    <div class="footer-col"><h4>Bolsos</h4><button data-goto-cat="bolsos">Ver todo</button></div>
     <div class="footer-col"><h4>Contacto</h4>
       <a href="https://wa.me/593967071228" target="_blank">+593 96 707 1228</a>
       <a href="https://www.instagram.com/xkovark/" target="_blank">@xkovark</a>
