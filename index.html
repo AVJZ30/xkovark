@@ -166,6 +166,29 @@
 <!-- CATÁLOGO COMPLETO -->
 <section id="catalogo" class="shop-first">
   <div class="shop-intro"><div><span class="shop-kicker">01 / THE COLLECTION · XKOVARK</span><h2 class="shop-heading">ELIGE TU <em>PRÓXIMA PIEZA.</em></h2><p>Explora toda la colección. Descubre los detalles, compara estilos y agrega tus favoritos al carrito.</p></div><a href="https://wa.me/593967071228" target="_blank" rel="noopener noreferrer" class="shop-contact">¿Necesitas asesoría? ↗</a></div>
+  <div class="collection-nav" aria-label="Categorías de productos">
+  <div class="chipnav">
+    <button class="chip active" data-cat="todas"><span class="chip-name">Todas</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="cadenas"><span class="chip-name">Cadenas</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="aretes"><span class="chip-name">Aretes</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="anillos"><span class="chip-name">Anillos</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="relojes"><span class="chip-name">Relojes</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="pulseras"><span class="chip-name">Pulseras</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="gafas"><span class="chip-name">Gafas</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="mochilas"><span class="chip-name">Mochilas</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="bandoleras"><span class="chip-name">Bandoleras</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="bolsos"><span class="chip-name">Bolsos</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="gorras"><span class="chip-name">Gorras</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="joggers"><span class="chip-name">Joggers</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="camisas"><span class="chip-name">Camisas</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="busos"><span class="chip-name">Busos</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="pasamontanas"><span class="chip-name">Pasamontañas</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="vapes"><span class="chip-name">Vapes</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="cinturon"><span class="chip-name">Cinturones</span><span class="chip-count" aria-hidden="true"></span></button>
+    <button class="chip" data-cat="perfumes"><span class="chip-name">Perfumes</span><span class="chip-count" aria-hidden="true"></span></button>
+  </div>
+    <details class="catalog-tools">
+      <summary aria-label="Abrir búsqueda y filtros"><span aria-hidden="true">⌕</span> Buscar y filtrar <span class="catalog-tools-arrow" aria-hidden="true">⌄</span></summary>
   <div class="filterbar">
     <div class="search-box">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
@@ -201,32 +224,13 @@
     </label>
     <span class="result-count" id="resultCount"></span>
   </div>
-
-  <div class="chipnav">
-    <button class="chip active" data-cat="todas">Todas</button>
-    <button class="chip" data-cat="cadenas">Cadenas</button>
-    <button class="chip" data-cat="aretes">Aretes</button>
-    <button class="chip" data-cat="anillos">Anillos</button>
-    <button class="chip" data-cat="relojes">Relojes</button>
-    <button class="chip" data-cat="pulseras">Pulseras</button>
-    <button class="chip" data-cat="gafas">Gafas</button>
-    <button class="chip" data-cat="mochilas">Mochilas</button>
-    <button class="chip" data-cat="bandoleras">Bandoleras</button>
-    <button class="chip" data-cat="bolsos">Bolsos</button>
-    <button class="chip" data-cat="gorras">Gorras</button>
-    <button class="chip" data-cat="joggers">Joggers</button>
-    <button class="chip" data-cat="camisas">Camisas</button>
-    <button class="chip" data-cat="busos">Busos</button>
-    <button class="chip" data-cat="pasamontanas">Pasamontañas</button>
-    <button class="chip" data-cat="vapes">Vapes</button>
-    <button class="chip" data-cat="cinturon">Cinturones</button>
-    <button class="chip" data-cat="perfumes">Perfumes</button>
+    </details>
   </div>
 
   <div class="section" style="padding-top:50px;">
     <div class="section-head reveal">
       <div><div class="eyebrow" style="margin-bottom:10px;">Catálogo completo</div><h2 class="section-title display">Toda la colección</h2></div>
-      <p class="section-note">Usa el buscador o los filtros para encontrar exactamente lo que quieres.</p>
+      <p class="section-note">Selecciona una categoría para descubrir tus próximas piezas favoritas.</p>
     </div>
     <div class="grid" id="catalogo-grid"></div>
   </div>
