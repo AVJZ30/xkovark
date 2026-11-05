@@ -218,15 +218,15 @@ function cardHTML(p) {
       <div class="card-img">
         ${imagesHTML}
         ${badge}
-        <button class="card-quick-add" type="button" data-id="${p.id}"
-          aria-label="${agotado ? 'Producto agotado' : 'Agregar ' + p.nombre + ' al carrito'}"
-          title="${agotado ? 'Agotado' : 'Agregar al carrito'}" ${agotado ? "disabled" : ""}> ${agotado ? '×' : '+'} </button>
       </div>
       <div class="card-body">
-        <span class="name">${p.nombre}</span>
-        <div class="card-foot">
-          <div class="price-wrap">${priceHTML}</div>
+        <div class="card-copy">
+          <span class="name">${p.nombre}</span>
+          <div class="card-foot"><div class="price-wrap">${priceHTML}</div></div>
         </div>
+        <button class="card-quick-add" type="button" data-id="${p.id}"
+          aria-label="${agotado ? 'Producto agotado' : 'Agregar ' + p.nombre + ' al carrito'}"
+          title="${agotado ? 'Agotado' : 'Agregar al carrito'}" ${agotado ? "disabled" : ""}>${agotado ? '×' : '+'}</button>
       </div>
     </article>
   `;
