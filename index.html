@@ -100,7 +100,12 @@
   <div class="drawer-search">
     <input type="text" placeholder="Buscar productos..." id="drawerSearch">
   </div>
-  <div class="drawer-group">
+  <div class="drawer-live-results" id="drawerLiveResults" aria-live="polite" hidden>
+    <div class="drawer-results-title"><span id="drawerResultsTitle">Resultados</span><button type="button" id="drawerResultsClear">Limpiar ×</button></div>
+    <div class="drawer-results-list" id="drawerResultsList"></div>
+    <button type="button" id="drawerResultsAll" class="drawer-results-all" hidden>Ver todos los resultados ↗</button>
+  </div>
+  <div class="drawer-group drawer-categories">
     <h5>Categorías</h5>
     <button data-goto-cat="cadenas">Cadenas</button>
     <button data-goto-cat="aretes">Aretes</button>
