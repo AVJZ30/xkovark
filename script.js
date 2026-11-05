@@ -566,29 +566,36 @@ function saveCart() {
 }
 
 function findProduct(id) {
-  return PRODUCTS.find(p => p.id === id);
+  // La hoja puede devolver IDs numéricos, pero data-id y localStorage usan texto.
+  return PRODUCTS.find(p => String(p.id) === String(id));
 }
 
 function addToCart(id, cantidad) {
-  const existing = cart.find(i => i.id === id);
+  const product = findProduct(id);
+  if (!product || product.disponibilidad === "agotado") return false;
+  const key = String(product.id);
+  const qty = Math.max(1, Math.floor(Number(cantidad) || 1));
+  const existing = cart.find(i => String(i.id) === key);
   if (existing) {
-    existing.cantidad += cantidad;
+    existing.id = key;
+    existing.cantidad = Math.max(0, Number(existing.cantidad) || 0) + qty;
   } else {
-    cart.push({ id, cantidad });
+    cart.push({ id: key, cantidad: qty });
   }
   saveCart();
   renderCart();
   bumpCartBadge();
+  return true;
 }
 
 function removeFromCart(id) {
-  cart = cart.filter(i => i.id !== id);
+  cart = cart.filter(i => String(i.id) !== String(id));
   saveCart();
   renderCart();
 }
 
 function changeCartQty(id, delta) {
-  const item = cart.find(i => i.id === id);
+  const item = cart.find(i => String(i.id) === String(id));
   if (!item) return;
   item.cantidad += delta;
   if (item.cantidad <= 0) {
@@ -715,7 +722,7 @@ function initCart() {
     if (quickAddBtn) {
       if (quickAddBtn.disabled) return;
       const id = quickAddBtn.dataset.id;
-      addToCart(id, 1);
+      if (!addToCart(id, 1)) return;
       quickAddBtn.textContent = "✓";
       quickAddBtn.classList.add("added");
       window.setTimeout(() => {
@@ -792,9 +799,18 @@ let detailPreviousFocus = null;
 function setProductDetailPhoto(position) {
   if (!detailProduct) return;
   const images = detailProduct.images || [];
-  if (!images.length) return;
-  detailImagePosition = (position + images.length) % images.length;
   const img = document.getElementById("detailProductImage");
+  const photoFrame = document.querySelector(".product-detail-photo");
+  if (!images.length) {
+    if (img) { img.removeAttribute("src"); img.alt = "Sin imagen disponible"; }
+    if (photoFrame) photoFrame.classList.add("detail-photo-empty");
+    document.getElementById("detailImageIndex").textContent = "Sin imagen";
+    document.getElementById("detailPrev").hidden = true;
+    document.getElementById("detailNext").hidden = true;
+    return;
+  }
+  if (photoFrame) photoFrame.classList.remove("detail-photo-empty");
+  detailImagePosition = (position + images.length) % images.length;
   if (img) {
     img.src = images[detailImagePosition];
     img.alt = detailProduct.nombre + " — foto " + (detailImagePosition + 1);
@@ -854,7 +870,7 @@ function initProductDetail() {
     if (!detailProduct || detailProduct.disponibilidad === "agotado") return;
     const q = document.getElementById("detailQuantity");
     const amount = Math.max(1, Math.min(99, Math.floor(Number(q.value) || 1)));
-    addToCart(detailProduct.id, amount);
+    if (!addToCart(detailProduct.id, amount)) return;
     closeProductDetail();
     openCartDrawer();
   });
