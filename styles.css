@@ -1049,11 +1049,16 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
   border-radius:inherit;
   pointer-events:none!important;
   box-shadow:none!important;
-  background:radial-gradient(ellipse 72% 70% at 50% 48%,
-    transparent 37%,
-    rgba(0,0,0,.08) 56%,
-    rgba(0,0,0,.46) 78%,
-    rgba(0,0,0,.88) 100%)!important;
+  background:
+    radial-gradient(ellipse 85% 82% at 45% 52%,
+      rgba(0,0,0,.13) 0%,
+      rgba(0,0,0,.24) 35%,
+      rgba(0,0,0,.54) 72%,
+      rgba(0,0,0,.91) 100%),
+    radial-gradient(ellipse 62% 44% at 54% 60%,
+      rgba(0,0,0,.29) 0%,
+      rgba(0,0,0,.16) 55%,
+      transparent 100%)!important;
   opacity:var(--xk-smoke)!important;
   transition:opacity .13s linear;
 }
