@@ -851,3 +851,34 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 
 /* Título principal XKOVARK completamente blanco */
 .hero .hero-wordmark,.hero .hero-wordmark .accent{color:#ffffff!important}
+
+/* Tarjetas minimalistas: foto protagonista, nombre, precio y botón + */
+.shop-first .card,#ofertas .card{cursor:pointer;border-radius:13px!important}
+.shop-first .card-img,#ofertas .card-img{position:relative}
+.shop-first .card-quick-add,#ofertas .card-quick-add{
+  position:absolute;bottom:13px;right:13px;z-index:8;
+  width:37px;height:37px;display:grid;place-items:center;
+  border-radius:50%;border:1px solid rgba(222,184,111,.8);
+  background:rgba(17,17,17,.78);color:#f4e0bd;
+  font:400 24px/1 'Work Sans',sans-serif;
+  backdrop-filter:blur(8px);cursor:pointer;
+  box-shadow:0 2px 15px #0004;
+  transition:background .2s,transform .2s,border-color .2s,color .2s;
+}
+.shop-first .card-quick-add:hover,#ofertas .card-quick-add:hover{
+  background:#d5af67;color:#111;transform:scale(1.09);border-color:#d5af67;
+}
+.shop-first .card-quick-add.added,#ofertas .card-quick-add.added{background:#d5af67;color:#111}
+.shop-first .card-quick-add:disabled,#ofertas .card-quick-add:disabled{opacity:.55;cursor:not-allowed}
+.shop-first .card-body,#ofertas .card-body{padding:12px 14px 15px;gap:6px}
+.shop-first .card-body .name,#ofertas .card-body .name{margin:0;font-weight:700;font-size:13px;line-height:1.4;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.shop-first .card-foot,#ofertas .card-foot{padding:0;border:0;display:block;margin-top:3px}
+.shop-first .price,#ofertas .price{font-size:14px;color:#e7d2a7}
+.shop-first .price-old,#ofertas .price-old{font-size:10px}
+.shop-first .card:focus-visible,#ofertas .card:focus-visible{outline:2px solid #e5c184;outline-offset:3px}
+@media(max-width:650px){
+ .shop-first .card-body,#ofertas .card-body{padding:10px 9px 12px}
+ .shop-first .card-body .name,#ofertas .card-body .name{font-size:11.5px}
+ .shop-first .price,#ofertas .price{font-size:12.5px}
+ .shop-first .card-quick-add,#ofertas .card-quick-add{width:32px;height:32px;right:8px;bottom:8px;font-size:22px}
+}
