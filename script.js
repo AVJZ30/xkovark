@@ -248,6 +248,10 @@ function renderGrid(containerId, list) {
   }
 
   el.innerHTML = list.map(cardHTML).join("");
+  // Un ligero desfase entre tarjetas crea el efecto de aparición en cascada.
+  el.querySelectorAll(".card.reveal").forEach((card, index) => {
+    card.style.setProperty("--card-reveal-delay", ((index % 4) * 65) + "ms");
+  });
   attachGalleryDots();
 }
 
@@ -480,17 +484,25 @@ function attachGalleryDots() {
   });
 }
 
+// Entrada progresiva de las tarjetas mientras se recorre la colección.
+let catalogRevealObserver = null;
 function attachRevealObservers() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
+  const targets = document.querySelectorAll(".reveal:not(.in)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!("IntersectionObserver" in window) || reducedMotion) {
+    targets.forEach(el => el.classList.add("in"));
+    return;
+  }
+  if (!catalogRevealObserver) {
+    catalogRevealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
         entry.target.classList.add("in");
         observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-
-  document.querySelectorAll(".reveal:not(.in)").forEach(el => observer.observe(el));
+      });
+    }, { rootMargin: "0px 0px 55px 0px", threshold: 0.06 });
+  }
+  targets.forEach(el => catalogRevealObserver.observe(el));
 }
 
 // ============================================================
