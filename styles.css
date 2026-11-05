@@ -700,3 +700,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 .catalog-more-btn{display:inline-flex;align-items:center;justify-content:center;gap:14px;min-width:190px;padding:15px 29px;border:1px solid #b79961;border-radius:999px;background:transparent;color:#e7ca95;cursor:pointer;font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;transition:background .2s ease,color .2s ease,box-shadow .2s ease}
 .catalog-more-btn:hover{background:#c6a15b;color:#0b0b0b;box-shadow:0 0 18px rgba(198,161,91,.22)}
 .catalog-more-btn:focus-visible{outline:2px solid #e5c184;outline-offset:4px}
+
+/* Footer compacto sin enlaces de categorías redundantes */
+footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:clamp(24px,6vw,100px)}
+@media(max-width:640px){footer .footer-top{grid-template-columns:1fr;gap:30px}}
