@@ -100,6 +100,7 @@ function mezclarProductos(productos) {
 function aplicarDatos(data) {
   PRODUCTS = mezclarProductos(mapearProductos(data));
   allProductsLoaded = PRODUCTS.length > 0;
+  renderDrawerSearchResults();
   renderCurated();
   applyFilters();
   renderCart(); // el total del carrito depende de los precios
@@ -391,6 +392,7 @@ function initFilterBar() {
       if (categorySelect) categorySelect.value = "todas";
       const drawerSearch = document.getElementById("drawerSearch");
       if (drawerSearch && drawerSearch.value !== state.search) drawerSearch.value = state.search;
+      renderDrawerSearchResults();
       resetCatalogPage();
       applyFilters();
     });
@@ -595,24 +597,75 @@ function closeDrawer() {
   document.getElementById("scrim")?.classList.remove("open");
 }
 
+// Muestra resultados directamente debajo del buscador del menú móvil.
+function renderDrawerSearchResults() {
+  const input = document.getElementById("drawerSearch");
+  const panel = document.getElementById("drawerLiveResults");
+  const results = document.getElementById("drawerResultsList");
+  const title = document.getElementById("drawerResultsTitle");
+  const allButton = document.getElementById("drawerResultsAll");
+  const categories = document.querySelector("#drawer .drawer-categories");
+  if (!input || !panel || !results) return;
+  const query = String(input.value || "").trim();
+  panel.hidden = !query;
+  if (categories) categories.hidden = !!query;
+  if (!query) {
+    results.innerHTML = "";
+    if (allButton) allButton.hidden = true;
+    return;
+  }
+  if (!allProductsLoaded) {
+    results.innerHTML = '<p class="drawer-results-empty">Cargando productos...</p>';
+    if (title) title.textContent = "Buscando...";
+    if (allButton) allButton.hidden = true;
+    return;
+  }
+  const normal = value => String(value ?? "").normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLowerCase();
+  const words = normal(query).trim().split(/\\s+/).filter(Boolean);
+  const matches = PRODUCTS.filter(p => {
+    const haystack = normal([p.nombre, p.desc, p.codigo, p.categoria, CATEGORY_LABELS[p.categoria]].join(" "));
+    return words.every(word => haystack.includes(word));
+  });
+  matches.sort((a,b) => {
+    const score = p => normal(p.nombre).startsWith(normal(query)) ? 1 : 0;
+    return score(b)-score(a);
+  });
+  if (title) title.textContent = matches.length + (matches.length === 1 ? " resultado" : " resultados");
+  const shown = matches.slice(0, 6);
+  if (!matches.length) {
+    results.innerHTML = '<p class="drawer-results-empty">No encontramos productos con ese nombre. Prueba con otra palabra.</p>';
+  } else {
+    results.innerHTML = shown.map(p => {
+      const photo = p.images?.[0] ? safeProductImage(p.images[0]) : "";
+      return `<button type="button" class="drawer-result" data-product-id="${escapeShopText(p.id)}">
+        ${photo ? `<img src="${photo}" alt="" loading="lazy">` : '<span class="drawer-result-no-photo">XK</span>'}
+        <span class="drawer-result-copy"><strong>${escapeShopText(p.nombre)}</strong><small>Código: ${escapeShopText(p.codigo || p.id)}</small><em>$${Number(p.precio).toFixed(2)}</em></span>
+        <span class="drawer-result-arrow" aria-hidden="true">↗</span>
+      </button>`;
+    }).join("");
+  }
+  if (allButton) allButton.hidden = matches.length <= 6;
+}
 function initDrawer() {
-  document.getElementById("menuToggle")?.addEventListener("click", openDrawer);
+  document.getElementById("menuToggle")?.addEventListener("click", () => {
+    openDrawer();
+    renderDrawerSearchResults();
+  });
   document.getElementById("drawerClose")?.addEventListener("click", closeDrawer);
   document.getElementById("scrim")?.addEventListener("click", closeDrawer);
 
   const drawerSearch = document.getElementById("drawerSearch");
   if (drawerSearch) {
-    drawerSearch.addEventListener("input", (e) => {
+    drawerSearch.addEventListener("input", e => {
+      state.search = e.target.value;
+      state.categoria = "todas";
       const mainSearch = document.getElementById("searchInput");
-      if (mainSearch) {
-        mainSearch.value = e.target.value;
-        state.search = e.target.value;
-        state.categoria = "todas";
-        const categories = document.getElementById("categoryFilter");
-        if (categories) categories.value = "todas";
-        resetCatalogPage();
-        applyFilters();
-      }
+      if (mainSearch) mainSearch.value = state.search;
+      const categories = document.getElementById("categoryFilter");
+      if (categories) categories.value = "todas";
+      resetCatalogPage();
+      applyFilters();
+      renderDrawerSearchResults();
     });
     drawerSearch.addEventListener("keydown", e => {
       if (e.key === "Enter") {
@@ -622,6 +675,22 @@ function initDrawer() {
       }
     });
   }
+  document.getElementById("drawerResultsClear")?.addEventListener("click", () => {
+    if (!drawerSearch) return;
+    drawerSearch.value = "";
+    drawerSearch.dispatchEvent(new Event("input", { bubbles:true }));
+    drawerSearch.focus();
+  });
+  document.getElementById("drawerResultsAll")?.addEventListener("click", () => {
+    closeDrawer();
+    document.getElementById("catalogo")?.scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+  document.getElementById("drawerResultsList")?.addEventListener("click", e => {
+    const result = e.target.closest(".drawer-result");
+    if (!result) return;
+    closeDrawer();
+    openProductDetail(result.dataset.productId);
+  });
 }
 
 /* ============================================================
