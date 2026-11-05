@@ -513,3 +513,78 @@ footer{padding:90px 5vw 36px;}
     background-color:#0b0b0b;
   }
 }
+
+
+/* ======================================================
+   XKOVARK / STORE EDITION 2026 — product-first redesign
+   ====================================================== */
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{overflow-x:hidden}
+.hero{min-height:clamp(520px,77vh,800px);padding-bottom:55px}
+.hero-wordmark{font-size:clamp(66px,12.5vw,190px);line-height:.83;letter-spacing:-.095em;padding-top:18vh;text-shadow:0 6px 34px rgba(0,0,0,.33)}
+.hero-wordmark .accent{color:#d6b475}
+.hero-tagline .eyebrow{font-weight:600;letter-spacing:.24em}
+.hero-foot{max-width:1120px;margin-top:27px;padding-top:27px}
+.hero-sub{max-width:500px;font-size:clamp(14px,1.4vw,17px)}
+.hero .btn-gold{padding:17px 27px}
+.ticker-wrap{border-bottom:1px solid rgba(214,180,117,.25)}
+.shop-first{background:#0e0e0e;padding:82px 0 100px;scroll-margin-top:85px}
+.shop-intro{margin:0 5vw 30px;display:flex;justify-content:space-between;gap:25px;align-items:end}
+.shop-intro>div{max-width:800px}
+.shop-kicker{color:#cdb078;font:11px 'IBM Plex Mono',monospace;letter-spacing:.17em}
+.shop-heading{margin:15px 0;font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(38px,6.2vw,90px);line-height:.95;letter-spacing:-.065em}
+.shop-heading em{font-style:normal;color:#c6a15b}
+.shop-intro p{max-width:520px;line-height:1.65;color:#b4b2ad;font-size:14px}
+.shop-contact{flex-shrink:0;color:#e6d5b6;font:11px 'IBM Plex Mono',monospace;text-decoration:none;border-bottom:1px solid #a88d58;padding-bottom:8px;letter-spacing:.03em}
+.shop-contact:hover{color:#fff}
+.shop-first .filterbar{position:sticky;top:70px;z-index:17;background:rgba(16,16,15,.96);backdrop-filter:blur(18px);border-top:1px solid #292823;border-bottom:1px solid #292823}
+.shop-first .chipnav{padding-top:19px;padding-bottom:22px}
+.shop-first .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;background:transparent;padding:0 5vw}
+.shop-first .card,#ofertas .card{background:#171715;border:1px solid #2b2924;border-radius:3px;min-width:0;transition:border-color .2s,transform .3s,box-shadow .3s}
+.shop-first .card:hover,#ofertas .card:hover{border-color:#8d784e;transform:translateY(-3px);box-shadow:0 12px 36px #0005}
+.shop-first .card-img,#ofertas .card-img{aspect-ratio:4/4.5;background:#242321}
+.shop-first .gallery-slide,#ofertas .gallery-slide{background:#242321}
+.shop-first .gallery-slide img,#ofertas .gallery-slide img{object-fit:contain;padding:12px;transition:transform .5s ease}
+.shop-first .card:hover .gallery-slide img{transform:scale(1.045)}
+.shop-first .card-body,#ofertas .card-body{padding:18px 16px 17px}
+.shop-first .card-body .name,#ofertas .card-body .name{font-size:clamp(13px,1.15vw,16px);font-weight:700;line-height:1.35;letter-spacing:-.015em}
+.shop-first .card-body .desc,#ofertas .card-body .desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11.5px;min-height:34px}
+.shop-first .card-foot,#ofertas .card-foot{gap:9px;align-items:flex-start;flex-wrap:wrap}
+.shop-first .price,#ofertas .price{font-size:18px;color:#e5c184}
+.shop-first .qty-row,#ofertas .qty-row{gap:8px;flex-wrap:wrap}
+.shop-first .btn-add-cart,#ofertas .btn-add-cart{flex:1;min-width:110px}
+.shop-first .card .badge,#ofertas .card .badge{z-index:4}
+.shop-first .result-count{white-space:nowrap}
+.departments{padding-top:74px;padding-bottom:55px;background:#131311}
+#ofertas{padding-top:75px;padding-bottom:75px;background:#10100f}
+#ofertas .grid{gap:13px;background:transparent}
+#ofertas:has(.empty-state){display:none}
+.dept-tile .dept-img img{transition:transform .5s ease}
+.dept-tile:hover .dept-img img{transform:scale(1.06)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #e1bd78;outline-offset:3px}
+@media(max-width:980px){
+ .shop-first .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:700px){
+ .hero{min-height:600px;padding-bottom:40px}
+ .hero-wordmark{font-size:clamp(56px,15.4vw,100px);padding-top:25vh}
+ .hero-foot{margin-top:20px;padding-top:20px}
+ .shop-first{padding-top:55px;padding-bottom:65px}
+ .shop-intro{margin:0 5vw 25px;align-items:flex-start;flex-direction:column;gap:14px}
+ .shop-heading{font-size:clamp(37px,9vw,64px)}
+ .shop-intro p{font-size:12.5px}
+ .shop-first .filterbar{top:58px}
+ .shop-first .grid,#ofertas .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 3vw}
+ .shop-first .card-img,#ofertas .card-img{aspect-ratio:4/5}
+ .shop-first .gallery-slide img,#ofertas .gallery-slide img{padding:5px}
+ .shop-first .card-body,#ofertas .card-body{padding:11px 9px}
+ .shop-first .card-body .name,#ofertas .card-body .name{font-size:12.5px}
+ .shop-first .card-body .desc,#ofertas .card-body .desc{font-size:10px;min-height:30px}
+ .shop-first .price,#ofertas .price{font-size:15px}
+ .shop-first .availability,#ofertas .availability{font-size:9px}
+ .shop-first .qty-row,#ofertas .qty-row{gap:6px}
+ .shop-first .qty-stepper,#ofertas .qty-stepper{max-width:100%}
+ .shop-first .btn-add-cart,#ofertas .btn-add-cart{min-width:0;width:100%;font-size:10px}
+ #ofertas{padding:55px 0}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.shop-first .card,.shop-first .gallery-slide img{transition:none}}
