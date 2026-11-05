@@ -133,26 +133,31 @@ function renderReviews(list) {
 
 function reviewCardHTML(r) {
   const fecha = r.created_at
-    ? new Date(r.created_at).toLocaleDateString("es-EC", { year: "numeric", month: "short", day: "numeric" })
+    ? new Date(r.created_at).toLocaleDateString("es-EC", { year:"numeric", month:"short", day:"numeric" })
     : "";
   const nombre = (r.nombre || "Cliente XKOVARK").toString();
   const comentario = (r.comentario || "").toString();
-  const rating = Number(r.calificacion) || 0;
+  const rating = Math.max(0, Math.min(5, Number(r.calificacion) || 0));
   const foto = (r.foto_url || "").toString().trim();
-
-  const fotoHTML = foto
-    ? `<img src="${foto}" alt="Foto de ${escapeHTML(nombre)}" class="review-photo" loading="lazy">`
+  const fotoSegura = /^https:\/\//i.test(foto) ? escapeHTML(foto) : "";
+  const inicial = escapeHTML((nombre.trim()[0] || "X").toUpperCase());
+  const fotoHTML = fotoSegura
+    ? `<div class="review-media"><img src="${fotoSegura}" alt="Foto adjunta a la opinión de ${escapeHTML(nombre)}" class="review-photo" loading="lazy"></div>`
     : "";
-
   return `
-    <div class="review-card reveal in">
-      ${fotoHTML}
-      <div class="rating-stars">${starsRow(rating, true)}</div>
-      <span class="review-name">${escapeHTML(nombre)}</span>
-      <span class="review-date">${fecha}</span>
+    <article class="review-card reveal in">
+      <div class="review-top">
+        <span class="review-avatar" aria-hidden="true">${inicial}</span>
+        <div class="review-identity">
+          <span class="review-name">${escapeHTML(nombre)}</span>
+          <span class="review-date">${fecha}</span>
+        </div>
+        <span class="review-quote-mark" aria-hidden="true">”</span>
+      </div>
+      <div class="rating-stars" aria-label="${rating} de 5 estrellas">${starsRow(rating, true)}</div>
       <p class="review-comment">${escapeHTML(comentario)}</p>
-    </div>
-  `;
+      ${fotoHTML}
+    </article>`;
 }
 
 function escapeHTML(str) {
