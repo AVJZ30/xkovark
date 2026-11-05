@@ -620,8 +620,8 @@ function renderDrawerSearchResults() {
     if (allButton) allButton.hidden = true;
     return;
   }
-  const normal = value => String(value ?? "").normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLowerCase();
-  const words = normal(query).trim().split(/\\s+/).filter(Boolean);
+  const normal = value => String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const words = normal(query).trim().split(/\s+/).filter(Boolean);
   const matches = PRODUCTS.filter(p => {
     const haystack = normal([p.nombre, p.desc, p.codigo, p.categoria, CATEGORY_LABELS[p.categoria]].join(" "));
     return words.every(word => haystack.includes(word));
