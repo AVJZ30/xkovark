@@ -755,3 +755,11 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 .reviews-page .reviews-home-nav a{color:#e5cfaa;border:1px solid #6a5739;border-radius:999px;padding:11px 18px;font:11px 'IBM Plex Mono',monospace;letter-spacing:.04em;white-space:nowrap;transition:color .2s,border-color .2s,background .2s}
 .reviews-page .reviews-home-nav a:hover{background:#2b241a;border-color:#d6b475;color:white}
 @media(max-width:640px){.reviews-page .reviews-home-nav{margin:0 9px 0 auto;flex:none}.reviews-page .reviews-home-nav a{font-size:9px;padding:10px 11px;letter-spacing:0}.reviews-page header{gap:6px}.reviews-page header .logo{font-size:clamp(12px,3.5vw,19px);letter-spacing:.08em}.reviews-page header .nav-right{gap:7px}}
+
+/* Mostrar progresivamente las opiniones: seis más recientes por tanda */
+.reviews-page .reviews-pagination{text-align:center;padding:36px 10px 0}
+.reviews-page .reviews-pagination[hidden],.reviews-page .reviews-more-btn[hidden]{display:none!important}
+.reviews-page .reviews-pagination-count{font:11px 'IBM Plex Mono',monospace;color:#aaa69f;letter-spacing:.04em;margin:0 0 16px}
+.reviews-page .reviews-more-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-width:190px;padding:15px 29px;border:1px solid #b79961;border-radius:999px;background:transparent;color:#e7ca95;cursor:pointer;font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;transition:background .2s,color .2s,box-shadow .2s}
+.reviews-page .reviews-more-btn:hover{background:#c6a15b;color:#0b0b0b;box-shadow:0 0 20px rgba(198,161,91,.22)}
+.reviews-page .reviews-more-btn:focus-visible{outline:2px solid #e5c184;outline-offset:4px}
