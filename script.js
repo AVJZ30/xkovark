@@ -514,14 +514,15 @@ function attachRevealObservers() {
 function updateProductPhotoLighting() {
   if (!document.getElementById("catalogo-grid")) return;
   const viewportHeight = window.innerHeight || 800;
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.querySelectorAll("#catalogo-grid .card-img, #ofertas-grid .card-img").forEach(frame => {
     const rect = frame.getBoundingClientRect();
     if (rect.bottom < -100 || rect.top > viewportHeight + 100) return;
+    // En la parte inferior se ve completamente blanca; al subir la tarjeta
+    // aparece humo negro en los bordes. Al retroceder, desaparece de nuevo.
     const center = (rect.top + rect.bottom) / 2;
-    const distance = Math.abs(center - viewportHeight * .54) / (viewportHeight * .8);
-    const glow = reduceMotion ? .65 : Math.max(.05, 1 - distance);
-    frame.style.setProperty("--xk-card-glow", glow.toFixed(3));
+    const progress = Math.max(0, Math.min(1, (viewportHeight * .82 - center) / (viewportHeight * .67)));
+    frame.style.setProperty("--xk-smoke", (reducedMotion ? 0 : progress).toFixed(3));
   });
 }
 
