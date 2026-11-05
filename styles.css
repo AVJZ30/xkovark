@@ -749,3 +749,9 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 /* Catálogo: las gafas son horizontales; evita enormes bandas vacías arriba y abajo */
 .shop-first .card[data-categoria="gafas"] .card-img,#ofertas .card[data-categoria="gafas"] .card-img{aspect-ratio:1.42/1}
 .shop-first .card[data-categoria="gafas"] .gallery-slide img,#ofertas .card[data-categoria="gafas"] .gallery-slide img{padding:0}
+
+/* Opiniones: navegación simple de regreso, visible en móvil */
+.reviews-page .reviews-home-nav{margin-left:auto;margin-right:22px;flex:1;display:flex;justify-content:flex-end}
+.reviews-page .reviews-home-nav a{color:#e5cfaa;border:1px solid #6a5739;border-radius:999px;padding:11px 18px;font:11px 'IBM Plex Mono',monospace;letter-spacing:.04em;white-space:nowrap;transition:color .2s,border-color .2s,background .2s}
+.reviews-page .reviews-home-nav a:hover{background:#2b241a;border-color:#d6b475;color:white}
+@media(max-width:640px){.reviews-page .reviews-home-nav{margin:0 9px 0 auto;flex:none}.reviews-page .reviews-home-nav a{font-size:9px;padding:10px 11px;letter-spacing:0}.reviews-page header{gap:6px}.reviews-page header .logo{font-size:clamp(12px,3.5vw,19px);letter-spacing:.08em}.reviews-page header .nav-right{gap:7px}}
