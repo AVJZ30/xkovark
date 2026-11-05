@@ -275,6 +275,14 @@ function renderCurated() {
 //  FILTROS Y BÚSQUEDA
 // ============================================================
 
+const CATALOG_PAGE_SIZE = 13;
+let visibleCatalogCount = CATALOG_PAGE_SIZE;
+function resetCatalogPage() { visibleCatalogCount = CATALOG_PAGE_SIZE; }
+
+// ============================================================
+//  FILTROS Y BÚSQUEDA
+// ============================================================
+
 function applyFilters() {
   if (!allProductsLoaded || PRODUCTS.length === 0) return;
 
@@ -288,7 +296,14 @@ function applyFilters() {
   if (state.orden === "precio-asc") list.sort((a, b) => a.precio - b.precio);
   if (state.orden === "precio-desc") list.sort((a, b) => b.precio - a.precio);
 
-  renderGrid("catalogo-grid", list);
+  const visibleItems = list.slice(0, visibleCatalogCount);
+  renderGrid("catalogo-grid", visibleItems);
+  const pagination = document.getElementById("catalogPagination");
+  const showMore = document.getElementById("catalogShowMore");
+  const progress = document.getElementById("catalogPaginationCount");
+  if (pagination) pagination.hidden = list.length <= CATALOG_PAGE_SIZE;
+  if (showMore) showMore.hidden = visibleItems.length >= list.length;
+  if (progress) progress.textContent = "Mostrando " + visibleItems.length + " de " + list.length + " productos";
 
   // Cantidades reales obtenidas de la hoja de productos, sin números inventados.
   const counts = new Map();
@@ -324,6 +339,7 @@ function goToCatalog(categoria) {
   }
 
   state.categoria = categoria;
+  resetCatalogPage();
   const catFilter = document.getElementById("categoryFilter");
   if (catFilter) catFilter.value = categoria;
 
@@ -349,6 +365,7 @@ function initFilterBar() {
   if (searchInput) {
     searchInput.addEventListener("input", e => {
       state.search = e.target.value;
+      resetCatalogPage();
       applyFilters();
     });
   }
@@ -356,6 +373,7 @@ function initFilterBar() {
   if (categorySelect) {
     categorySelect.addEventListener("change", e => {
       state.categoria = e.target.value;
+      resetCatalogPage();
       document.querySelectorAll(".chip").forEach(c => {
         c.classList.toggle("active", c.dataset.cat === e.target.value);
       });
@@ -366,6 +384,7 @@ function initFilterBar() {
   if (stockCheck) {
     stockCheck.addEventListener("change", e => {
       state.soloStock = e.target.checked;
+      resetCatalogPage();
       applyFilters();
     });
   }
@@ -373,13 +392,20 @@ function initFilterBar() {
   if (sortSelect) {
     sortSelect.addEventListener("change", e => {
       state.orden = e.target.value;
+      resetCatalogPage();
       applyFilters();
     });
   }
 
+  document.getElementById("catalogShowMore")?.addEventListener("click", () => {
+    visibleCatalogCount += CATALOG_PAGE_SIZE;
+    applyFilters();
+  });
+
   document.querySelectorAll(".chip").forEach(chip => {
     chip.addEventListener("click", () => {
       state.categoria = chip.dataset.cat;
+      resetCatalogPage();
       if (categorySelect) categorySelect.value = chip.dataset.cat;
       document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
       chip.classList.add("active");
