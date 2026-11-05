@@ -652,3 +652,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
   position:relative;
   z-index:1;
 }
+
+/* Fotos de fondo blanco: respetar blanco puro y evitar el efecto gris */
+.shop-first .gallery-slide,#ofertas .gallery-slide{background:#fff}
+.shop-first .gallery-slide::before,#ofertas .gallery-slide::before{opacity:0;transition:opacity .25s ease}
+.shop-first .gallery-slide::after,#ofertas .gallery-slide::after{opacity:0}
+.shop-first .gallery-slide.photo-colored,#ofertas .gallery-slide.photo-colored{background:var(--product-edge-color,#242321)}
+.shop-first .gallery-slide.photo-colored::before,#ofertas .gallery-slide.photo-colored::before{opacity:.55}
+.shop-first .gallery-slide.photo-colored::after,#ofertas .gallery-slide.photo-colored::after{opacity:1;background:rgba(14,14,13,.06)}
