@@ -290,6 +290,20 @@ function applyFilters() {
 
   renderGrid("catalogo-grid", list);
 
+  // Cantidades reales obtenidas de la hoja de productos, sin números inventados.
+  const counts = new Map();
+  PRODUCTS.forEach(p => {
+    counts.set(p.categoria, (counts.get(p.categoria) || 0) + 1);
+  });
+  document.querySelectorAll(".chip[data-cat]").forEach(chip => {
+    const cat = chip.dataset.cat;
+    const total = cat === "todas" ? PRODUCTS.length : (counts.get(cat) || 0);
+    const badge = chip.querySelector(".chip-count");
+    if (badge) badge.textContent = String(total);
+    chip.classList.toggle("active", cat === state.categoria);
+    chip.setAttribute("aria-pressed", String(cat === state.categoria));
+  });
+
   const countEl = document.getElementById("resultCount");
   if (countEl) {
     countEl.textContent = list.length + (list.length === 1 ? " pieza" : " piezas");
