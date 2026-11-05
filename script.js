@@ -516,9 +516,9 @@ function initHeaderScroll() {
   const updateScrollEffects = () => {
     scrollFrame = 0;
     header.classList.toggle("scrolled", window.scrollY > 40);
-    // La iluminación cambia de tono con la distancia recorrida, sin recargar fotos.
-    const hue = (35 + window.scrollY * 0.22) % 360;
-    document.documentElement.style.setProperty("--xk-scroll-hue", hue.toFixed(1));
+    // Negro → dorado según la posición; al subir, vuelve gradualmente a negro.
+    const progress = Math.max(0, Math.min(1, window.scrollY / 1600));
+    document.documentElement.style.setProperty("--xk-photo-gold", progress.toFixed(3));
   };
   window.addEventListener("scroll", () => {
     if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScrollEffects);
