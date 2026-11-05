@@ -72,6 +72,7 @@ function mapearProductos(data) {
       categoria: item.categoria ? String(item.categoria).toLowerCase().trim() : "otros",
       nombre: item.nombre_producto || item.nombre || "Producto sin nombre",
       desc: item.descripcion || "",
+      codigo: String(item.codigo_producto ?? item.codigo ?? item.sku ?? item.referencia ?? item.id ?? item.nombre_producto ?? `producto-${index + 2}`).trim(),
       precio: parseFloat(item.precio) || 0,
       precioAntes: precioAntes,
       tags: tags,
@@ -280,12 +281,38 @@ function resetCatalogPage() { visibleCatalogCount = CATALOG_PAGE_SIZE; }
 function applyFilters() {
   if (!allProductsLoaded || PRODUCTS.length === 0) return;
 
+  // Coincidencias reales: todos los términos deben estar presentes, con o sin tildes.
+  const normalizeSearch = value => String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  const query = normalizeSearch(state.search);
+  const terms = query.split(/\s+/).filter(Boolean);
   let list = PRODUCTS.filter(p => {
-    const matchSearch = (p.nombre + " " + p.desc).toLowerCase().includes(state.search.toLowerCase());
+    const searchable = normalizeSearch([p.nombre, p.desc, p.codigo, p.categoria, CATEGORY_LABELS[p.categoria]].join(" "));
+    const matchSearch = terms.every(term => searchable.includes(term));
     const matchCat = state.categoria === "todas" || p.categoria === state.categoria;
     const matchStock = !state.soloStock || p.disponibilidad !== "agotado";
     return matchSearch && matchCat && matchStock;
   });
+  if (terms.length && state.orden === "relevancia") {
+    list.sort((a, b) => {
+      const score = p => {
+        const name = normalizeSearch(p.nombre);
+        return (name === query ? 100 : 0) + (name.startsWith(query) ? 50 : 0) +
+          terms.filter(term => name.includes(term)).length * 10;
+      };
+      return score(b) - score(a);
+    });
+  }
+  const catalog = document.getElementById("catalogo");
+  if (catalog) catalog.classList.toggle("search-active", !!query);
+  const searchHeader = document.getElementById("searchResultIntro");
+  const searchLabel = document.getElementById("searchResultLabel");
+  if (searchHeader) searchHeader.hidden = !query;
+  if (searchLabel) searchLabel.textContent = query
+    ? `Resultados para “${state.search.trim()}” · ${list.length} ${list.length === 1 ? "producto" : "productos"}`
+    : "";
+  // Evita que las ofertas ajenas a la búsqueda parezcan resultados.
+  const offers = document.getElementById("ofertas");
+  if (offers) offers.hidden = !!query;
 
   if (state.orden === "precio-asc") list.sort((a, b) => a.precio - b.precio);
   if (state.orden === "precio-desc") list.sort((a, b) => b.precio - a.precio);
@@ -359,6 +386,11 @@ function initFilterBar() {
   if (searchInput) {
     searchInput.addEventListener("input", e => {
       state.search = e.target.value;
+      // Cada búsqueda nueva usa todas las categorías.
+      state.categoria = "todas";
+      if (categorySelect) categorySelect.value = "todas";
+      const drawerSearch = document.getElementById("drawerSearch");
+      if (drawerSearch && drawerSearch.value !== state.search) drawerSearch.value = state.search;
       resetCatalogPage();
       applyFilters();
     });
@@ -391,6 +423,16 @@ function initFilterBar() {
     });
   }
 
+  document.getElementById("clearCatalogSearch")?.addEventListener("click", () => {
+    state.search = "";
+    state.categoria = "todas";
+    if (searchInput) searchInput.value = "";
+    const drawer = document.getElementById("drawerSearch");
+    if (drawer) drawer.value = "";
+    if (categorySelect) categorySelect.value = "todas";
+    resetCatalogPage();
+    applyFilters();
+  });
   document.getElementById("catalogShowMore")?.addEventListener("click", () => {
     visibleCatalogCount += CATALOG_PAGE_SIZE;
     applyFilters();
@@ -565,7 +607,18 @@ function initDrawer() {
       if (mainSearch) {
         mainSearch.value = e.target.value;
         state.search = e.target.value;
+        state.categoria = "todas";
+        const categories = document.getElementById("categoryFilter");
+        if (categories) categories.value = "todas";
+        resetCatalogPage();
         applyFilters();
+      }
+    });
+    drawerSearch.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        closeDrawer();
+        document.getElementById("catalogo")?.scrollIntoView({ behavior:"smooth", block:"start" });
       }
     });
   }
@@ -654,6 +707,16 @@ function cartItemCount() {
   return cart.reduce((sum, item) => sum + item.cantidad, 0);
 }
 
+function escapeShopText(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch =>
+    ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[ch]
+  );
+}
+function safeProductImage(url) {
+  const value = String(url || "").trim();
+  return /^https:\/\//i.test(value) ? escapeShopText(value) : "";
+}
+
 function renderCart() {
   const container = document.getElementById("cartItems");
   const totalEl = document.getElementById("cartTotal");
@@ -670,9 +733,11 @@ function renderCart() {
         const subtotal = product.precio * item.cantidad;
         return `
           <div class="cart-item" data-id="${item.id}">
+            ${product.images?.[0] ? `<img class="cart-product-thumb" src="${safeProductImage(product.images[0])}" alt="Foto de ${escapeShopText(product.nombre)}" loading="lazy">` : '<div class="cart-product-thumb cart-product-placeholder" aria-hidden="true">XK</div>'}
             <div class="cart-item-info">
-              <span class="cart-item-name">${product.nombre}</span>
-              <span class="cart-item-price">$${product.precio} c/u · Subtotal $${subtotal}</span>
+              <span class="cart-item-name">${escapeShopText(product.nombre)}</span>
+              <span class="cart-item-code">Código: ${escapeShopText(product.codigo || product.id)}</span>
+              <span class="cart-item-price">${product.precio} c/u · Subtotal ${subtotal.toFixed(2)}</span>
             </div>
             <div class="cart-item-actions">
               <button class="cart-qty-btn cart-qty-minus" type="button" data-id="${item.id}">−</button>
@@ -716,14 +781,21 @@ function closeCartDrawer() {
 }
 
 function buildWhatsAppOrderMessage() {
-  const lines = ["Hola XKOVARK, quiero hacer este pedido:", ""];
-  cart.forEach(item => {
+  const lines = ["Hola XKOVARK, quiero realizar este pedido:", ""];
+  cart.forEach((item, index) => {
     const product = findProduct(item.id);
     if (!product) return;
     const subtotal = product.precio * item.cantidad;
-    lines.push(`• ${product.nombre} x${item.cantidad} — $${subtotal}`);
+    lines.push(`${index + 1}. ${product.nombre}`);
+    lines.push(`Código: ${product.codigo || product.id}`);
+    lines.push(`Cantidad: ${item.cantidad} · Subtotal: $${subtotal.toFixed(2)}`);
+    // WhatsApp no permite adjuntar una foto por enlace wa.me; enviamos
+    // la URL directa para que el vendedor identifique visualmente la pieza.
+    if (product.images?.[0]) lines.push(`Imagen: ${product.images[0]}`);
+    lines.push("");
   });
-  lines.push("", `Total: $${cartTotal()}`);
+  lines.push(`TOTAL: $${cartTotal().toFixed(2)} USD`);
+  lines.push("Por favor, confirmen disponibilidad, pago y envío.");
   return lines.join("\n");
 }
 
