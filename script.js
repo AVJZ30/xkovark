@@ -213,34 +213,22 @@ function cardHTML(p) {
   const agotado = p.disponibilidad === "agotado";
 
   return `
-    <div class="card reveal ${agotado ? 'is-agotado' : ''}"
-         data-id="${p.id}" data-categoria="${p.categoria}" id="${p.id}">
+    <article class="card reveal ${agotado ? 'is-agotado' : ''}"
+         data-id="${p.id}" data-categoria="${p.categoria}" id="${p.id}" tabindex="0" aria-label="Ver detalles de ${p.nombre}">
       <div class="card-img">
         ${imagesHTML}
         ${badge}
+        <button class="card-quick-add" type="button" data-id="${p.id}"
+          aria-label="${agotado ? 'Producto agotado' : 'Agregar ' + p.nombre + ' al carrito'}"
+          title="${agotado ? 'Agotado' : 'Agregar al carrito'}" ${agotado ? "disabled" : ""}> ${agotado ? '×' : '+'} </button>
       </div>
       <div class="card-body">
         <span class="name">${p.nombre}</span>
-        <span class="desc">${p.desc}</span>
         <div class="card-foot">
           <div class="price-wrap">${priceHTML}</div>
-          <span class="availability">
-            <span class="dot-status ${p.disponibilidad}"></span>
-            ${AVAIL_LABELS[p.disponibilidad] || p.disponibilidad}
-          </span>
-        </div>
-        <div class="qty-row">
-          <div class="qty-stepper" data-id="${p.id}">
-            <button class="qty-btn qty-minus" type="button" aria-label="Restar cantidad">−</button>
-            <span class="qty-value">1</span>
-            <button class="qty-btn qty-plus" type="button" aria-label="Sumar cantidad">+</button>
-          </div>
-          <button class="btn-add-cart" type="button" data-id="${p.id}" ${agotado ? "disabled" : ""}>
-            ${agotado ? "Agotado" : "Agregar"}
-          </button>
         </div>
       </div>
-    </div>
+    </article>
   `;
 }
 
@@ -719,9 +707,24 @@ function initCart() {
     const plusBtn = e.target.closest(".qty-plus");
     const minusBtn = e.target.closest(".qty-minus");
     const addBtn = e.target.closest(".btn-add-cart");
+    const quickAddBtn = e.target.closest(".card-quick-add");
     const cartQtyPlus = e.target.closest(".cart-qty-plus");
     const cartQtyMinus = e.target.closest(".cart-qty-minus");
     const cartRemoveBtn = e.target.closest(".cart-remove");
+
+    if (quickAddBtn) {
+      if (quickAddBtn.disabled) return;
+      const id = quickAddBtn.dataset.id;
+      addToCart(id, 1);
+      quickAddBtn.textContent = "✓";
+      quickAddBtn.classList.add("added");
+      window.setTimeout(() => {
+        if (!quickAddBtn.isConnected) return;
+        quickAddBtn.textContent = "+";
+        quickAddBtn.classList.remove("added");
+      }, 1100);
+      return;
+    }
 
     if (plusBtn || minusBtn) {
       const stepper = (plusBtn || minusBtn).closest(".qty-stepper");
@@ -882,7 +885,14 @@ function initLightbox() {
   // las que se vuelven a dibujar al buscar o filtrar.
   document.addEventListener("click", (e) => {
     const card = e.target.closest("#catalogo-grid .card, #ofertas-grid .card");
-    if (card && !e.target.closest(".gallery-arrow, .gdot, .qty-row, .btn-add-cart")) {
+    if (card && !e.target.closest(".gallery-arrow, .gdot, .qty-row, .btn-add-cart, .card-quick-add")) {
+      openProductDetail(card.dataset.id);
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    const card = e.target.closest("#catalogo-grid .card, #ofertas-grid .card");
+    if (card && e.target === card && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
       openProductDetail(card.dataset.id);
     }
   });
