@@ -660,3 +660,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 .shop-first .gallery-slide.photo-colored,#ofertas .gallery-slide.photo-colored{background:var(--product-edge-color,#242321)}
 .shop-first .gallery-slide.photo-colored::before,#ofertas .gallery-slide.photo-colored::before{opacity:.55}
 .shop-first .gallery-slide.photo-colored::after,#ofertas .gallery-slide.photo-colored::after{opacity:1;background:rgba(14,14,13,.06)}
+
+/* Fondo blanco uniforme en todas las fotografías de productos */
+.shop-first .card-img,#ofertas .card-img,
+.shop-first .product-gallery,#ofertas .product-gallery,
+.shop-first .gallery-slide,#ofertas .gallery-slide,
+.shop-first .gallery-slide.photo-colored,#ofertas .gallery-slide.photo-colored{background:#fff !important}
+.shop-first .gallery-slide::before,#ofertas .gallery-slide::before,
+.shop-first .gallery-slide::after,#ofertas .gallery-slide::after{display:none !important}
