@@ -1012,22 +1012,38 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 }
 
 
-/* Transición de negro a dorado SOLO en las imágenes de producto.
-   No aplica capas al recuadro ni al texto, no cambia otros colores. */
-:root{--xk-photo-gold:0}
-.shop-first .gallery-slide,#ofertas .gallery-slide{isolation:auto}
+/* Iluminación editorial tipo video: halo negro→oro desde la base de cada fotografía.
+   El fondo del producto, no la tarjeta ni su texto, responde a la posición en pantalla.
+   Los fondos blancos incrustados en las fotografías se integran por mezcla multiply. */
+.shop-first .card-img,#ofertas .card-img,
+.shop-first .card[data-categoria="gafas"] .card-img,#ofertas .card[data-categoria="gafas"] .card-img{
+  --xk-card-glow:.08;
+  background:radial-gradient(ellipse 88% 64% at 50% 82%,
+    rgba(207,155,79,calc(.12 + .57 * var(--xk-card-glow))) 0%,
+    rgba(119,85,45,calc(.10 + .38 * var(--xk-card-glow))) 36%,
+    #201c18 70%,#0b0b0b 100%)!important;
+}
+.shop-first .product-gallery,#ofertas .product-gallery,
+.shop-first .gallery-slide,#ofertas .gallery-slide,
+.shop-first .gallery-slide.photo-colored,#ofertas .gallery-slide.photo-colored{
+  background:transparent!important;
+}
+.shop-first .gallery-slide img,#ofertas .gallery-slide img,
+.shop-first .card[data-categoria="gafas"] .gallery-slide img,
+#ofertas .card[data-categoria="gafas"] .gallery-slide img{
+  filter:brightness(1.15) contrast(1.035)!important;
+  mix-blend-mode:multiply;
+  object-fit:contain!important;
+  position:relative;z-index:1;
+}
+.shop-first .gallery-slide::before,#ofertas .gallery-slide::before,
 .shop-first .gallery-slide::after,#ofertas .gallery-slide::after,
 .shop-first .card-img::after,#ofertas .card-img::after{
-  display:none!important;content:none!important;box-shadow:none!important;
+  display:none!important;content:none!important;
 }
-.shop-first .gallery-slide img,#ofertas .gallery-slide img{
-  filter:brightness(calc(.78 + .22 * var(--xk-photo-gold)))
-         sepia(calc(.42 * var(--xk-photo-gold)))
-         saturate(calc(1 + .6 * var(--xk-photo-gold)));
-  transition:filter .12s linear,transform .55s ease;
-}
+.shop-first .card-img .placeholder,#ofertas .card-img .placeholder{background:transparent}
 @media(prefers-reduced-motion:reduce){
-  .shop-first .gallery-slide img,#ofertas .gallery-slide img{filter:none;transition:none}
+  .shop-first .card-img,#ofertas .card-img{--xk-card-glow:.65}
 }
 /* La bandera es un emoji Unicode real, sin imágenes ni iconos añadidos. */
 .nav-right .ecuador-flag{font-family:system-ui,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
