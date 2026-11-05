@@ -1086,7 +1086,7 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 .shop-first.search-active #catalogo-grid{position:relative;isolation:isolate;min-height:260px}
 .shop-first.search-active #catalogo-grid::before{
  content:"";position:absolute;z-index:-1;inset:0;
- background:url("img/xkovark-brand.svg") center 48%/min(60vw,440px) auto no-repeat;
+ background:url("img/xkovark-brand.png") center 48%/min(60vw,440px) auto no-repeat;
  opacity:.17;pointer-events:none;
 }
 .shop-first.search-active #catalogo-grid .card{position:relative}
@@ -1102,3 +1102,7 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
  .shop-first.search-active #catalogo-grid::before{background-size:min(76vw,360px)}
  .quote-section .quote-brand-logo{width:150px}
 }
+
+/* El logotipo permanece visible tras las tarjetas en resultados filtrados */
+.shop-first.search-active #catalogo-grid::before{z-index:0}
+.shop-first.search-active #catalogo-grid>.card,.shop-first.search-active #catalogo-grid>.empty-state{z-index:1}
