@@ -253,6 +253,8 @@ function renderGrid(containerId, list) {
     card.style.setProperty("--card-reveal-delay", ((index % 4) * 65) + "ms");
   });
   attachGalleryDots();
+  // Las tarjetas recién mostradas también reciben la iluminación correcta.
+  requestAnimationFrame(updateProductPhotoLighting);
 }
 
 function renderCurated() {
@@ -509,21 +511,35 @@ function attachRevealObservers() {
 //  HEADER Y DRAWER (MENÚ MÓVIL)
 // ============================================================
 
+function updateProductPhotoLighting() {
+  if (!document.getElementById("catalogo-grid")) return;
+  const viewportHeight = window.innerHeight || 800;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll("#catalogo-grid .card-img, #ofertas-grid .card-img").forEach(frame => {
+    const rect = frame.getBoundingClientRect();
+    if (rect.bottom < -100 || rect.top > viewportHeight + 100) return;
+    const center = (rect.top + rect.bottom) / 2;
+    const distance = Math.abs(center - viewportHeight * .54) / (viewportHeight * .8);
+    const glow = reduceMotion ? .65 : Math.max(.05, 1 - distance);
+    frame.style.setProperty("--xk-card-glow", glow.toFixed(3));
+  });
+}
+
 function initHeaderScroll() {
   const header = document.getElementById("siteHeader");
   if (!header) return;
   let scrollFrame = 0;
-  const updateScrollEffects = () => {
+  const update = () => {
     scrollFrame = 0;
     header.classList.toggle("scrolled", window.scrollY > 40);
-    // Negro → dorado según la posición; al subir, vuelve gradualmente a negro.
-    const progress = Math.max(0, Math.min(1, window.scrollY / 1600));
-    document.documentElement.style.setProperty("--xk-photo-gold", progress.toFixed(3));
+    updateProductPhotoLighting();
   };
-  window.addEventListener("scroll", () => {
-    if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScrollEffects);
-  }, { passive: true });
-  updateScrollEffects();
+  const schedule = () => {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(update);
+  };
+  window.addEventListener("scroll", schedule, { passive:true });
+  window.addEventListener("resize", schedule, { passive:true });
+  update();
 }
 
 function openDrawer() {
