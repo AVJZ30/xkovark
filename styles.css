@@ -704,3 +704,48 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 /* Footer compacto sin enlaces de categorías redundantes */
 footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:clamp(24px,6vw,100px)}
 @media(max-width:640px){footer .footer-top{grid-template-columns:1fr;gap:30px}}
+
+/* XKOVARK / Reviews editorial — layout inspired by premium boutique reviews */
+.reviews-page .reviews-hero{position:relative;min-height:480px;padding:158px 5vw 72px;overflow:hidden;background:radial-gradient(ellipse at 82% 18%,#32271a 0%,#15120f 36%,#090909 72%)}
+.reviews-page .reviews-hero::after{content:"";position:absolute;right:-8vw;top:40px;width:48vw;aspect-ratio:1;border:1px solid rgba(213,174,96,.14);border-radius:50%;box-shadow:0 0 0 70px rgba(213,174,96,.025),0 0 0 150px rgba(213,174,96,.018);pointer-events:none}
+.reviews-page .reviews-hero .page-hero-inner{position:relative;z-index:1;max-width:830px}
+.reviews-page .reviews-hero h1{font-size:clamp(47px,8.8vw,128px);line-height:.93;letter-spacing:-.07em;margin:20px 0 22px}
+.reviews-page .reviews-gold{color:#d6b475}
+.reviews-page .reviews-hero .hero-sub{max-width:560px;color:#cbc5b9;font-size:clamp(14px,1.5vw,17px);line-height:1.75}
+.reviews-page .reviews-hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.reviews-page .reviews-hero-number{position:absolute;right:5vw;bottom:28px;color:#76664d;letter-spacing:.2em;font:11px 'IBM Plex Mono',monospace}
+.reviews-page .reviews-overview{padding:55px 5vw 65px;background:#0d0d0c}
+.reviews-page .rating-summary{max-width:1100px;margin:auto;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:35px;align-items:center;border:1px solid #4d3f2b;background:linear-gradient(112deg,#1e1b16,#111110);border-radius:14px;padding:clamp(22px,4vw,50px)}
+.reviews-page .rating-score{font-size:clamp(70px,10vw,128px);letter-spacing:-.07em;color:#f0d49c}
+.reviews-page .rating-summary-body{gap:12px}
+.reviews-page .rating-summary-body .star{width:24px;height:24px}
+.reviews-page .rating-count{color:#b8b1a5;font-size:13px}
+.reviews-page .rating-write-link{color:#e2c48b;width:max-content;font:11px 'IBM Plex Mono',monospace;border-bottom:1px solid #907346;padding-bottom:7px;margin-top:6px}
+.reviews-page .reviews-gallery{padding:60px 5vw 90px;background:#0e0e0e}
+.reviews-page .reviews-gallery .section-head{margin-bottom:28px}
+.reviews-page .reviews-gallery .section-title{font-size:clamp(30px,4.5vw,62px)}
+.reviews-page .reviews-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;background:transparent;align-items:stretch}
+.reviews-page .review-card{position:relative;gap:17px;background:#181816;border:1px solid #34312b;border-radius:12px;padding:26px;min-width:0;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.reviews-page .review-card:hover{transform:translateY(-4px);border-color:#a38758;box-shadow:0 12px 30px #0005}
+.reviews-page .review-top{display:flex;align-items:center;gap:12px}
+.reviews-page .review-avatar{width:44px;height:44px;flex-shrink:0;border:1px solid #655336;border-radius:50%;display:grid;place-items:center;background:#2a241b;color:#f1d29a;font:bold 17px 'Archivo',sans-serif}
+.reviews-page .review-identity{display:flex;flex-direction:column;gap:6px;min-width:0}
+.reviews-page .review-name{text-transform:none;letter-spacing:0;overflow-wrap:anywhere;color:#fff}
+.reviews-page .review-date{color:#9f9a90}
+.reviews-page .review-quote-mark{margin-left:auto;font:bold 54px Georgia,serif;color:#776444;line-height:.5}
+.reviews-page .review-card .rating-stars{gap:4px}
+.reviews-page .review-card .star.small{width:17px;height:17px}
+.reviews-page .review-comment{font-size:14px;color:#e0dcd2;line-height:1.8;overflow-wrap:anywhere}
+.reviews-page .review-media{border-radius:8px;overflow:hidden;margin-top:auto;border:1px solid #37342e}
+.reviews-page .review-photo{aspect-ratio:16/10;width:100%;object-fit:cover;border:none}
+.reviews-page .reviews-form-section{background:linear-gradient(160deg,#161410,#0c0c0c);padding:80px 5vw 105px}
+.reviews-page .reviews-form-section .section-head{max-width:1020px;margin-left:auto;margin-right:auto}
+.reviews-page .review-form{max-width:740px;margin:auto;padding:clamp(20px,4vw,45px);border:1px solid #383125;background:#151411;border-radius:13px}
+.reviews-page .review-form .form-group input[type="text"],.reviews-page .review-form .form-group textarea{border-radius:6px;background:#0c0c0c}
+.reviews-page .review-form .form-submit{border-radius:4px}
+.reviews-page .reviews-loading,.reviews-page .reviews-empty,.reviews-page .reviews-error{border:1px solid #33302a;border-radius:10px;background:#161512}
+@media(max-width:950px){.reviews-page .reviews-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.reviews-page .reviews-hero{padding:132px 6vw 60px;min-height:430px}.reviews-page .reviews-hero h1{font-size:clamp(44px,11vw,66px)}.reviews-page .reviews-hero-actions .btn{font-size:10px}.reviews-page .rating-summary{gap:12px;grid-template-columns:auto minmax(0,1fr)}.reviews-page .rating-score{font-size:68px}.reviews-page .rating-summary-body .star{width:17px;height:17px}.reviews-page .reviews-grid{grid-template-columns:1fr}.reviews-page .reviews-gallery{padding:55px 5vw 70px}.reviews-page .review-card{padding:23px}.reviews-page .reviews-form-section{padding:65px 5vw 85px}}
+/* Catálogo: las gafas son horizontales; evita enormes bandas vacías arriba y abajo */
+.shop-first .card[data-categoria="gafas"] .card-img,#ofertas .card[data-categoria="gafas"] .card-img{aspect-ratio:1.42/1}
+.shop-first .card[data-categoria="gafas"] .gallery-slide img,#ofertas .card[data-categoria="gafas"] .gallery-slide img{padding:0}
