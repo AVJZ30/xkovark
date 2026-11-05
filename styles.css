@@ -914,3 +914,57 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 @media(min-width:651px){
  .product-detail-photo{height:100%;max-height:100%;align-self:stretch}
 }
+
+/* XKOVARK — tarjetas de altura uniforme, botón + debajo de la fotografía */
+.shop-first .grid,#ofertas .grid{align-items:stretch;grid-auto-rows:auto}
+.shop-first .card,#ofertas .card{
+  display:flex;flex-direction:column;min-width:0;height:100%;
+  border-radius:13px!important;overflow:hidden;
+}
+.shop-first .card-img,#ofertas .card-img,
+.shop-first .card[data-categoria="gafas"] .card-img,
+#ofertas .card[data-categoria="gafas"] .card-img{
+  width:100%;height:auto!important;aspect-ratio:4/5!important;
+  flex:0 0 auto;min-height:0;background:#fff!important;
+  overflow:hidden;
+}
+.shop-first .product-gallery,#ofertas .product-gallery{
+  width:100%;height:100%;position:relative;background:#fff!important;
+}
+.shop-first .gallery-track,#ofertas .gallery-track{height:100%}
+.shop-first .gallery-slide,#ofertas .gallery-slide{height:100%;background:#fff!important}
+.shop-first .gallery-slide img,#ofertas .gallery-slide img,
+.shop-first .card[data-categoria="gafas"] .gallery-slide img,
+#ofertas .card[data-categoria="gafas"] .gallery-slide img{
+  width:100%;height:100%;padding:8px!important;
+  object-fit:contain!important;object-position:center!important;
+}
+.shop-first .card-body,#ofertas .card-body{
+  display:flex;flex-direction:row;align-items:center;justify-content:space-between;
+  gap:10px;flex:1 0 auto;padding:13px 12px 15px;
+}
+.shop-first .card-copy,#ofertas .card-copy{
+  display:flex;flex-direction:column;gap:5px;min-width:0;flex:1;
+}
+.shop-first .card-body .name,#ofertas .card-body .name{line-height:1.35;min-height:2.7em}
+.shop-first .card-foot,#ofertas .card-foot{margin:0}
+.shop-first .card-quick-add,#ofertas .card-quick-add{
+  position:static!important;inset:auto!important;
+  flex:0 0 37px;width:37px;height:37px;
+  display:grid;place-items:center;
+  border-radius:50%;background:#292929;
+  border:1px solid #ba975a;color:#f3d4a1;
+  box-shadow:none;z-index:auto;
+}
+.shop-first .card-quick-add:hover,#ofertas .card-quick-add:hover{background:#d5af67;color:#111}
+@media(max-width:650px){
+  .shop-first .grid,#ofertas .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .shop-first .card-img,#ofertas .card-img,
+  .shop-first .card[data-categoria="gafas"] .card-img,
+  #ofertas .card[data-categoria="gafas"] .card-img{aspect-ratio:4/5!important}
+  .shop-first .card-body,#ofertas .card-body{padding:10px 8px 12px;gap:5px}
+  .shop-first .card-quick-add,#ofertas .card-quick-add{
+    flex:0 0 31px;width:31px;height:31px;font-size:22px;
+  }
+  .shop-first .gallery-slide img,#ofertas .gallery-slide img{padding:4px!important}
+}
