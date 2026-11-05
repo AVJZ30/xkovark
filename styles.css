@@ -668,3 +668,27 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{ou
 .shop-first .gallery-slide.photo-colored,#ofertas .gallery-slide.photo-colored{background:#fff !important}
 .shop-first .gallery-slide::before,#ofertas .gallery-slide::before,
 .shop-first .gallery-slide::after,#ofertas .gallery-slide::after{display:none !important}
+
+
+/* Navegación del catálogo tipo boutique: categorías redondeadas y cantidades */
+.shop-first .collection-nav{padding:0 5vw 10px;position:relative}
+.shop-first .collection-nav .chipnav{display:flex;gap:8px;align-items:center;overflow-x:auto;padding:8px 0 16px;scrollbar-width:thin;scrollbar-color:#49453e transparent}
+.shop-first .collection-nav .chip{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;border:1px solid #42403e;border-radius:999px;background:transparent;color:#f2f1ed;padding:12px 17px;font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;transition:background .2s,color .2s,border-color .2s}
+.shop-first .collection-nav .chip .chip-count{font-size:9px;letter-spacing:0;color:#9b9a97;font-weight:400}
+.shop-first .collection-nav .chip:hover{border-color:#cdb078;background:#24211b;color:#f5deb0}
+.shop-first .collection-nav .chip.active{background:#fff;border-color:#fff;color:#121212}
+.shop-first .collection-nav .chip.active .chip-count{color:#565656}
+.shop-first .collection-nav .catalog-tools{margin:0 0 12px;border-top:1px solid #242321}
+.shop-first .collection-nav .catalog-tools>summary{display:flex;align-items:center;gap:9px;padding:12px 0;color:#b6b4b0;cursor:pointer;font:10px 'IBM Plex Mono',monospace;letter-spacing:.09em;text-transform:uppercase;list-style:none;width:max-content}
+.shop-first .collection-nav .catalog-tools>summary::-webkit-details-marker{display:none}
+.shop-first .collection-nav .catalog-tools>summary:hover{color:#e5c184}
+.shop-first .collection-nav .catalog-tools>summary>span:first-child{font-size:22px;line-height:10px}
+.shop-first .collection-nav .catalog-tools[open] .catalog-tools-arrow{transform:rotate(180deg)}
+.shop-first .collection-nav .filterbar{position:static;top:auto;z-index:auto;border:1px solid #34312c;border-radius:8px;margin:0 0 12px;padding:15px;background:#171715;backdrop-filter:none}
+@media(max-width:700px){
+ .shop-first .collection-nav{padding:0 4vw 6px}
+ .shop-first .collection-nav .chipnav{gap:7px}
+ .shop-first .collection-nav .chip{padding:11px 14px;font-size:9.5px}
+ .shop-first .collection-nav .filterbar{gap:9px;padding:12px}
+ .shop-first .collection-nav .search-box{min-width:100%;flex-basis:100%}
+}
