@@ -119,17 +119,48 @@ function renderSummary(list) {
   countEl.textContent = `Basado en ${list.length} ${list.length === 1 ? "opinión" : "opiniones"}`;
 }
 
+const REVIEWS_PAGE_SIZE = 6;
+let allReviews = [];
+let visibleReviewsCount = REVIEWS_PAGE_SIZE;
+
 function renderReviews(list) {
   const grid = document.getElementById("reviewsGrid");
   if (!grid) return;
 
-  if (list.length === 0) {
+  // Cada nueva carga comienza con las seis opiniones más recientes.
+  allReviews = [...list].sort((a, b) =>
+    new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
+  );
+  visibleReviewsCount = REVIEWS_PAGE_SIZE;
+  updateVisibleReviews();
+}
+
+function updateVisibleReviews() {
+  const grid = document.getElementById("reviewsGrid");
+  const pagination = document.getElementById("reviewsPagination");
+  const counter = document.getElementById("reviewsPaginationCount");
+  const button = document.getElementById("reviewsShowMore");
+  if (!grid) return;
+
+  if (allReviews.length === 0) {
     grid.innerHTML = `<div class="reviews-empty">Todavía no hay opiniones. Sé el primero en dejar la tuya más abajo.</div>`;
+    if (pagination) pagination.hidden = true;
     return;
   }
 
-  grid.innerHTML = list.map(reviewCardHTML).join("");
+  const shown = allReviews.slice(0, visibleReviewsCount);
+  grid.innerHTML = shown.map(reviewCardHTML).join("");
+  if (counter) counter.textContent = "Mostrando " + shown.length + " de " + allReviews.length + " opiniones";
+  if (pagination) pagination.hidden = allReviews.length <= REVIEWS_PAGE_SIZE;
+  if (button) button.hidden = shown.length >= allReviews.length;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("reviewsShowMore")?.addEventListener("click", () => {
+    visibleReviewsCount += REVIEWS_PAGE_SIZE;
+    updateVisibleReviews();
+  });
+});
 
 function reviewCardHTML(r) {
   const fecha = r.created_at
