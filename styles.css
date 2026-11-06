@@ -1148,3 +1148,27 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 @media (prefers-reduced-motion: reduce) {
   .gallery-track { transition: none; }
 }
+
+/* Fotografías nítidas: sin ampliaciones artificiales sobre los píxeles.
+   Se conserva la resolución nativa de cada archivo. */
+.shop-first .gallery-slide img,
+#ofertas .gallery-slide img,
+.shop-first .card:hover .gallery-slide img,
+#ofertas .card:hover .gallery-slide img,
+.shop-first .card-img img,
+#ofertas .card-img img,
+.product-detail-photo img,
+.lightbox-img {
+  image-rendering:auto;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+}
+@media (hover:hover) {
+  .shop-first .card:hover .gallery-slide img,
+  #ofertas .card:hover .gallery-slide img {transform:none!important;}
+}
+.product-detail-photo img,
+.lightbox-img {
+  object-fit:contain;
+  object-position:center;
+}
