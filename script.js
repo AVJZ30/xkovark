@@ -926,6 +926,8 @@ function openLightbox(src, alt) {
   const img = document.getElementById("lightboxImg");
   const scrim = document.getElementById("lightboxScrim");
   if (!img || !scrim) return;
+  img.loading = "eager";
+  img.decoding = "async";
   img.src = src;
   img.alt = alt || "";
   scrim.classList.add("open");
@@ -956,6 +958,8 @@ function setProductDetailPhoto(position) {
   if (photoFrame) photoFrame.classList.remove("detail-photo-empty");
   detailImagePosition = (position + images.length) % images.length;
   if (img) {
+    img.decoding = "async";
+    img.loading = "eager";
     img.src = images[detailImagePosition];
     img.alt = detailProduct.nombre + " — foto " + (detailImagePosition + 1);
   }
