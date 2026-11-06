@@ -858,9 +858,13 @@ function buildWhatsAppOrderMessage() {
     lines.push(`${index + 1}. ${product.nombre}`);
     lines.push(`Código: ${product.codigo || product.id}`);
     lines.push(`Cantidad: ${item.cantidad} · Subtotal: $${subtotal.toFixed(2)}`);
-    // WhatsApp no permite adjuntar una foto por enlace wa.me; enviamos
-    // la URL directa para que el vendedor identifique visualmente la pieza.
-    if (product.images?.[0]) lines.push(`Imagen: ${product.images[0]}`);
+    // Enlace compacto a la ficha con fotos, sin pegar la URL extensa de la imagen.
+    // El código identifica el producto y conserva la foto visible en la tienda.
+    if (product.images?.[0]) {
+      const productLink = new URL(window.location.pathname, window.location.origin);
+      productLink.searchParams.set("p", product.codigo || product.id);
+      lines.push(`Foto del producto: ${productLink.href}`);
+    }
     lines.push("");
   });
   lines.push(`TOTAL: $${cartTotal().toFixed(2)} USD`);
@@ -1029,6 +1033,18 @@ function closeProductDetail() {
   detailProduct = null;
   if (detailPreviousFocus?.isConnected) detailPreviousFocus.focus();
 }
+// Al abrir el enlace corto desde WhatsApp, muestra directamente la foto y ficha.
+let linkedProductOpened = false;
+function openLinkedProductIfAvailable() {
+  if (linkedProductOpened) return;
+  const code = new URLSearchParams(window.location.search).get("p");
+  if (!code) return;
+  const product = PRODUCTS.find(item => String(item.codigo || "") === code || String(item.id) === code);
+  if (!product || !document.getElementById("productDetailOverlay")) return;
+  linkedProductOpened = true;
+  openProductDetail(product.id);
+}
+
 function initProductDetail() {
   const overlay = document.getElementById("productDetailOverlay");
   if (!overlay) return;
@@ -1128,6 +1144,7 @@ async function init() {
   initCart();
   initLightbox();
   initProductDetail();
+  openLinkedProductIfAvailable();
   attachRevealObservers();
 
   // Eventos de navegación por categoría
@@ -1155,6 +1172,7 @@ async function init() {
     if (JSON.stringify(frescos) !== JSON.stringify(cacheado)) {
       guardarCache(frescos);
       aplicarDatos(frescos);
+      openLinkedProductIfAvailable();
       console.log(`${PRODUCTS.length} productos actualizados`);
     }
   } catch (error) {
