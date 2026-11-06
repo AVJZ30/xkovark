@@ -1086,7 +1086,7 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 .shop-first.search-active #catalogo-grid{position:relative;isolation:isolate;min-height:260px}
 .shop-first.search-active #catalogo-grid::before{
  content:"";position:absolute;z-index:-1;inset:0;
- background:url("img/xkovark-brand.png") center 48%/min(60vw,440px) auto no-repeat;
+ background:url("img/xkovark-search-logo.svg") center 48%/min(60vw,440px) auto no-repeat;
  opacity:.17;pointer-events:none;
 }
 .shop-first.search-active #catalogo-grid .card{position:relative}
