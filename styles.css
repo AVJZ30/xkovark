@@ -1126,3 +1126,25 @@ footer .footer-top{grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:cla
 .drawer-results-empty{font-size:13px;color:#b8b1a5;line-height:1.6;padding:20px 0}
 .drawer-results-all{width:100%;padding:13px;margin-top:12px;border:1px solid #ae8b50;border-radius:8px;color:#dfbd82;background:transparent;font:11px 'IBM Plex Mono',monospace}
 @media(max-width:650px){.drawer-result{min-height:82px}.drawer-result img,.drawer-result-no-photo{width:57px;height:62px;flex-basis:57px}}
+
+/* Interacción táctil limpia: evita el destello azul/celeste del navegador
+   sin quitar el foco visible para usuarios de teclado. */
+a, button, .card, .card-img, .product-gallery, .gallery-main,
+.gallery-arrow, .gallery-dots, .gdot, .drawer-result,
+.product-detail-photo, .product-detail-arrow, .lightbox-img {
+  -webkit-tap-highlight-color: transparent;
+}
+.card-img img, .product-detail-photo img, .lightbox-img {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* En móviles no mantener efectos hover pesados después de tocar una foto. */
+@media (hover: none) {
+  .shop-first .card:hover .gallery-slide img,
+  #ofertas .card:hover .gallery-slide img { transform: none; }
+}
+/* Evita pintar transiciones cuando el usuario solicita menos movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-track { transition: none; }
+}
