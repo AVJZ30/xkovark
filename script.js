@@ -186,7 +186,7 @@ function cardHTML(p) {
         <div class="gallery-track" style="width:${imgs.length * 100}%;">
           ${imgs.map(src => `
         <div class="gallery-slide" style="width:${100 / imgs.length}%">
-          <img src="${src}" alt="${p.nombre}" class="gallery-main" loading="lazy"
+          <img src="${src}" alt="${p.nombre}" class="gallery-main" loading="lazy" decoding="async" draggable="false"
                onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%231a1a17%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%2396958c%22 font-family=%22monospace%22 font-size=%2212%22%3ESin%20imagen%3C/text%3E%3C/svg%3E'">
         </div>`).join("")}
         </div>
@@ -468,46 +468,8 @@ function goToGallerySlide(gallery, index) {
 
 function attachGalleryDots() {
   document.querySelectorAll(".product-gallery").forEach(gallery => {
-    // Usa los colores de la misma foto como fondo difuminado.
-    // Funciona incluso con fotos externas que no permiten leer píxeles desde canvas.
-    gallery.querySelectorAll(".gallery-slide").forEach(slide => {
-      const img = slide.querySelector("img.gallery-main");
-      if (!img) return;
-      const applyBackground = () => {
-        const src = img.currentSrc || img.src;
-        if (!src) return;
-        slide.classList.remove("photo-colored");
-        slide.style.setProperty("--product-photo-bg", 'url("' + src.replace(/["\\\n\r]/g, "") + '")');
-        // Identifica el color de los bordes. Las fotografías de estudio suelen tener
-        // el mismo fondo en las cuatro esquinas. Sin permiso CORS, mantenemos blanco.
-        const sample = new Image();
-        sample.crossOrigin = "anonymous";
-        sample.onload = () => {
-          try {
-            const canvas = document.createElement("canvas");
-            canvas.width = canvas.height = 32;
-            const ctx = canvas.getContext("2d", { willReadFrequently: true });
-            ctx.drawImage(sample, 0, 0, 32, 32);
-            const pixels = ctx.getImageData(0, 0, 32, 32).data;
-            const points = [[1,1],[30,1],[1,30],[30,30],[16,1],[16,30],[1,16],[30,16]];
-            const colors = points.map(([x,y]) => {
-              const i = (y * 32 + x) * 4;
-              const alpha = pixels[i+3] / 255;
-              return [Math.round(pixels[i] * alpha + 255 * (1-alpha)),Math.round(pixels[i+1] * alpha + 255 * (1-alpha)),Math.round(pixels[i+2] * alpha + 255 * (1-alpha))];
-            });
-            const bright = colors.filter(c => c.every(v => v >= 236)).length;
-            if (bright >= 6) return; // blanco o casi blanco: fondo completamente blanco
-            const avg = [0,1,2].map(i => Math.round(colors.reduce((sum,c) => sum+c[i],0)/colors.length));
-            slide.style.setProperty("--product-edge-color", "rgb(" + avg.join(",") + ")");
-            slide.classList.add("photo-colored");
-          } catch (_) { /* Imagen externa sin CORS: blanco limpio como respaldo */ }
-        };
-        sample.onerror = () => {};
-        sample.src = src;
-      };
-      applyBackground();
-      img.addEventListener("load", applyBackground, { once: true });
-    });
+    // Las tarjetas usan fondo blanco uniforme; no hace falta descargar
+    // las fotos por segunda vez ni analizarlas mediante canvas.
     const current = parseInt(gallery.dataset.index || "0", 10);
     goToGallerySlide(gallery, current);
 
@@ -638,7 +600,7 @@ function renderDrawerSearchResults() {
     results.innerHTML = shown.map(p => {
       const photo = p.images?.[0] ? safeProductImage(p.images[0]) : "";
       return `<button type="button" class="drawer-result" data-product-id="${escapeShopText(p.id)}">
-        ${photo ? `<img src="${photo}" alt="" loading="lazy">` : '<span class="drawer-result-no-photo">XK</span>'}
+        ${photo ? `<img src="${photo}" alt="" loading="lazy" decoding="async">` : '<span class="drawer-result-no-photo">XK</span>'}
         <span class="drawer-result-copy"><strong>${escapeShopText(p.nombre)}</strong><small>Código: ${escapeShopText(p.codigo || p.id)}</small><em>$${Number(p.precio).toFixed(2)}</em></span>
         <span class="drawer-result-arrow" aria-hidden="true">↗</span>
       </button>`;
