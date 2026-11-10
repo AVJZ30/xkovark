@@ -1194,3 +1194,53 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
     margin:0 auto 22px;
   }
 }
+
+
+/* XKOVARK — imagen final: presentación editorial responsive sin recortes. */
+.quote-section{
+  padding:clamp(64px,9vw,112px) clamp(18px,5vw,72px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+  overflow:hidden;
+}
+.quote-section .quote-brand-logo.xk-quote-photo{
+  box-sizing:border-box;
+  display:block;
+  width:min(100%,360px);
+  height:auto;
+  max-height:460px;
+  margin:0 auto clamp(28px,4vw,42px);
+  padding:clamp(9px,1.6vw,15px);
+  object-fit:contain;
+  object-position:center;
+  background:#171717;
+  border:1px solid rgba(216,182,121,.38);
+  border-radius:16px;
+  box-shadow:0 0 0 5px rgba(216,182,121,.045),0 18px 55px rgba(0,0,0,.34);
+  filter:none!important;
+}
+.quote-section .quote{
+  width:100%;
+  max-width:850px;
+  margin:0 auto 15px;
+  overflow-wrap:break-word;
+  text-wrap:balance;
+}
+.quote-section .quote-attr{
+  margin:0;
+  text-align:center;
+}
+@media(max-width:650px){
+  .quote-section{padding:64px 18px 70px}
+  .quote-section .quote-brand-logo.xk-quote-photo{
+    width:min(100%,300px);
+    height:auto;
+    max-height:390px;
+    margin-bottom:28px;
+    padding:10px;
+    border-radius:12px;
+  }
+  .quote-section .quote{max-width:100%;font-size:clamp(24px,7vw,38px);line-height:1.2}
+}
