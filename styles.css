@@ -1273,3 +1273,38 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
     margin-bottom:26px;
   }
 }
+
+/* Corrección definitiva: dejar aire lateral para mostrar los extremos de la foto. */
+.quote-section{
+  overflow:visible;
+  padding-inline:clamp(24px,7vw,90px);
+}
+.quote-section .quote-brand-logo.xk-quote-photo{
+  display:block;
+  flex:none;
+  width:min(440px,82vw,100%);
+  max-width:100%;
+  height:auto;
+  max-height:none;
+  min-width:0;
+  padding:0;
+  margin:0 auto clamp(26px,4vw,42px);
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  background:transparent;
+  object-fit:contain;
+  object-position:center;
+  clip-path:none;
+  transform:none;
+}
+@media(max-width:650px){
+  .quote-section{padding:64px 22px 70px;overflow:visible}
+  .quote-section .quote-brand-logo.xk-quote-photo{
+    width:min(82vw,340px);
+    max-width:calc(100vw - 44px);
+    height:auto;
+    max-height:none;
+    margin-inline:auto;
+  }
+}
