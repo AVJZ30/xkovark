@@ -1308,3 +1308,15 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
     margin-inline:auto;
   }
 }
+
+/* Logo blanco al final: fusionar el fondo negro de la imagen con la web
+   y mantener visibles las letras y el símbolo sin un bloque rectangular. */
+.quote-section{
+  background-color:#0c0c0c;
+  isolation:isolate;
+}
+.quote-section .quote-brand-logo.xk-quote-photo{
+  mix-blend-mode:screen;
+  filter:none!important;
+  opacity:1;
+}
