@@ -1244,3 +1244,32 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
   }
   .quote-section .quote{max-width:100%;font-size:clamp(24px,7vw,38px);line-height:1.2}
 }
+
+/* Imagen final XKOVARK: sin marco, sin fondo ni recortes. */
+.quote-section .quote-brand-logo.xk-quote-photo{
+  display:block;
+  box-sizing:border-box;
+  width:min(100%, 520px);
+  max-width:100%;
+  height:auto;
+  max-height:none;
+  aspect-ratio:auto;
+  margin:0 auto clamp(26px,4vw,42px);
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  filter:none!important;
+  object-fit:contain;
+  object-position:center center;
+}
+@media(max-width:650px){
+  .quote-section .quote-brand-logo.xk-quote-photo{
+    width:min(100%, 420px);
+    max-height:none;
+    height:auto;
+    padding:0;
+    margin-bottom:26px;
+  }
+}
