@@ -155,8 +155,32 @@ const CATEGORY_LABELS = {
   vapes: "Vapes",
   cinturon: "Cinturones",
   perfumes: "Perfumes",
-  tatuajes: "Tatuajes"
+  tatuajes: "Tatuajes",
+  grillz: "Grillz",
+  grills: "Grillz",
+  grill: "Grillz"
 };
+
+// Unifica términos comerciales y variantes de escritura para ambos buscadores.
+function normalizeProductSearch(value) {
+  return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+function productSearchTerms(value) {
+  return normalizeProductSearch(value).split(/\s+/).filter(Boolean).map(term =>
+    /^(grillz|grills|grill|grilz|gril|grillss)$/.test(term) ? "grill" : term
+  );
+}
+function productSearchText(product) {
+  const raw = [product.nombre, product.desc, product.codigo, product.categoria, CATEGORY_LABELS[product.categoria]].join(" ");
+  const normalized = normalizeProductSearch(raw);
+  // Solo añade la equivalencia si el producto está etiquetado como grill/grillz.
+  const hasGrill = /\bgrill(?:z|s)?\b|\bgrilz\b/i.test(normalized);
+  return normalized + (hasGrill ? " grill grillz grills grilz " : "");
+}
+function productMatchesSearch(product, terms) {
+  const searchable = productSearchText(product);
+  return terms.every(term => searchable.includes(term));
+}
 
 const AVAIL_LABELS = {
   stock: "En stock",
@@ -283,12 +307,11 @@ function applyFilters() {
   if (!allProductsLoaded || PRODUCTS.length === 0) return;
 
   // Coincidencias reales: todos los términos deben estar presentes, con o sin tildes.
-  const normalizeSearch = value => String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  const normalizeSearch = normalizeProductSearch;
   const query = normalizeSearch(state.search);
-  const terms = query.split(/\s+/).filter(Boolean);
+  const terms = productSearchTerms(state.search);
   let list = PRODUCTS.filter(p => {
-    const searchable = normalizeSearch([p.nombre, p.desc, p.codigo, p.categoria, CATEGORY_LABELS[p.categoria]].join(" "));
-    const matchSearch = terms.every(term => searchable.includes(term));
+    const matchSearch = productMatchesSearch(p, terms);
     const matchCat = state.categoria === "todas" || p.categoria === state.categoria;
     const matchStock = !state.soloStock || p.disponibilidad !== "agotado";
     return matchSearch && matchCat && matchStock;
@@ -582,12 +605,9 @@ function renderDrawerSearchResults() {
     if (allButton) allButton.hidden = true;
     return;
   }
-  const normal = value => String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  const words = normal(query).trim().split(/\s+/).filter(Boolean);
-  const matches = PRODUCTS.filter(p => {
-    const haystack = normal([p.nombre, p.desc, p.codigo, p.categoria, CATEGORY_LABELS[p.categoria]].join(" "));
-    return words.every(word => haystack.includes(word));
-  });
+  const normal = normalizeProductSearch;
+  const words = productSearchTerms(query);
+  const matches = PRODUCTS.filter(p => productMatchesSearch(p, words));
   matches.sort((a,b) => {
     const score = p => normal(p.nombre).startsWith(normal(query)) ? 1 : 0;
     return score(b)-score(a);
