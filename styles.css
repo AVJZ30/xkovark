@@ -1344,3 +1344,9 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
     letter-spacing:-.04em;
   }
 }
+
+/* WhatsApp: globo y auricular con silueta reconocible en los tres accesos. */
+.whatsapp-logo-svg{display:block;flex:none;overflow:visible}
+.icon-btn .whatsapp-logo-svg,.social-icon .whatsapp-logo-svg{color:var(--white);stroke:none}
+.icon-btn:hover .whatsapp-logo-svg,.social-icon:hover .whatsapp-logo-svg{color:var(--gold)}
+.wa-float .whatsapp-logo-svg{width:29px;height:29px;color:var(--gold);fill:none}
