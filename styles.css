@@ -1324,7 +1324,7 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 /* Cierre XKOVARK: imagen apenas menor y lema mucho más próximo. */
 .quote-section .quote-brand-logo.xk-quote-photo{
   width:min(426px,79vw,100%);
-  margin-bottom:2px;
+  margin-bottom:-18px;
 }
 .quote-section .quote{
   margin-top:0;
@@ -1336,7 +1336,7 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
   .quote-section .quote-brand-logo.xk-quote-photo{
     width:min(79vw,326px);
     max-width:calc(100vw - 44px);
-    margin-bottom:0;
+    margin-bottom:-24px;
   }
   .quote-section .quote{
     font-size:clamp(23px,6.6vw,36px);
