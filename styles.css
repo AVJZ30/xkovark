@@ -1321,9 +1321,26 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
   opacity:1;
 }
 
-/* Compactar separación entre la imagen de marca y el lema final. */
-.quote-section .quote-brand-logo.xk-quote-photo{margin-bottom:clamp(8px,1.8vw,18px)}
+/* Cierre XKOVARK: imagen apenas menor y lema mucho más próximo. */
+.quote-section .quote-brand-logo.xk-quote-photo{
+  width:min(426px,79vw,100%);
+  margin-bottom:2px;
+}
+.quote-section .quote{
+  margin-top:0;
+  letter-spacing:-.035em;
+  line-height:1.12;
+}
 @media(max-width:650px){
   .quote-section{padding-top:44px;padding-bottom:52px}
-  .quote-section .quote-brand-logo.xk-quote-photo{margin-bottom:10px}
+  .quote-section .quote-brand-logo.xk-quote-photo{
+    width:min(79vw,326px);
+    max-width:calc(100vw - 44px);
+    margin-bottom:0;
+  }
+  .quote-section .quote{
+    font-size:clamp(23px,6.6vw,36px);
+    line-height:1.1;
+    letter-spacing:-.04em;
+  }
 }
