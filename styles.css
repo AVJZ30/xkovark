@@ -1320,3 +1320,10 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
   filter:none!important;
   opacity:1;
 }
+
+/* Compactar separación entre la imagen de marca y el lema final. */
+.quote-section .quote-brand-logo.xk-quote-photo{margin-bottom:clamp(8px,1.8vw,18px)}
+@media(max-width:650px){
+  .quote-section{padding-top:44px;padding-bottom:52px}
+  .quote-section .quote-brand-logo.xk-quote-photo{margin-bottom:10px}
+}
