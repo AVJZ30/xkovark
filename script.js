@@ -25,7 +25,7 @@ let state = {
 //  CARGA DE PRODUCTOS (con caché local y petición temprana)
 // ============================================================
 
-const CACHE_KEY = "xkovark_productos_v1"; // si cambias la estructura de datos, cambia v1 por v2
+const CACHE_KEY = "xkovark_productos_v2"; // si cambias la estructura de datos, cambia v1 por v2
 
 function leerCache() {
   try {
@@ -39,7 +39,7 @@ function guardarCache(data) {
 }
 
 // La petición arranca YA, en cuanto se carga este archivo
-const peticionTemprana = fetch(SPREADSHEET_URL).then(res => {
+const peticionTemprana = fetch(SPREADSHEET_URL, { cache: "no-store" }).then(res => {
   if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
   return res.json();
 });
@@ -69,7 +69,7 @@ function mapearProductos(data) {
 
     return {
       id: item.id || String(item.nombre_producto || "").toLowerCase().replace(/[^a-z0-9]+/g, "-") || `producto-${index}`,
-      categoria: item.categoria ? String(item.categoria).toLowerCase().trim() : "otros",
+      categoria: item.categoria ? (/^grills?$|^grilz$|^grillz$/.test(String(item.categoria).toLowerCase().trim()) ? "grillz" : String(item.categoria).toLowerCase().trim()) : "otros",
       nombre: item.nombre_producto || item.nombre || "Producto sin nombre",
       desc: item.descripcion || "",
       codigo: String(item.codigo_producto ?? item.codigo ?? item.sku ?? item.referencia ?? item.id ?? item.nombre_producto ?? `producto-${index + 2}`).trim(),
