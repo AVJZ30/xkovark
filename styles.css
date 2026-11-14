@@ -1321,12 +1321,13 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
   opacity:1;
 }
 
-/* Cierre XKOVARK: imagen apenas menor y lema mucho más próximo. */
+/* Cierre XKOVARK compacto: imagen y lema más pequeños y unidos. */
 .quote-section .quote-brand-logo.xk-quote-photo{
-  width:min(426px,79vw,100%);
+  width:min(380px,72vw,100%);
   margin-bottom:-18px;
 }
 .quote-section .quote{
+  font-size:clamp(20px,3vw,36px);
   margin-top:0;
   letter-spacing:-.035em;
   line-height:1.12;
@@ -1334,12 +1335,12 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 @media(max-width:650px){
   .quote-section{padding-top:44px;padding-bottom:52px}
   .quote-section .quote-brand-logo.xk-quote-photo{
-    width:min(79vw,326px);
+    width:min(72vw,290px);
     max-width:calc(100vw - 44px);
-    margin-bottom:-24px;
+    margin-bottom:-22px;
   }
   .quote-section .quote{
-    font-size:clamp(23px,6.6vw,36px);
+    font-size:clamp(19px,5.6vw,29px);
     line-height:1.1;
     letter-spacing:-.04em;
   }
