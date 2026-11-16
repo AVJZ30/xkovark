@@ -1377,3 +1377,22 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 .product-detail-overlay[data-category="gafas"] .product-detail-photo.detail-photo-empty {
   background:#141414 !important;
 }
+
+/* Gafas: integración visual del fondo incrustado en las fotografías.
+   Solo gafas, tanto en tarjetas como en el detalle ampliado.
+   Se suavizan los bordes de la foto para disimular el parche interior
+   sin oscurecer los demás productos ni añadir un nuevo recuadro. */
+.shop-first .card[data-categoria="gafas"] .card-img::after,
+#ofertas .card[data-categoria="gafas"] .card-img::after {
+  display:none !important;
+  content:none !important;
+}
+.shop-first .card[data-categoria="gafas"] .gallery-slide img,
+#ofertas .card[data-categoria="gafas"] .gallery-slide img,
+.product-detail-overlay[data-category="gafas"] .product-detail-photo #detailProductImage {
+  mix-blend-mode:normal !important;
+  opacity:.96 !important;
+  filter:brightness(.92) contrast(1.02) saturate(.92) drop-shadow(0 8px 15px rgba(0,0,0,.18)) !important;
+  -webkit-mask-image:radial-gradient(ellipse 76% 78% at center, #000 62%, transparent 100%);
+  mask-image:radial-gradient(ellipse 76% 78% at center, #000 62%, transparent 100%);
+}
