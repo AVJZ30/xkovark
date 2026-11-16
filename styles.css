@@ -1351,3 +1351,19 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 .icon-btn .whatsapp-logo-svg,.social-icon .whatsapp-logo-svg{color:var(--white);stroke:none}
 .icon-btn:hover .whatsapp-logo-svg,.social-icon:hover .whatsapp-logo-svg{color:var(--gold)}
 .wa-float .whatsapp-logo-svg{width:29px;height:29px;color:var(--gold);fill:none}
+
+
+/* Gafas: fondo carbón como las fotografías originales, sin panel blanco.
+   Solo afecta a las tarjetas de gafas del catálogo y de ofertas. */
+.shop-first .card[data-categoria="gafas"] .card-img,
+#ofertas .card[data-categoria="gafas"] .card-img,
+.shop-first .card[data-categoria="gafas"] .product-gallery,
+#ofertas .card[data-categoria="gafas"] .product-gallery,
+.shop-first .card[data-categoria="gafas"] .gallery-track,
+#ofertas .card[data-categoria="gafas"] .gallery-track,
+.shop-first .card[data-categoria="gafas"] .gallery-slide,
+#ofertas .card[data-categoria="gafas"] .gallery-slide,
+.shop-first .card[data-categoria="gafas"] .gallery-slide.photo-colored,
+#ofertas .card[data-categoria="gafas"] .gallery-slide.photo-colored {
+  background:#242424 !important;
+}
