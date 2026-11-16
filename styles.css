@@ -1353,17 +1353,28 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 .wa-float .whatsapp-logo-svg{width:29px;height:29px;color:var(--gold);fill:none}
 
 
-/* Gafas: fondo carbón como las fotografías originales, sin panel blanco.
-   Solo afecta a las tarjetas de gafas del catálogo y de ofertas. */
+/* XKOVARK: fondo mate uniforme en todas las capas de las tarjetas.
+   También reemplaza los fondos blancos heredados, incluso al pasar el cursor. */
+.shop-first .card,
+#ofertas .card,
+.shop-first .card:hover,
+#ofertas .card:hover,
+.shop-first .card-body,
+#ofertas .card-body,
+.shop-first .card-img,
+#ofertas .card-img,
+.shop-first .product-gallery,
+#ofertas .product-gallery,
+.shop-first .gallery-track,
+#ofertas .gallery-track,
+.shop-first .gallery-slide,
+#ofertas .gallery-slide,
+.shop-first .gallery-slide.photo-colored,
+#ofertas .gallery-slide.photo-colored {
+  background:#121212 !important;
+}
+/* Las gafas mantienen apagado el efecto de humo en sus bordes. */
 .shop-first .card[data-categoria="gafas"] .card-img,
-#ofertas .card[data-categoria="gafas"] .card-img,
-.shop-first .card[data-categoria="gafas"] .product-gallery,
-#ofertas .card[data-categoria="gafas"] .product-gallery,
-.shop-first .card[data-categoria="gafas"] .gallery-track,
-#ofertas .card[data-categoria="gafas"] .gallery-track,
-.shop-first .card[data-categoria="gafas"] .gallery-slide,
-#ofertas .card[data-categoria="gafas"] .gallery-slide,
-.shop-first .card[data-categoria="gafas"] .gallery-slide.photo-colored,
-#ofertas .card[data-categoria="gafas"] .gallery-slide.photo-colored {
-  background:#1C1C1C !important;
+#ofertas .card[data-categoria="gafas"] .card-img {
+  --xk-smoke:0 !important;
 }
