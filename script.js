@@ -1012,6 +1012,7 @@ function openProductDetail(id) {
   add.textContent = add.disabled ? "Agotado" : "Agregar al carrito";
   setProductDetailPhoto(0);
   const overlay = document.getElementById("productDetailOverlay");
+  overlay.dataset.category = p.categoria;
   overlay.hidden = false;
   document.body.classList.add("product-detail-open");
   document.getElementById("productDetailClose").focus();
