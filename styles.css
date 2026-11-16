@@ -1371,3 +1371,9 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 #ofertas .card[data-categoria="gafas"] .card-img {
   --xk-smoke:0 !important;
 }
+
+/* Ficha ampliada: el fondo #141414 se aplica solo a las gafas. */
+.product-detail-overlay[data-category="gafas"] .product-detail-photo,
+.product-detail-overlay[data-category="gafas"] .product-detail-photo.detail-photo-empty {
+  background:#141414 !important;
+}
