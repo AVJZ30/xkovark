@@ -1365,5 +1365,5 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 #ofertas .card[data-categoria="gafas"] .gallery-slide,
 .shop-first .card[data-categoria="gafas"] .gallery-slide.photo-colored,
 #ofertas .card[data-categoria="gafas"] .gallery-slide.photo-colored {
-  background:#242424 !important;
+  background:#1C1C1C !important;
 }
