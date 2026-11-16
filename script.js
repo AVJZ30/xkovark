@@ -545,6 +545,11 @@ function updateProductPhotoLighting() {
   const viewportHeight = window.innerHeight || 800;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.querySelectorAll("#catalogo-grid .card-img, #ofertas-grid .card-img").forEach(frame => {
+    // Las gafas conservan su fondo #1C1C1C sin oscurecimiento al desplazarse.
+    if (frame.closest('.card[data-categoria="gafas"]')) {
+      frame.style.setProperty("--xk-smoke", "0");
+      return;
+    }
     const rect = frame.getBoundingClientRect();
     if (rect.bottom < -100 || rect.top > viewportHeight + 100) return;
     // En la parte inferior se ve completamente blanca; al subir la tarjeta
