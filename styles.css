@@ -1394,6 +1394,6 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
   opacity:.96 !important;
   filter:brightness(.92) contrast(1.02) saturate(.92) drop-shadow(0 8px 15px rgba(0,0,0,.18)) !important;
   /* Desvanecimiento amplio para fundir el fondo incrustado con #141414. */
-  -webkit-mask-image:radial-gradient(ellipse 83% 84% at center, #000 38%, rgba(0,0,0,.94) 51%, rgba(0,0,0,.68) 67%, rgba(0,0,0,.28) 84%, transparent 100%);
-  mask-image:radial-gradient(ellipse 83% 84% at center, #000 38%, rgba(0,0,0,.94) 51%, rgba(0,0,0,.68) 67%, rgba(0,0,0,.28) 84%, transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 86% 86% at center, #000 27%, rgba(0,0,0,.93) 42%, rgba(0,0,0,.67) 57%, rgba(0,0,0,.34) 73%, rgba(0,0,0,.10) 87%, transparent 100%);
+  mask-image:radial-gradient(ellipse 86% 86% at center, #000 27%, rgba(0,0,0,.93) 42%, rgba(0,0,0,.67) 57%, rgba(0,0,0,.34) 73%, rgba(0,0,0,.10) 87%, transparent 100%);
 }
