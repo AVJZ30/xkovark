@@ -1353,7 +1353,7 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 .wa-float .whatsapp-logo-svg{width:29px;height:29px;color:var(--gold);fill:none}
 
 
-/* Únicamente las gafas: fondo más oscuro y uniforme (#0B0B0B).
+/* Únicamente las gafas: fondo gris oscuro uniforme (#161616).
    Las otras categorías conservan el fondo blanco de sus fotografías. */
 .shop-first .card[data-categoria="gafas"] .card-img,
 #ofertas .card[data-categoria="gafas"] .card-img,
@@ -1365,7 +1365,7 @@ a, button, .card, .card-img, .product-gallery, .gallery-main,
 #ofertas .card[data-categoria="gafas"] .gallery-slide,
 .shop-first .card[data-categoria="gafas"] .gallery-slide.photo-colored,
 #ofertas .card[data-categoria="gafas"] .gallery-slide.photo-colored {
-  background:#0B0B0B !important;
+  background:#161616 !important;
 }
 .shop-first .card[data-categoria="gafas"] .card-img,
 #ofertas .card[data-categoria="gafas"] .card-img {
