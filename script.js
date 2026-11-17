@@ -808,7 +808,7 @@ function renderCart() {
   }
 
   const total = cartTotal();
-  if (totalEl) totalEl.textContent = `$${total}`;
+  if (totalEl) totalEl.textContent = `${total.toFixed(2)}`;
 
   const count = cartItemCount();
   if (badge) {
